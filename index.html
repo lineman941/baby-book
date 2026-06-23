@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en" data-color-theme="teal-dream" data-font="soft">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Our Little Miracle</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Dancing+Script:wght@600;700&family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       TOP BAR
+       ============================================================ -->
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <span class="app-title">Our Little Miracle</span>
+      <button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙️</button>
+    </div>
+  </header>
+
+  <!-- Settings tray — hidden by default, slides down on phone -->
+  <div class="settings-tray" id="settingsTray" aria-hidden="true">
+    <div class="settings-tray-inner">
+      <div class="settings-label">Theme</div>
+      <div class="theme-pills">
+        <button class="theme-pill" data-set-theme="teal-dream"    style="background:#7ee8e8" title="Teal Dream"></button>
+        <button class="theme-pill" data-set-theme="rose-gold"     style="background:#f4a7b9" title="Rose Gold"></button>
+        <button class="theme-pill" data-set-theme="sage"          style="background:#a8c5a0" title="Sage"></button>
+        <button class="theme-pill" data-set-theme="lavender"      style="background:#c4b5fd" title="Lavender"></button>
+        <button class="theme-pill" data-set-theme="classic-cream" style="background:#e8d5b7" title="Classic Cream"></button>
+      </div>
+      <div class="settings-label" style="margin-top:10px">Font</div>
+      <select id="fontSelect" class="font-select">
+        <option value="soft">Soft (Nunito)</option>
+        <option value="script">Script (Handwritten)</option>
+        <option value="elegant">Elegant (Serif)</option>
+        <option value="modern">Modern (Poppins)</option>
+      </select>
+      <div style="margin-top:14px;border-top:1px solid rgba(0,0,0,.08);padding-top:12px;">
+        <a href="etsy-dashboard.html" target="_blank" style="display:block;background:#3dbfbf;color:#fff;text-align:center;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;">🛍️ Open Etsy Dashboard</a>
+        <a href="LAUNCH.html" target="_blank" style="display:block;margin-top:8px;background:#f97316;color:#fff;text-align:center;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;">📋 Launch Guide</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       COVER SECTION
+       ============================================================ -->
+  <section class="page-section active" id="section-cover">
+    <div class="cover-page">
+    </div>
+  </section>
+
+  <!-- ============================================================
+       BIRTH STORY SECTION
+       ============================================================ -->
+  <section class="page-section" id="section-birth">
+
+    <div class="section-header">
+      <h1 class="section-title">Birth Story</h1>
+      <p class="section-subtitle">Record the details of your baby's arrival</p>
+    </div>
+
+    <div class="birth-grid">
+      <!-- Full Name -->
+      <div class="field-card full-width">
+        <label for="birthFullName">Full Name</label>
+        <input type="text" id="birthFullName" placeholder="Baby's full name" autocomplete="new-password" autocomplete="new-password">
+      </div>
+
+      <!-- Date of Birth -->
+      <div class="field-card">
+        <label for="birthDate">Date of Birth</label>
+        <input type="date" id="birthDate">
+      </div>
+
+      <!-- Time of Birth -->
+      <div class="field-card">
+        <label for="birthTime">Time of Birth</label>
+        <input type="time" id="birthTime">
+      </div>
+
+      <!-- Weight -->
+      <div class="field-card">
+        <label for="birthWeight">Weight</label>
+        <input type="text" id="birthWeight" placeholder="e.g. 7 lbs 4 oz" autocomplete="new-password" autocomplete="new-password">
+      </div>
+
+      <!-- Length -->
+      <div class="field-card">
+        <label for="birthLength">Length</label>
+        <input type="text" id="birthLength" placeholder="e.g. 20 inches" autocomplete="new-password" autocomplete="new-password">
+      </div>
+
+      <!-- Hospital / Location -->
+      <div class="field-card full-width">
+        <label for="birthHospital">Hospital / Location</label>
+        <input type="text" id="birthHospital" placeholder="Hospital or birth location" autocomplete="new-password" autocomplete="new-password">
+      </div>
+
+      <!-- Birth Story -->
+      <div class="field-card full-width">
+        <label for="birthStoryText">Birth Story</label>
+        <textarea id="birthStoryText" autocomplete="off" placeholder="Tell the story of this magical day — the moments, the feelings, the joy…" rows="6"></textarea>
+      </div>
+    </div>
+
+    <!-- Birth photo -->
+    <div class="photo-upload-area" id="birthPhotoArea">
+      <span class="upload-icon">📷</span>
+      <span class="upload-label">Tap to add a birth photo<br><small>or drag &amp; drop</small></span>
+      <img alt="Birth photo" id="birthPhotoImg">
+      <input type="file" accept="image/*" id="birthPhotoInput">
+    </div>
+
+  </section>
+
+  <!-- ============================================================
+       MILESTONES SECTION
+       ============================================================ -->
+  <section class="page-section" id="section-milestones">
+
+    <div class="section-header">
+      <h1 class="section-title">Milestones</h1>
+      <p class="section-subtitle">Capture every precious first</p>
+    </div>
+
+    <div class="milestone-grid">
+
+      <!-- First Smile -->
+      <div class="milestone-card">
+        <div class="milestone-emoji">😊</div>
+        <div class="milestone-name">First Smile</div>
+        <input type="date" class="milestone-date-input" data-milestone="first-smile">
+        <div class="milestone-photo-upload">
+          <span class="upload-placeholder">📷</span>
+          <img alt="First Smile photo">
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+
+      <!-- First Roll -->
+      <div class="milestone-card">
+        <div class="milestone-emoji">🙃</div>
+        <div class="milestone-name">First Roll</div>
+        <input type="date" class="milestone-date-input" data-milestone="first-roll">
+        <div class="milestone-photo-upload">
+          <span class="upload-placeholder">📷</span>
+          <img alt="First Roll photo">
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+
+      <!-- First Food -->
+      <div class="milestone-card">
+        <div class="milestone-emoji">🍼</div>
+        <div class="milestone-name">First Food</div>
+        <input type="date" class="milestone-date-input" data-milestone="first-food">
+        <div class="milestone-photo-upload">
+          <span class="upload-placeholder">📷</span>
+          <img alt="First Food photo">
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+
+      <!-- Sitting Up -->
+      <div class="milestone-card">
+        <div class="milestone-emoji">🪑</div>
+        <div class="milestone-name">Sitting Up</div>
+        <input type="date" class="milestone-date-input" data-milestone="sitting-up">
+        <div class="milestone-photo-upload">
+          <span class="upload-placeholder">📷</span>
+          <img alt="Sitting Up photo">
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+
+      <!-- First Tooth -->
+      <div class="milestone-card">
+        <div class="milestone-emoji">🦷</div>
+        <div class="milestone-name">First Tooth</div>
+        <input type="date" class="milestone-date-input" data-milestone="first-tooth">
+        <div class="milestone-photo-upload">
+          <span class="upload-placeholder">📷</span>
+          <img alt="First Tooth photo">
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+
+      <!-- Crawling -->
+      <div class="milestone-card">
+        <div class="milestone-emoji">🐛</div>
+        <div class="milestone-name">Crawling</div>
+        <input type="date" class="milestone-date-input" data-milestone="crawling">
+        <div class="milestone-photo-upload">
+          <span class="upload-placeholder">📷</span>
+          <img alt="Crawling photo">
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+
+      <!-- First Steps -->
+      <div class="milestone-card">
+        <div class="milestone-emoji">🚶</div>
+        <div class="milestone-name">First Steps</div>
+        <input type="date" class="milestone-date-input" data-milestone="first-steps">
+        <div class="milestone-photo-upload">
+          <span class="upload-placeholder">📷</span>
+          <img alt="First Steps photo">
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+
+      <!-- First Word -->
+      <div class="milestone-card">
+        <div class="milestone-emoji">💬</div>
+        <div class="milestone-name">First Word</div>
+        <input type="date" class="milestone-date-input" data-milestone="first-word">
+        <div class="milestone-photo-upload">
+          <span class="upload-placeholder">📷</span>
+          <img alt="First Word photo">
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+
+      <!-- Slept Through -->
+      <div class="milestone-card">
+        <div class="milestone-emoji">💤</div>
+        <div class="milestone-name">Slept Through</div>
+        <input type="date" class="milestone-date-input" data-milestone="slept-through">
+        <div class="milestone-photo-upload">
+          <span class="upload-placeholder">📷</span>
+          <img alt="Slept Through photo">
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+
+      <!-- First Bath -->
+      <div class="milestone-card">
+        <div class="milestone-emoji">🛁</div>
+        <div class="milestone-name">First Bath</div>
+        <input type="date" class="milestone-date-input" data-milestone="first-bath">
+        <div class="milestone-photo-upload">
+          <span class="upload-placeholder">📷</span>
+          <img alt="First Bath photo">
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+
+      <!-- First Laugh -->
+      <div class="milestone-card">
+        <div class="milestone-emoji">😂</div>
+        <div class="milestone-name">First Laugh</div>
+        <input type="date" class="milestone-date-input" data-milestone="first-laugh">
+        <div class="milestone-photo-upload">
+          <span class="upload-placeholder">📷</span>
+          <img alt="First Laugh photo">
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+
+      <!-- First Trip -->
+      <div class="milestone-card">
+        <div class="milestone-emoji">✈️</div>
+        <div class="milestone-name">First Trip</div>
+        <input type="date" class="milestone-date-input" data-milestone="first-trip">
+        <div class="milestone-photo-upload">
+          <span class="upload-placeholder">📷</span>
+          <img alt="First Trip photo">
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       LOVE LETTERS SECTION
+       ============================================================ -->
+  <section class="page-section" id="section-letters">
+
+    <div class="section-header">
+      <h1 class="section-title">Love Letters</h1>
+      <p class="section-subtitle">Words your little one will treasure forever</p>
+    </div>
+
+    <div class="letter-cards">
+
+      <!-- Letter from Mom -->
+      <div class="letter-card">
+        <div class="letter-card-header">
+          <div class="letter-card-title">💌 Letter from Mom</div>
+          <input type="date" class="letter-date-input" data-letter-key="letterMomDate">
+        </div>
+        <textarea class="letter-text-input" data-letter-key="letterMomText"
+          placeholder="Dear little one, from the moment I knew you were coming…"
+          rows="6"></textarea>
+      </div>
+
+      <!-- Letter from Dad -->
+      <div class="letter-card">
+        <div class="letter-card-header">
+          <div class="letter-card-title">💌 Letter from Dad</div>
+          <input type="date" class="letter-date-input" data-letter-key="letterDadDate">
+        </div>
+        <textarea class="letter-text-input" data-letter-key="letterDadText"
+          placeholder="My child, I want you to know how much you've changed everything…"
+          rows="6"></textarea>
+      </div>
+
+      <!-- A Future Message -->
+      <div class="letter-card">
+        <div class="letter-card-header">
+          <div class="letter-card-title">💌 A Future Message</div>
+          <input type="date" class="letter-date-input" data-letter-key="letterFutureDate">
+        </div>
+        <textarea class="letter-text-input" data-letter-key="letterFutureText"
+          placeholder="By the time you read this, you'll be… I hope you remember…"
+          rows="6"></textarea>
+      </div>
+
+      <!-- From the Village -->
+      <div class="letter-card">
+        <div class="letter-card-header">
+          <div class="letter-card-title">💌 From the Village</div>
+          <input type="date" class="letter-date-input" data-letter-key="letterVillageDate">
+        </div>
+        <textarea class="letter-text-input" data-letter-key="letterVillageText"
+          placeholder="From your grandparents, aunts, uncles, and friends who love you so…"
+          rows="6"></textarea>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       MONTHLY GROWTH SECTION
+       ============================================================ -->
+  <section class="page-section" id="section-growth">
+
+    <div class="section-header">
+      <h1 class="section-title">Monthly Growth</h1>
+      <p class="section-subtitle">Track weight &amp; height over time</p>
+    </div>
+
+    <!-- Entry form -->
+    <div class="growth-form">
+      <div class="field-card" style="grid-column: 1 / -1;">
+        <label for="growthMonth">Month / Label</label>
+        <input type="text" id="growthMonth" placeholder='e.g. "Month 1" or "June 2025"' autocomplete="new-password">
+      </div>
+      <div class="field-card">
+        <label for="growthWeight">Weight (lbs)</label>
+        <input type="number" id="growthWeight" placeholder="7.5" step="0.1" min="0">
+      </div>
+      <div class="field-card">
+        <label for="growthHeight">Height (in)</label>
+        <input type="number" id="growthHeight" placeholder="20" step="0.25" min="0">
+      </div>
+      <button class="growth-add-btn" id="growthAddBtn">+ Add Entry</button>
+    </div>
+
+    <!-- Chart -->
+    <div class="growth-chart-wrap">
+      <div class="growth-chart-title">Growth Chart</div>
+      <div style="position:relative; height:220px;">
+        <canvas id="growthChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="growth-table-wrap">
+      <table class="growth-table">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Weight</th>
+            <th>Height</th>
+          </tr>
+        </thead>
+        <tbody id="growthTableBody">
+          <tr>
+            <td colspan="3" class="growth-table-empty">No entries yet. Add your first measurement above.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <!-- ============================================================
+       BOTTOM TAB NAV
+       ============================================================ -->
+  
+  <!-- ══════════════════════════════════════════
+       FIRST YEAR IN PHOTOS
+  ══════════════════════════════════════════ -->
+  <section class="page-section" id="section-photos">
+    <div class="section-header">
+      <div class="section-title">First Year in Photos</div>
+      <div class="section-subtitle">One photo for every month of your first year.</div>
+    </div>
+    <div class="photo-year-grid" id="photoYearGrid">
+      <!-- 12 month cards generated by JS -->
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FAMILY TREE
+  ══════════════════════════════════════════ -->
+  <section class="page-section" id="section-family">
+    <div class="section-header">
+      <div class="section-title">Family Tree</div>
+      <div class="section-subtitle">The village that loved you before you arrived.</div>
+    </div>
+
+    <!-- Baby row -->
+    <div class="tree-row tree-baby">
+      <div class="tree-node tree-center">
+        <div class="tree-photo-wrap">
+          <div class="photo-upload-area" id="babyTreePhoto">
+            <span class="upload-icon">👶</span>
+            <span class="upload-label">Baby's Photo</span>
+            <input type="file" accept="image/*">
+            <img src="" alt="Baby">
+          </div>
+        </div>
+        <input type="text" class="tree-name-input" placeholder="Baby's Name" autocomplete="new-password">
+        <div class="tree-label">Our Baby</div>
+      </div>
+    </div>
+
+    <div class="tree-connector">❤️</div>
+
+    <!-- Parents row -->
+    <div class="tree-row">
+      <div class="tree-node">
+        <div class="photo-upload-area">
+          <span class="upload-icon">👩</span>
+          <span class="upload-label">Mom's Photo</span>
+          <input type="file" accept="image/*">
+          <img src="" alt="Mom">
+        </div>
+        <input type="text" class="tree-name-input" placeholder="Mom's Name" autocomplete="new-password">
+        <div class="tree-label">Mom</div>
+      </div>
+      <div class="tree-node">
+        <div class="photo-upload-area">
+          <span class="upload-icon">👨</span>
+          <span class="upload-label">Dad's Photo</span>
+          <input type="file" accept="image/*">
+          <img src="" alt="Dad">
+        </div>
+        <input type="text" class="tree-name-input" placeholder="Dad's Name" autocomplete="new-password">
+        <div class="tree-label">Dad</div>
+      </div>
+    </div>
+
+    <div class="tree-connector">🌿</div>
+
+    <!-- Grandparents row -->
+    <div class="tree-grandparents-label">Grandparents</div>
+    <div class="tree-row tree-gp-row">
+      <div class="tree-node tree-node-sm">
+        <div class="photo-upload-area small">
+          <span class="upload-icon">👵</span>
+          <input type="file" accept="image/*">
+          <img src="" alt="">
+        </div>
+        <input type="text" class="tree-name-input" placeholder="Grandma (Mom's side)" autocomplete="new-password">
+        <div class="tree-label">Grandma</div>
+      </div>
+      <div class="tree-node tree-node-sm">
+        <div class="photo-upload-area small">
+          <span class="upload-icon">👴</span>
+          <input type="file" accept="image/*">
+          <img src="" alt="">
+        </div>
+        <input type="text" class="tree-name-input" placeholder="Grandpa (Mom's side)" autocomplete="new-password">
+        <div class="tree-label">Grandpa</div>
+      </div>
+      <div class="tree-node tree-node-sm">
+        <div class="photo-upload-area small">
+          <span class="upload-icon">👵</span>
+          <input type="file" accept="image/*">
+          <img src="" alt="">
+        </div>
+        <input type="text" class="tree-name-input" placeholder="Grandma (Dad's side)" autocomplete="new-password">
+        <div class="tree-label">Grandma</div>
+      </div>
+      <div class="tree-node tree-node-sm">
+        <div class="photo-upload-area small">
+          <span class="upload-icon">👴</span>
+          <input type="file" accept="image/*">
+          <img src="" alt="">
+        </div>
+        <input type="text" class="tree-name-input" placeholder="Grandpa (Dad's side)" autocomplete="new-password">
+        <div class="tree-label">Grandpa</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FIRST HOLIDAYS
+  ══════════════════════════════════════════ -->
+  <section class="page-section" id="section-holidays">
+    <div class="section-header">
+      <div class="section-title">First Holidays</div>
+      <div class="section-subtitle">Every first is a holiday worth remembering.</div>
+    </div>
+    <div class="holiday-grid">
+
+      <div class="holiday-card">
+        <div class="holiday-emoji">🎄</div>
+        <div class="holiday-name">First Christmas</div>
+        <input type="date" class="holiday-date" autocomplete="off">
+        <div class="photo-upload-area small">
+          <span class="upload-icon">📷</span>
+          <input type="file" accept="image/*">
+          <img src="" alt="">
+        </div>
+        <textarea class="holiday-note" placeholder="What made it magical..." rows="2"></textarea>
+      </div>
+
+      <div class="holiday-card">
+        <div class="holiday-emoji">🎃</div>
+        <div class="holiday-name">First Halloween</div>
+        <input type="date" class="holiday-date" autocomplete="off">
+        <div class="photo-upload-area small">
+          <span class="upload-icon">📷</span>
+          <input type="file" accept="image/*">
+          <img src="" alt="">
+        </div>
+        <textarea class="holiday-note" placeholder="What were you dressed as..." rows="2"></textarea>
+      </div>
+
+      <div class="holiday-card">
+        <div class="holiday-emoji">🦃</div>
+        <div class="holiday-name">First Thanksgiving</div>
+        <input type="date" class="holiday-date" autocomplete="off">
+        <div class="photo-upload-area small">
+          <span class="upload-icon">📷</span>
+          <input type="file" accept="image/*">
+          <img src="" alt="">
+        </div>
+        <textarea class="holiday-note" placeholder="Who was at the table..." rows="2"></textarea>
+      </div>
+
+      <div class="holiday-card">
+        <div class="holiday-emoji">🐣</div>
+        <div class="holiday-name">First Easter</div>
+        <input type="date" class="holiday-date" autocomplete="off">
+        <div class="photo-upload-area small">
+          <span class="upload-icon">📷</span>
+          <input type="file" accept="image/*">
+          <img src="" alt="">
+        </div>
+        <textarea class="holiday-note" placeholder="Your first spring..." rows="2"></textarea>
+      </div>
+
+      <div class="holiday-card">
+        <div class="holiday-emoji">🎂</div>
+        <div class="holiday-name">First Birthday</div>
+        <input type="date" class="holiday-date" autocomplete="off">
+        <div class="photo-upload-area small">
+          <span class="upload-icon">📷</span>
+          <input type="file" accept="image/*">
+          <img src="" alt="">
+        </div>
+        <textarea class="holiday-note" placeholder="One whole year of you..." rows="2"></textarea>
+      </div>
+
+      <div class="holiday-card">
+        <div class="holiday-emoji">🎆</div>
+        <div class="holiday-name">First New Year</div>
+        <input type="date" class="holiday-date" autocomplete="off">
+        <div class="photo-upload-area small">
+          <span class="upload-icon">📷</span>
+          <input type="file" accept="image/*">
+          <img src="" alt="">
+        </div>
+        <textarea class="holiday-note" placeholder="Ringing in the new year..." rows="2"></textarea>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       YOUR NAME STORY
+  ══════════════════════════════════════════ -->
+  <section class="page-section" id="section-name">
+    <div class="section-header">
+      <div class="section-title">Your Name Story</div>
+      <div class="section-subtitle">Every name has a story. This one belongs to you.</div>
+    </div>
+    <div class="name-story-cards">
+      <div class="field-card">
+        <label>Your Full Name</label>
+        <input type="text" placeholder="Baby's full name" autocomplete="new-password">
+      </div>
+      <div class="field-card">
+        <label>Why We Chose This Name</label>
+        <textarea placeholder="The story behind your name..." rows="4"></textarea>
+      </div>
+      <div class="field-card">
+        <label>What Your Name Means</label>
+        <textarea placeholder="Its meaning and origin..." rows="3"></textarea>
+      </div>
+      <div class="field-card">
+        <label>Named After Someone?</label>
+        <textarea placeholder="If your name honors someone special..." rows="3"></textarea>
+      </div>
+      <div class="field-card">
+        <label>Other Names We Considered</label>
+        <input type="text" placeholder="The runners up..." autocomplete="new-password">
+      </div>
+      <div class="field-card">
+        <label>What We Hope Your Name Means to You</label>
+        <textarea placeholder="Our wish for what you'll carry with you..." rows="4"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       UPSELL — THE COMPLETE STORY PACK
+  ══════════════════════════════════════════ -->
+  <section class="page-section" id="section-more">
+    <div class="upsell-hero">
+      <div class="upsell-badge">✨ Add-On Pack</div>
+      <div class="upsell-title">The Complete Story Pack</div>
+      <div class="upsell-sub">7 bonus pages that go deeper — from before you were born to the wishes your whole family carries for you.</div>
+      <div class="upsell-price">
+        <span class="upsell-amount">$3.97</span>
+        <span class="upsell-orig">$9.97</span>
+        <span class="upsell-badge-sm">60% off</span>
+      </div>
+      <a href="https://www.etsy.com/shop/OurLittleMiracleBook" target="_blank" class="upsell-btn">🛍️ Get the Complete Pack on Etsy</a>
+      <div class="upsell-note">Instant unlock · No app required · Works on any phone</div>
+    </div>
+
+    <div class="upsell-pages-grid">
+
+      <div class="upsell-page-card locked">
+        <div class="upsell-page-icon">🤰</div>
+        <div class="upsell-page-name">Before You Were Born</div>
+        <div class="upsell-page-desc">The pregnancy story — how we found out, what the world looked like, our hopes before you arrived.</div>
+        <div class="lock-badge">🔒 Included in Pack</div>
+      </div>
+
+      <div class="upsell-page-card locked">
+        <div class="upsell-page-icon">👩‍👦</div>
+        <div class="upsell-page-name">All About Mom</div>
+        <div class="upsell-page-desc">Mom's age, favorites, personality, photo — a portrait of who she was when you were born.</div>
+        <div class="lock-badge">🔒 Included in Pack</div>
+      </div>
+
+      <div class="upsell-page-card locked">
+        <div class="upsell-page-icon">👨‍👦</div>
+        <div class="upsell-page-name">All About Dad</div>
+        <div class="upsell-page-desc">Dad's age, favorites, personality, photo — his story the day you changed everything.</div>
+        <div class="lock-badge">🔒 Included in Pack</div>
+      </div>
+
+      <div class="upsell-page-card locked">
+        <div class="upsell-page-icon">💝</div>
+        <div class="upsell-page-name">Things You Love Right Now</div>
+        <div class="upsell-page-desc">Monthly snapshot of your favorites — toy, sound, person, food, song. Fills in fast, lasts forever.</div>
+        <div class="lock-badge">🔒 Included in Pack</div>
+      </div>
+
+      <div class="upsell-page-card locked">
+        <div class="upsell-page-icon">💉</div>
+        <div class="upsell-page-name">Doctor Visits & Vaccines</div>
+        <div class="upsell-page-desc">Track every checkup, vaccine, and note from your first year of doctor visits.</div>
+        <div class="lock-badge">🔒 Included in Pack</div>
+      </div>
+
+      <div class="upsell-page-card locked">
+        <div class="upsell-page-icon">🌟</div>
+        <div class="upsell-page-name">Wishes For You</div>
+        <div class="upsell-page-desc">Every family member writes one wish for your future. The most emotional page in the book.</div>
+        <div class="lock-badge">🔒 Included in Pack</div>
+      </div>
+
+      <div class="upsell-page-card locked">
+        <div class="upsell-page-icon">🖐️</div>
+        <div class="upsell-page-name">Handprint & Footprint</div>
+        <div class="upsell-page-desc">Upload a scan or photo of tiny hands and feet. The smallest details you'll treasure most.</div>
+        <div class="lock-badge">🔒 Included in Pack</div>
+      </div>
+
+    </div>
+  </section>
+
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="cover"><span class="tab-icon">📖</span><span class="tab-label">Cover</span></button>
+    <button class="tab-btn" data-tab="birth"><span class="tab-icon">👶</span><span class="tab-label">Birth</span></button>
+    <button class="tab-btn" data-tab="milestones"><span class="tab-icon">⭐</span><span class="tab-label">Moments</span></button>
+    <button class="tab-btn" data-tab="letters"><span class="tab-icon">💌</span><span class="tab-label">Letters</span></button>
+    <button class="tab-btn" data-tab="growth"><span class="tab-icon">📈</span><span class="tab-label">Growth</span></button>
+    <button class="tab-btn" data-tab="photos"><span class="tab-icon">🗓️</span><span class="tab-label">Year</span></button>
+    <button class="tab-btn" data-tab="family"><span class="tab-icon">🌳</span><span class="tab-label">Family</span></button>
+    <button class="tab-btn" data-tab="holidays"><span class="tab-icon">🎄</span><span class="tab-label">Holidays</span></button>
+    <button class="tab-btn" data-tab="name"><span class="tab-icon">✍️</span><span class="tab-label">Name</span></button>
+    <button class="tab-btn" data-tab="upsell"><span class="tab-icon">✨</span><span class="tab-label">More</span></button>
+  </nav>
+
+  <script src="app.js"></script>
+</body>
+</html>
