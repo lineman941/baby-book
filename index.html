@@ -20,6 +20,10 @@
 </head>
 <body>
 
+<!-- LIQUID RIPPLE CANVAS -->
+<canvas id="liquid-canvas" aria-hidden="true"></canvas>
+
+
   <!-- ============================================================
        TOP BAR
        ============================================================ -->
@@ -49,8 +53,8 @@
         <option value="modern">Modern (Poppins)</option>
       </select>
       <div style="margin-top:14px;border-top:1px solid rgba(0,0,0,.08);padding-top:12px;">
-        <a href="etsy-dashboard.html" target="_blank" style="display:block;background:#3dbfbf;color:#fff;text-align:center;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;">🛍️ Open Etsy Dashboard</a>
-        <a href="LAUNCH.html" target="_blank" style="display:block;margin-top:8px;background:#f97316;color:#fff;text-align:center;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;">📋 Launch Guide</a>
+        <a href="etsy-dashboard.html" target="_blank" class="btn-3d btn-3d-primary" style="display:block;text-decoration:none;text-align:center;margin-bottom:6px;">🛍️ Open Etsy Dashboard</a>
+        <a href="LAUNCH.html" target="_blank" class="btn-3d btn-3d-ghost" style="display:block;text-decoration:none;text-align:center;">📋 Launch Guide</a>
       </div>
     </div>
   </div>
@@ -718,5 +722,89 @@
   </nav>
 
   <script src="app.js"></script>
+
+<script>
+/* ══ LIQUID RIPPLE BACKGROUND ══ */
+(function(){
+  const canvas = document.getElementById('liquid-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, mouse = {x:0,y:0}, ripples = [];
+
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Mouse/touch tracking
+  function setMouse(x, y){
+    const dx = x - mouse.x, dy = y - mouse.y;
+    if (Math.sqrt(dx*dx+dy*dy) > 4) {
+      ripples.push({x, y, r:0, maxR:120+Math.random()*80, opacity:0.22, speed:1.2+Math.random()*.8});
+      mouse.x = x; mouse.y = y;
+    }
+  }
+  document.addEventListener('mousemove', e => setMouse(e.clientX, e.clientY));
+  document.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    setMouse(t.clientX, t.clientY);
+  }, {passive:true});
+
+  // Ambient slow ripples when idle
+  let idleTimer = 0;
+  function spawnAmbient(){
+    ripples.push({
+      x: W*(.15 + Math.random()*.7),
+      y: H*(.2 + Math.random()*.6),
+      r:0, maxR:80+Math.random()*60,
+      opacity:0.12, speed:0.6+Math.random()*.4
+    });
+  }
+
+  function getColor(){
+    const root = document.documentElement;
+    const style = getComputedStyle(root);
+    const tp = (style.getPropertyValue('--tp')||'#5ee7e7').trim();
+    return tp;
+  }
+
+  function hexToRgb(hex){
+    hex = hex.replace('#','');
+    if (hex.length===3) hex = hex.split('').map(c=>c+c).join('');
+    const n = parseInt(hex,16);
+    return [(n>>16)&255,(n>>8)&255,n&255];
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+    const color = getColor();
+    const [r,g,b] = hexToRgb(color);
+
+    ripples = ripples.filter(rp => rp.opacity > 0.005);
+    for (const rp of ripples) {
+      rp.r += rp.speed;
+      rp.opacity *= 0.974;
+      const grad = ctx.createRadialGradient(rp.x,rp.y,rp.r*.2,rp.x,rp.y,rp.r);
+      grad.addColorStop(0, `rgba(${r},${g},${b},0)`);
+      grad.addColorStop(0.5, `rgba(${r},${g},${b},${rp.opacity*.7})`);
+      grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+      ctx.beginPath();
+      ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI*2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    idleTimer++;
+    if (idleTimer % 90 === 0) spawnAmbient();
+    requestAnimationFrame(draw);
+  }
+
+  // Initial ripples
+  for(let i=0;i<3;i++) setTimeout(spawnAmbient, i*800);
+  draw();
+})();
+</script>
 </body>
 </html>
