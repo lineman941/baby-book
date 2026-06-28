@@ -1,234 +1,516 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Our Little Miracle — Digital Baby Book</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Nunito', sans-serif; background: #fff; color: #333; }
-    
-    /* HERO */
-    .hero { background: linear-gradient(135deg, #e0fafa 0%, #f0f9ff 50%, #fef9f0 100%); padding: 60px 20px 80px; text-align: center; }
-    .hero-badge { background: #7ee8e8; color: #fff; font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 20px; display: inline-block; margin-bottom: 16px; letter-spacing: .05em; }
-    .hero h1 { font-size: clamp(28px, 6vw, 52px); font-weight: 900; color: #1a1a2e; line-height: 1.15; margin-bottom: 16px; }
-    .hero h1 span { color: #3dbfbf; font-family: 'Dancing Script', cursive; }
-    .hero p { font-size: clamp(15px, 2.5vw, 18px); color: #555; max-width: 560px; margin: 0 auto 32px; line-height: 1.6; }
-    .hero-cta { display: inline-block; background: #f97316; color: #fff; font-size: 16px; font-weight: 800; padding: 16px 36px; border-radius: 50px; text-decoration: none; box-shadow: 0 6px 24px rgba(249,115,22,.35); transition: transform .15s; }
-    .hero-cta:hover { transform: scale(1.04); }
-    .hero-sub { font-size: 13px; color: #888; margin-top: 14px; }
-    
-    /* PHONE MOCKUP */
-    .phone-wrap { position: relative; width: 200px; margin: 40px auto 0; }
-    .phone-shell { border: 6px solid #1a1a2e; border-radius: 30px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
-    .phone-shell img { width: 100%; display: block; }
-    
-    /* GALLERY */
-    .gallery { padding: 60px 20px; background: #fafafa; }
-    .gallery h2 { text-align: center; font-size: 28px; font-weight: 800; margin-bottom: 32px; color: #1a1a2e; }
-    .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 900px; margin: 0 auto; }
-    @media(min-width:700px) { .gallery-grid { grid-template-columns: repeat(4, 1fr); } }
-    .gallery-item { border-radius: 14px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,.1); aspect-ratio: 3/4; }
-    .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
-    
-    /* FEATURES */
-    .features { padding: 60px 20px; max-width: 900px; margin: 0 auto; }
-    .features h2 { text-align: center; font-size: 28px; font-weight: 800; margin-bottom: 32px; color: #1a1a2e; }
-    .features-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-    @media(min-width:600px) { .features-grid { grid-template-columns: repeat(3, 1fr); } }
-    .feature-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; padding: 24px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.05); }
-    .feature-icon { font-size: 36px; margin-bottom: 12px; }
-    .feature-title { font-size: 15px; font-weight: 800; color: #1a1a2e; margin-bottom: 6px; }
-    .feature-desc { font-size: 13px; color: #666; line-height: 1.5; }
-    
-    /* LIFESTYLE SPLIT */
-    .lifestyle { padding: 60px 20px; background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); color: #fff; }
-    .lifestyle-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 32px; align-items: center; }
-    @media(min-width:700px) { .lifestyle-inner { grid-template-columns: 1fr 1fr; } }
-    .lifestyle-img { border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.4); }
-    .lifestyle-img img { width: 100%; display: block; }
-    .lifestyle-text h2 { font-size: 28px; font-weight: 800; margin-bottom: 14px; line-height: 1.3; }
-    .lifestyle-text h2 span { color: #7ee8e8; font-family: 'Dancing Script', cursive; }
-    .lifestyle-text p { font-size: 15px; opacity: .85; line-height: 1.7; margin-bottom: 24px; }
-    .lifestyle-list { list-style: none; }
-    .lifestyle-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; margin-bottom: 10px; }
-    .lifestyle-list li::before { content: "✓"; background: #7ee8e8; color: #fff; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
-    
-    /* QUOTE */
-    .quote-section { padding: 60px 20px; text-align: center; background: #fff; }
-    .quote-text { font-size: clamp(20px,4vw,32px); font-family: 'Dancing Script', cursive; color: #3dbfbf; max-width: 600px; margin: 0 auto 16px; line-height: 1.4; }
-    .quote-sub { font-size: 14px; color: #888; }
-    
-    /* CTA */
-    .cta-section { padding: 60px 20px 80px; text-align: center; background: linear-gradient(135deg, #e0fafa 0%, #f0f9ff 100%); }
-    .cta-section h2 { font-size: clamp(22px,4vw,36px); font-weight: 900; color: #1a1a2e; margin-bottom: 12px; }
-    .cta-section p { font-size: 15px; color: #555; max-width: 480px; margin: 0 auto 28px; }
-    .price-tag { font-size: 42px; font-weight: 900; color: #3dbfbf; margin-bottom: 6px; }
-    .price-tag span { font-size: 20px; color: #aaa; text-decoration: line-through; margin-left: 10px; }
-    .price-note { font-size: 12px; color: #888; margin-bottom: 24px; }
-    
-    /* UPSELL PACK SECTION */
-    .pack-section { padding: 60px 20px; background: #1a1a2e; color: #fff; }
-    .pack-section h2 { text-align: center; font-size: clamp(22px,4vw,34px); font-weight: 900; margin-bottom: 8px; }
-    .pack-section h2 span { color: #7ee8e8; font-family: 'Dancing Script', cursive; }
-    .pack-tagline { text-align: center; font-size: 15px; opacity: .8; max-width: 480px; margin: 0 auto 36px; line-height: 1.6; }
-    .pack-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 760px; margin: 0 auto 36px; }
-    @media (max-width: 600px) { .pack-compare { grid-template-columns: 1fr; } }
-    .pack-tier {
-      border-radius: 18px; padding: 24px 20px; text-align: center;
-    }
-    .pack-tier.base { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); }
-    .pack-tier.premium { background: linear-gradient(135deg, #7ee8e8 0%, #3dbfbf 100%); color: #1a1a2e; }
-    .tier-label { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; opacity: .7; margin-bottom: 8px; }
-    .pack-tier.premium .tier-label { opacity: .8; }
-    .tier-name { font-size: 20px; font-weight: 900; margin-bottom: 6px; }
-    .tier-price { font-size: 36px; font-weight: 900; margin-bottom: 4px; }
-    .tier-price-orig { font-size: 14px; text-decoration: line-through; opacity: .5; margin-bottom: 16px; }
-    .tier-features { list-style: none; text-align: left; margin-bottom: 20px; }
-    .tier-features li { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; margin-bottom: 8px; opacity: .9; line-height: 1.4; }
-    .tier-features li::before { content: "✓"; font-weight: 900; flex-shrink: 0; margin-top: 1px; }
-    .pack-tier.base .tier-features li::before { color: #7ee8e8; }
-    .pack-tier.premium .tier-features li::before { color: #1a1a2e; }
-    .tier-cta {
-      display: block; width: 100%; padding: 13px; border-radius: 12px;
-      font-size: 14px; font-weight: 800; text-decoration: none; text-align: center;
-      transition: transform .15s;
-    }
-    .tier-cta:active { transform: scale(.97); }
-    .pack-tier.base .tier-cta { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
-    .pack-tier.premium .tier-cta { background: #1a1a2e; color: #7ee8e8; }
-    .pack-note { text-align: center; font-size: 12px; opacity: .5; margin-top: 12px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Little Miracle — Digital Baby Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#0d1117;color:#e8f4f4;overflow-x:hidden;position:relative;}
 
-    /* FOOTER */
-    footer { text-align: center; padding: 24px; font-size: 12px; color: #aaa; background: #fafafa; }
-  </style>
+/* LIQUID CANVAS */
+#mkt-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.5;}
+
+/* All sections above canvas */
+section,footer,nav{position:relative;z-index:1;}
+
+/* NAV */
+.mkt-nav{
+  position:fixed;top:0;left:0;right:0;height:64px;z-index:100;
+  background:rgba(13,17,23,.88);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  border-bottom:1px solid rgba(94,231,231,.15);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;
+}
+.nav-brand{
+  font-size:18px;font-weight:900;color:#5ee7e7;
+  letter-spacing:-.02em;font-family:'Dancing Script',cursive;
+  text-shadow:0 0 20px rgba(94,231,231,.5);
+}
+.nav-price{
+  font-size:13px;font-weight:800;color:#fff;
+  background:rgba(94,231,231,.12);border:1px solid rgba(94,231,231,.25);
+  padding:6px 14px;border-radius:20px;
+}
+
+/* HERO */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:100px 24px 80px;text-align:center;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(94,231,231,.12) 0%,transparent 70%);
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(94,231,231,.12);border:1px solid rgba(94,231,231,.3);
+  color:#5ee7e7;font-size:12px;font-weight:800;
+  padding:6px 16px;border-radius:20px;margin-bottom:24px;
+  letter-spacing:.08em;text-transform:uppercase;
+  box-shadow:0 0 20px rgba(94,231,231,.15);
+}
+.hero h1{
+  font-size:clamp(36px,7vw,72px);font-weight:900;
+  color:#fff;line-height:1.08;margin-bottom:20px;
+  letter-spacing:-.03em;
+}
+.hero h1 .accent{
+  color:#5ee7e7;font-family:'Dancing Script',cursive;
+  font-size:1.1em;display:block;
+  text-shadow:0 0 40px rgba(94,231,231,.5);
+}
+.hero-desc{
+  font-size:clamp(16px,2.5vw,20px);
+  color:rgba(255,255,255,.7);max-width:560px;
+  margin:0 auto 40px;line-height:1.65;font-weight:500;
+}
+.hero-ctas{display:flex;flex-direction:column;align-items:center;gap:14px;}
+
+/* 3D BUTTONS — marketing version */
+.btn3d{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:16px 36px;border:none;border-radius:16px;
+  font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;
+  cursor:pointer;text-decoration:none;
+  position:relative;overflow:hidden;
+  transform-style:preserve-3d;
+  transition:transform .12s cubic-bezier(.4,0,.2,1),box-shadow .12s;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn3d-teal{
+  background:linear-gradient(135deg,#5ee7e7 0%,#1aafaf 100%);
+  color:#0d1117;text-shadow:none;
+  box-shadow:0 6px 0 #0d7a7a,0 10px 30px rgba(94,231,231,.35),
+             inset 0 1px 0 rgba(255,255,255,.5);
+}
+.btn3d-teal:hover{
+  transform:perspective(600px) translateY(-3px) translateZ(6px);
+  box-shadow:0 9px 0 #0d7a7a,0 16px 40px rgba(94,231,231,.45),
+             inset 0 1px 0 rgba(255,255,255,.5);
+}
+.btn3d-teal:active{
+  transform:perspective(600px) translateY(4px) translateZ(-2px);
+  box-shadow:0 2px 0 #0d7a7a,0 4px 12px rgba(94,231,231,.2),
+             inset 0 1px 0 rgba(255,255,255,.5);
+}
+.btn3d-orange{
+  background:linear-gradient(135deg,#ff8c42 0%,#f97316 100%);
+  color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.25);
+  box-shadow:0 6px 0 #b84e00,0 10px 30px rgba(249,115,22,.35),
+             inset 0 1px 0 rgba(255,255,255,.4);
+}
+.btn3d-orange:hover{
+  transform:perspective(600px) translateY(-3px) translateZ(6px);
+  box-shadow:0 9px 0 #b84e00,0 16px 40px rgba(249,115,22,.45),
+             inset 0 1px 0 rgba(255,255,255,.4);
+}
+.btn3d-orange:active{
+  transform:perspective(600px) translateY(4px) translateZ(-2px);
+  box-shadow:0 2px 0 #b84e00,0 4px 12px rgba(249,115,22,.2),
+             inset 0 1px 0 rgba(255,255,255,.4);
+}
+.btn3d-ghost{
+  background:rgba(255,255,255,.06);color:#5ee7e7;
+  border:2px solid rgba(94,231,231,.3);
+  box-shadow:0 4px 0 rgba(0,0,0,.3),0 8px 20px rgba(0,0,0,.2),
+             inset 0 1px 0 rgba(255,255,255,.08);
+}
+.btn3d-ghost:hover{
+  transform:perspective(600px) translateY(-2px) translateZ(4px);
+  background:rgba(94,231,231,.1);
+  box-shadow:0 6px 0 rgba(0,0,0,.3),0 12px 28px rgba(0,0,0,.25),
+             inset 0 1px 0 rgba(255,255,255,.12);
+}
+.btn3d-ghost:active{
+  transform:perspective(600px) translateY(3px) translateZ(-2px);
+}
+.btn3d::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.3) 50%,transparent 70%);
+  background-size:200% 100%;background-position:-100% 0;
+  transition:background-position .5s ease;pointer-events:none;
+}
+.btn3d:hover::after{background-position:100% 0;}
+.hero-note{font-size:13px;color:rgba(255,255,255,.4);margin-top:6px;}
+
+/* PHONE MOCKUP */
+.phone-section{
+  padding:60px 24px;text-align:center;
+  background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(94,231,231,.08) 0%,transparent 70%);
+}
+.phone-wrap{
+  display:inline-block;position:relative;
+  width:min(220px,55vw);
+  filter:drop-shadow(0 30px 60px rgba(94,231,231,.2));
+}
+.phone-shell{
+  border:5px solid rgba(255,255,255,.15);border-radius:32px;
+  overflow:hidden;background:#0a0a0a;
+  box-shadow:0 0 0 1px rgba(255,255,255,.05),0 40px 80px rgba(0,0,0,.6);
+}
+.phone-shell img{width:100%;display:block;}
+.phone-glow{
+  position:absolute;inset:-20px;border-radius:50px;
+  background:radial-gradient(circle,rgba(94,231,231,.12) 0%,transparent 70%);
+  z-index:-1;
+  animation:glow-pulse 3s ease-in-out infinite;
+}
+@keyframes glow-pulse{
+  0%,100%{opacity:.6;transform:scale(1);}
+  50%{opacity:1;transform:scale(1.05);}
+}
+
+/* FEATURES */
+.features{padding:80px 24px;max-width:960px;margin:0 auto;}
+.section-eyebrow{
+  text-align:center;font-size:12px;font-weight:800;
+  color:#5ee7e7;text-transform:uppercase;letter-spacing:.15em;
+  margin-bottom:12px;
+}
+.section-heading{
+  text-align:center;font-size:clamp(26px,4vw,42px);font-weight:900;
+  color:#fff;margin-bottom:48px;letter-spacing:-.02em;line-height:1.2;
+}
+.section-heading .sub{color:#5ee7e7;font-family:'Dancing Script',cursive;font-size:1.05em;}
+.features-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+@media(min-width:600px){.features-grid{grid-template-columns:repeat(3,1fr);}}
+.feature-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;padding:28px 22px;
+  transition:transform .2s,border-color .2s,box-shadow .2s;
+  position:relative;overflow:hidden;
+}
+.feature-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(94,231,231,.4),transparent);
+}
+.feature-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(94,231,231,.25);
+  box-shadow:0 20px 40px rgba(0,0,0,.3),0 0 60px rgba(94,231,231,.06);
+}
+.feature-icon{font-size:40px;margin-bottom:14px;display:block;}
+.feature-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:8px;}
+.feature-desc{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;}
+
+/* LIFESTYLE */
+.lifestyle{
+  padding:80px 24px;
+  background:linear-gradient(180deg,transparent 0%,rgba(94,231,231,.04) 50%,transparent 100%);
+}
+.lifestyle-inner{
+  max-width:900px;margin:0 auto;display:grid;
+  grid-template-columns:1fr;gap:40px;align-items:center;
+}
+@media(min-width:700px){.lifestyle-inner{grid-template-columns:1fr 1fr;}}
+.lifestyle-img{
+  border-radius:20px;overflow:hidden;
+  box-shadow:0 30px 60px rgba(0,0,0,.4),0 0 40px rgba(94,231,231,.08);
+  border:1px solid rgba(94,231,231,.15);
+}
+.lifestyle-img img{width:100%;display:block;}
+.lifestyle-text h2{
+  font-size:clamp(24px,4vw,38px);font-weight:900;color:#fff;
+  margin-bottom:16px;line-height:1.25;letter-spacing:-.02em;
+}
+.lifestyle-text h2 .accent{color:#5ee7e7;font-family:'Dancing Script',cursive;}
+.lifestyle-text p{
+  font-size:15px;color:rgba(255,255,255,.65);line-height:1.75;margin-bottom:24px;
+}
+.check-list{list-style:none;}
+.check-list li{
+  display:flex;align-items:flex-start;gap:12px;
+  font-size:14px;color:rgba(255,255,255,.75);margin-bottom:12px;line-height:1.5;
+}
+.check-list li::before{
+  content:"✓";
+  min-width:22px;height:22px;border-radius:50%;
+  background:linear-gradient(135deg,#5ee7e7,#1aafaf);
+  color:#0d1117;font-size:11px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+  box-shadow:0 4px 12px rgba(94,231,231,.3);
+}
+
+/* QUOTE */
+.quote-section{
+  padding:80px 24px;text-align:center;
+  background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(94,231,231,.06) 0%,transparent 70%);
+}
+.quote-text{
+  font-size:clamp(22px,4vw,38px);font-family:'Dancing Script',cursive;
+  color:#5ee7e7;max-width:640px;margin:0 auto 16px;line-height:1.4;
+  text-shadow:0 0 40px rgba(94,231,231,.3);
+}
+.quote-sub{font-size:14px;color:rgba(255,255,255,.4);}
+
+/* PRICING */
+.pricing{padding:80px 24px;text-align:center;}
+.price-tag{font-size:72px;font-weight:900;color:#5ee7e7;line-height:1;margin-bottom:6px;
+  text-shadow:0 0 40px rgba(94,231,231,.4);}
+.price-tag .orig{font-size:28px;color:rgba(255,255,255,.25);text-decoration:line-through;margin-left:12px;}
+.price-note{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:32px;}
+.pricing h2{font-size:clamp(22px,4vw,38px);font-weight:900;color:#fff;margin-bottom:12px;letter-spacing:-.02em;}
+.pricing p{font-size:16px;color:rgba(255,255,255,.6);max-width:480px;margin:0 auto 32px;line-height:1.6;}
+
+/* PACKS */
+.packs{
+  padding:80px 24px;
+  background:rgba(255,255,255,.02);
+}
+.pack-grid{
+  display:grid;grid-template-columns:1fr;gap:20px;
+  max-width:720px;margin:32px auto 0;
+}
+@media(min-width:600px){.pack-grid{grid-template-columns:1fr 1fr;}}
+.pack-card{
+  border-radius:20px;padding:28px 22px;
+  position:relative;overflow:hidden;
+}
+.pack-card.basic{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.1);
+}
+.pack-card.premium{
+  background:linear-gradient(135deg,rgba(94,231,231,.15) 0%,rgba(26,175,175,.12) 100%);
+  border:1px solid rgba(94,231,231,.35);
+  box-shadow:0 0 40px rgba(94,231,231,.08);
+}
+.pack-card.premium::before{
+  content:'BEST VALUE';
+  position:absolute;top:16px;right:-28px;
+  background:linear-gradient(135deg,#5ee7e7,#1aafaf);
+  color:#0d1117;font-size:10px;font-weight:900;
+  padding:4px 40px;transform:rotate(35deg);letter-spacing:.08em;
+}
+.pack-name{font-size:20px;font-weight:900;color:#fff;margin-bottom:6px;}
+.pack-price{font-size:44px;font-weight:900;color:#5ee7e7;line-height:1;margin-bottom:4px;}
+.pack-orig{font-size:14px;color:rgba(255,255,255,.3);text-decoration:line-through;margin-bottom:18px;}
+.pack-features{list-style:none;margin-bottom:22px;}
+.pack-features li{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:13px;color:rgba(255,255,255,.75);
+  margin-bottom:8px;line-height:1.4;
+}
+.pack-features li::before{
+  content:"✓";color:#5ee7e7;font-weight:900;flex-shrink:0;margin-top:1px;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;padding:32px 24px;
+  font-size:13px;color:rgba(255,255,255,.3);
+  border-top:1px solid rgba(255,255,255,.06);
+}
+</style>
 </head>
 <body>
 
+<canvas id="mkt-canvas" aria-hidden="true"></canvas>
+
+<nav class="mkt-nav">
+  <span class="nav-brand">Our Little Miracle ✨</span>
+  <span class="nav-price">Only $4.97</span>
+</nav>
+
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-badge">✨ Digital Baby Book</div>
-  <h1>The Baby Book for<br><span>Real Moms at 3AM</span></h1>
-  <p>No app to download. No Canva needed. Works on any phone, right now. 9 pages, 12 milestones, family tree, first holidays, and more — everything in one place.</p>
-  <a href="https://www.etsy.com/shop/OurLittleMiracleBook" class="hero-cta">🛍️ Get It on Etsy — Only $4.97</a>
-  <div class="hero-sub">Limited launch price · Digital instant access · 5 beautiful themes</div>
+  <div class="hero-badge">✨ Digital Baby Book · No App Needed</div>
+  <h1>
+    The Baby Book for
+    <span class="accent">Real Moms at 3AM</span>
+  </h1>
+  <p class="hero-desc">No app to download. No Canva needed. Works on any phone, right now. 9 pages, 12 milestones, family tree, first holidays — everything in one beautiful place.</p>
+  <div class="hero-ctas">
+    <a href="https://www.etsy.com/shop/OurLittleMiracleBook" class="btn3d btn3d-orange">🛍️ Get It on Etsy — Only $4.97</a>
+    <a href="index.html" class="btn3d btn3d-ghost">👀 Preview the App</a>
+  </div>
+  <p class="hero-note">Limited launch price · Digital instant access · 5 stunning themes</p>
+</section>
+
+<!-- PHONE MOCKUP -->
+<section class="phone-section">
   <div class="phone-wrap">
+    <div class="phone-glow"></div>
     <div class="phone-shell">
-      <img src="assets/mockup_nursery_phone.png" alt="Baby Book on Phone">
+      <img src="assets/mockup_nursery_phone.png" alt="Baby Book on Phone" loading="lazy">
     </div>
   </div>
 </section>
 
-<section class="gallery">
-  <h2>See It in Real Life</h2>
-  <div class="gallery-grid">
-    <div class="gallery-item"><img src="assets/mockup_nursery_phone.png" alt="Nursery mockup"></div>
-    <div class="gallery-item"><img src="assets/mockup_flatlay_marble.png" alt="Flatlay mockup"></div>
-    <div class="gallery-item"><img src="assets/mockup_mom_3am.png" alt="3AM mom mockup"></div>
-    <div class="gallery-item"><img src="assets/mockup_two_screens.png" alt="Two screens mockup"></div>
-  </div>
-</section>
-
+<!-- FEATURES -->
 <section class="features">
-  <h2>Everything You Need, Nothing You Don't</h2>
+  <p class="section-eyebrow">What's Inside</p>
+  <h2 class="section-heading">Everything you need to <span class="sub">remember forever</span></h2>
   <div class="features-grid">
-    <div class="feature-card"><div class="feature-icon">📱</div><div class="feature-title">Works on Any Phone</div><div class="feature-desc">No app download. No account. Open it in any browser — it just works.</div></div>
-    <div class="feature-card"><div class="feature-icon">🎨</div><div class="feature-title">5 Beautiful Themes</div><div class="feature-desc">Teal Dream, Rose Gold, Sage, Lavender, Classic Cream. Switch anytime.</div></div>
-    <div class="feature-card"><div class="feature-icon">📷</div><div class="feature-title">Add Your Photos</div><div class="feature-desc">Drag and drop or tap to upload. Your memories, your way.</div></div>
-    <div class="feature-card"><div class="feature-icon">⭐</div><div class="feature-title">12 Milestones</div><div class="feature-desc">First smile, first steps, first tooth — never forget a single moment.</div></div>
-    <div class="feature-card"><div class="feature-icon">💌</div><div class="feature-title">Love Letters</div><div class="feature-desc">Write from Mom, Dad, grandparents, and the village. Time-stamped.</div></div>
-    <div class="feature-card"><div class="feature-icon">📈</div><div class="feature-title">Growth Tracker</div><div class="feature-desc">Track weight and height month by month with beautiful charts.</div></div>
-    <div class="feature-card"><div class="feature-icon">🗓️</div><div class="feature-title">First Year in Photos</div><div class="feature-desc">12 monthly photo slots — one for every month of your first year.</div></div>
-    <div class="feature-card"><div class="feature-icon">🌳</div><div class="feature-title">Family Tree</div><div class="feature-desc">Baby, Mom, Dad, and all 4 grandparents — photos and names all in one place.</div></div>
-    <div class="feature-card"><div class="feature-icon">🎄</div><div class="feature-title">First Holidays</div><div class="feature-desc">Christmas, Halloween, Birthday, Easter and more — photo, date, and memory for each.</div></div>
+    <div class="feature-card">
+      <span class="feature-icon">🐣</span>
+      <div class="feature-title">Birth Story</div>
+      <p class="feature-desc">Name, date, time, weight, length, hospital, and the full story in your own words — with a birth photo.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🌟</span>
+      <div class="feature-title">12 Milestones</div>
+      <p class="feature-desc">First smile, first word, first steps — each with a photo, date, and your personal note.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📈</span>
+      <div class="feature-title">Growth Tracker</div>
+      <p class="feature-desc">Log weight and height over time with a beautiful auto-updating chart.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">👨‍👩‍👧</span>
+      <div class="feature-title">Family Tree</div>
+      <p class="feature-desc">Parents, grandparents, siblings — fill in your whole family with photos.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🎄</span>
+      <div class="feature-title">First Holidays</div>
+      <p class="feature-desc">Christmas, Easter, Halloween, Thanksgiving — capture every first with a photo and memory.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🎨</span>
+      <div class="feature-title">5 Stunning Themes</div>
+      <p class="feature-desc">Teal Dream, Rose Gold, Sage, Lavender, Classic Cream — switch instantly, no reload.</p>
+    </div>
   </div>
 </section>
 
+<!-- LIFESTYLE -->
 <section class="lifestyle">
   <div class="lifestyle-inner">
-    <div class="lifestyle-img"><img src="assets/mockup_mom_3am.png" alt="3AM mom using baby book"></div>
+    <div class="lifestyle-img">
+      <img src="assets/mockup_nursery_phone.png" alt="Mom using Baby Book" loading="lazy">
+    </div>
     <div class="lifestyle-text">
-      <h2>Built for the <span>3AM version</span> of you</h2>
-      <p>You're half awake, baby finally dozed off, and your heart is so full it hurts. This is the moment to capture. Not tomorrow. Not when you find the time.</p>
-      <ul class="lifestyle-list">
-        <li>Opens instantly — no loading, no setup</li>
-        <li>Works in the dark with one hand</li>
-        <li>Auto-saves as you type</li>
-        <li>Pick up right where you left off</li>
-        <li>No subscriptions, ever</li>
+      <h2>Built for <span class="accent">real life</span> with a newborn</h2>
+      <p>No logins. No subscriptions. No waiting. Just open the link on your phone and start filling it in — even at 3am in the dark with one hand.</p>
+      <ul class="check-list">
+        <li>Works on any phone or tablet browser</li>
+        <li>Saves automatically — no account needed</li>
+        <li>Add photos from your camera roll instantly</li>
+        <li>Print-ready layout for physical keepsakes</li>
+        <li>One-time purchase, yours forever</li>
       </ul>
     </div>
   </div>
 </section>
 
-<section class="pack-section">
-  <h2>Good things come in <span>bundles</span></h2>
-  <p class="pack-tagline">Start free with the full baby book. Unlock 7 deeper story pages when you're ready to go beyond the basics.</p>
-
-  <div class="pack-compare">
-
-    <!-- BASE -->
-    <div class="pack-tier base">
-      <div class="tier-label">Included</div>
-      <div class="tier-name">Our Little Miracle</div>
-      <div class="tier-price">$4.97</div>
-      <div class="tier-price-orig">$19.97</div>
-      <ul class="tier-features">
-        <li>Custom cover with name &amp; DOB</li>
-        <li>Full birth story page</li>
-        <li>12 milestone cards with photos</li>
-        <li>4 love letter pages</li>
-        <li>Monthly growth tracker + chart</li>
-        <li>First Year in Photos (12 months)</li>
-        <li>Family Tree page</li>
-        <li>First Holidays (6 holidays)</li>
-        <li>Your Name Story page</li>
-        <li>5 color themes · 4 fonts</li>
-        <li>Works on any phone, no app</li>
-      </ul>
-      <a href="https://www.etsy.com/shop/OurLittleMiracleBook" class="tier-cta">Get the Base Book →</a>
-    </div>
-
-    <!-- COMPLETE PACK -->
-    <div class="pack-tier premium">
-      <div class="tier-label">✨ Best Value</div>
-      <div class="tier-name">Complete Story Pack</div>
-      <div class="tier-price">$3.97</div>
-      <div class="tier-price-orig">$9.97 · Save 60%</div>
-      <ul class="tier-features">
-        <li>Everything in the base book</li>
-        <li>Before You Were Born — pregnancy story</li>
-        <li>All About Mom — her portrait at this moment</li>
-        <li>All About Dad — his story the day you arrived</li>
-        <li>Things You Love Right Now — monthly favorites</li>
-        <li>Doctor Visits &amp; Vaccine Tracker</li>
-        <li>Wishes For You — family writes their hopes</li>
-        <li>Handprint &amp; Footprint page</li>
-      </ul>
-      <a href="https://www.etsy.com/shop/OurLittleMiracleBook" class="tier-cta">🛍️ Add the Complete Pack</a>
-    </div>
-
-  </div>
-  <div class="pack-note">Both are instant digital downloads · No app · Works on any phone or tablet</div>
-</section>
-
+<!-- QUOTE -->
 <section class="quote-section">
-  <div class="quote-text">"She'll only be this little once. Every moment is worth remembering."</div>
-  <div class="quote-sub">— From every mom who almost forgot to write it down</div>
+  <p class="quote-text">"The most precious moments happen in the blink of an eye — this is where you keep them."</p>
+  <p class="quote-sub">Our Little Miracle · Baby Book</p>
 </section>
 
-<section class="cta-section">
-  <h2>Start Your Baby Book Today</h2>
-  <p>Instant digital access. No download required. Works on every phone, tablet, and computer.</p>
-  <div class="price-tag">$4.97 <span>$19.97</span></div>
-  <div class="price-note">Launch week price — limited time</div>
-  <a href="https://www.etsy.com/shop/OurLittleMiracleBook" class="hero-cta">🛍️ Get It on Etsy Now</a>
+<!-- PRICING -->
+<section class="pricing">
+  <p class="section-eyebrow">Launch Price</p>
+  <h2 class="section-heading">One-time. Yours forever.</h2>
+  <p>No subscriptions. No app store. Just a link that opens your beautiful baby book — instantly.</p>
+  <div class="price-tag">$4.97 <span class="orig">$19</span></div>
+  <div class="price-note">Digital download · Instant access · Limited launch pricing</div>
+  <a href="https://www.etsy.com/shop/OurLittleMiracleBook" class="btn3d btn3d-orange">🛍️ Grab It on Etsy Now</a>
+</section>
+
+<!-- PACKS -->
+<section class="packs">
+  <p class="section-eyebrow">Choose Your Bundle</p>
+  <h2 class="section-heading">Simple <span class="sub">pricing</span></h2>
+  <div class="pack-grid">
+    <div class="pack-card basic">
+      <div class="pack-name">Baby Book</div>
+      <div class="pack-price">$4.97</div>
+      <div class="pack-orig">$19</div>
+      <ul class="pack-features">
+        <li>Full digital baby book app</li>
+        <li>9 sections &amp; 12 milestones</li>
+        <li>5 color themes</li>
+        <li>Photo uploads</li>
+        <li>Growth chart</li>
+        <li>Lifetime access</li>
+      </ul>
+      <a href="https://www.etsy.com/shop/OurLittleMiracleBook" class="btn3d btn3d-ghost" style="display:block;text-align:center;">Get Basic</a>
+    </div>
+    <div class="pack-card premium">
+      <div class="pack-name">Complete Bundle</div>
+      <div class="pack-price">$9.97</div>
+      <div class="pack-orig">$39</div>
+      <ul class="pack-features">
+        <li>Everything in Basic</li>
+        <li>Printable PDF export template</li>
+        <li>Custom color theme builder</li>
+        <li>Priority customer support</li>
+        <li>All future updates free</li>
+        <li>Bonus: 1st year photo grid</li>
+      </ul>
+      <a href="https://www.etsy.com/shop/OurLittleMiracleBook" class="btn3d btn3d-teal" style="display:block;text-align:center;">Get Bundle</a>
+    </div>
+  </div>
 </section>
 
 <footer>
-  <p>Our Little Miracle — Digital Baby Book &copy; 2025 · Instant Digital Download · For personal use</p>
+  <p>© 2025 Our Little Miracle · Made with ❤️ for new parents everywhere</p>
 </footer>
 
+<script>
+/* LIQUID RIPPLE FOR MARKETING PAGE */
+(function(){
+  const canvas = document.getElementById('mkt-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W,H,ripples=[],mouse={x:0,y:0},idle=0;
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  resize(); window.addEventListener('resize',resize);
+  function addRipple(x,y,opacity,maxR,speed){
+    ripples.push({x,y,r:0,maxR:maxR||120+Math.random()*80,opacity:opacity||0.18,speed:speed||1.2+Math.random()*.8});
+  }
+  document.addEventListener('mousemove',e=>{
+    const dx=e.clientX-mouse.x,dy=e.clientY-mouse.y;
+    if(Math.sqrt(dx*dx+dy*dy)>5){addRipple(e.clientX,e.clientY);mouse.x=e.clientX;mouse.y=e.clientY;}
+  });
+  document.addEventListener('touchmove',e=>{
+    const t=e.touches[0];
+    const dx=t.clientX-mouse.x,dy=t.clientY-mouse.y;
+    if(Math.sqrt(dx*dx+dy*dy)>8){addRipple(t.clientX,t.clientY);mouse.x=t.clientX;mouse.y=t.clientY;}
+  },{passive:true});
+  // Ambient ripples
+  function ambient(){addRipple(W*(.1+Math.random()*.8),H*(.1+Math.random()*.8),.1,70+Math.random()*50,.5+Math.random()*.4);}
+  for(let i=0;i<4;i++) setTimeout(ambient,i*600);
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ripples=ripples.filter(r=>r.opacity>.004);
+    for(const r of ripples){
+      r.r+=r.speed; r.opacity*=.975;
+      const g=ctx.createRadialGradient(r.x,r.y,r.r*.15,r.x,r.y,r.r);
+      g.addColorStop(0,'rgba(94,231,231,0)');
+      g.addColorStop(.5,`rgba(94,231,231,${r.opacity*.8})`);
+      g.addColorStop(1,'rgba(94,231,231,0)');
+      ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,Math.PI*2);
+      ctx.fillStyle=g;ctx.fill();
+    }
+    idle++;
+    if(idle%80===0) ambient();
+    requestAnimationFrame(draw);
+  }
+  draw();
+  // Button ripple
+  const style=document.createElement('style');
+  style.textContent='@keyframes btn-ripple{from{transform:scale(0);opacity:1}to{transform:scale(4);opacity:0}}';
+  document.head.appendChild(style);
+  document.querySelectorAll('.btn3d').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      const rect=btn.getBoundingClientRect();
+      const span=document.createElement('span');
+      span.style.cssText='position:absolute;border-radius:50%;pointer-events:none;transform:scale(0);animation:btn-ripple .5s ease-out forwards;background:rgba(255,255,255,.35);width:120px;height:120px;left:'+(e.clientX-rect.left-60)+'px;top:'+(e.clientY-rect.top-60)+'px;z-index:10';
+      btn.appendChild(span);
+      setTimeout(()=>span.remove(),500);
+    });
+  });
+})();
+</script>
 </body>
 </html>
