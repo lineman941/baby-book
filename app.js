@@ -1,30 +1,48 @@
 /* ============================================================
-   Baby Book — app.js
-   ============================================================ */
+   Our Little Miracle — app.js  (COMPLETE REBUILD)
+   All sections wired, auto-save, growth chart, photo uploads
+============================================================ */
 
 const STORE_KEY = 'olm_baby_book';
 let store = {};
+let growthChart = null;
 
-/* ---- Storage ---- */
+/* ── Storage ── */
 function loadStore() {
   try { store = JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch(e) { store = {}; }
 }
 function saveStore() {
-  try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch(e) {}
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(store));
+    flashSave();
+  } catch(e) {}
+}
+function flashSave() {
+  const ind = document.getElementById('saveIndicator');
+  if (!ind) return;
+  ind.classList.add('visible');
+  clearTimeout(ind._t);
+  ind._t = setTimeout(() => ind.classList.remove('visible'), 1500);
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
 }
 
-/* ---- Theme ---- */
+/* ── Theme ── */
 function applyTheme(t) {
   document.documentElement.setAttribute('data-color-theme', t);
   store.theme = t;
   saveStore();
-  // Highlight active pill
   document.querySelectorAll('.theme-pill').forEach(p => {
     p.classList.toggle('active', p.dataset.setTheme === t);
   });
 }
 
-/* ---- Font ---- */
+/* ── Font ── */
 function applyFont(f) {
   document.documentElement.setAttribute('data-font', f);
   store.font = f;
@@ -33,63 +51,108 @@ function applyFont(f) {
   if (sel) sel.value = f;
 }
 
-/* ---- Tabs ---- */
+/* ── Tabs ── */
 function showTab(name) {
   document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   const sec = document.getElementById('section-' + name);
   if (sec) sec.classList.add('active');
-  const btn = document.querySelector(`.tab-btn[data-tab="${name}"]`);
+  const btn = document.querySelector('.tab-btn[data-tab="' + name + '"]');
   if (btn) btn.classList.add('active');
   store.lastTab = name;
   saveStore();
 }
 
-/* ---- Cover lock ---- */
+/* ── Settings tray ── */
+function bindSettings() {
+  const btn = document.getElementById('settingsBtn');
+  const tray = document.getElementById('settingsTray');
+  if (btn && tray) {
+    btn.addEventListener('click', () => {
+      const open = tray.classList.toggle('open');
+      tray.setAttribute('aria-hidden', !open);
+    });
+    document.addEventListener('click', e => {
+      if (!tray.contains(e.target) && e.target !== btn) {
+        tray.classList.remove('open');
+        tray.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
+  document.querySelectorAll('.theme-pill').forEach(p => {
+    p.addEventListener('click', () => applyTheme(p.dataset.setTheme));
+  });
+  const fontSel = document.getElementById('fontSelect');
+  if (fontSel) fontSel.addEventListener('change', () => applyFont(fontSel.value));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.addEventListener('click', () => showTab(b.dataset.tab));
+  });
+}
+
+/* ── Cover lock ── */
 function formatDateDisplay(isoDate) {
   if (!isoDate) return '';
   const [y, m, d] = isoDate.split('-');
   const months = ['January','February','March','April','May','June',
-                  'July','August','September','October','November','December'];
+    'July','August','September','October','November','December'];
   return months[parseInt(m, 10) - 1] + ' ' + parseInt(d, 10) + ', ' + y;
 }
-
 function lockCover() {
   const nameVal = document.getElementById('coverName').value.trim();
-  const dobVal  = document.getElementById('coverDob').value;
-  if (!nameVal) { alert("Please enter your baby's name first."); return; }
-  store.coverName   = nameVal;
-  store.coverDob    = dobVal;
+  const dobVal = document.getElementById('coverDob').value;
+  if (!nameVal) { showToast("Please enter your baby's name first!"); return; }
+  store.coverName = nameVal;
+  store.coverDob = dobVal;
   store.coverLocked = true;
   saveStore();
   document.getElementById('lockedName').textContent = nameVal;
-  document.getElementById('lockedDob').textContent  = dobVal ? formatDateDisplay(dobVal) : '';
+  document.getElementById('lockedDob').textContent = dobVal ? formatDateDisplay(dobVal) : '';
   document.getElementById('coverZone').classList.add('is-locked');
+  showToast('Cover saved! 💗');
 }
-
 function unlockCover() {
   document.getElementById('coverZone').classList.remove('is-locked');
 }
-
 function bindCoverLock() {
-  document.getElementById('coverSaveBtn').addEventListener('click', lockCover);
-  document.getElementById('coverEditBtn').addEventListener('click', unlockCover);
+  const saveBtn = document.getElementById('coverSaveBtn');
+  const editBtn = document.getElementById('coverEditBtn');
+  if (saveBtn) saveBtn.addEventListener('click', lockCover);
+  if (editBtn) editBtn.addEventListener('click', unlockCover);
   if (store.coverName) document.getElementById('coverName').value = store.coverName;
-  if (store.coverDob)  document.getElementById('coverDob').value  = store.coverDob;
+  if (store.coverDob) document.getElementById('coverDob').value = store.coverDob;
   if (store.coverLocked) {
     document.getElementById('lockedName').textContent = store.coverName || '';
-    document.getElementById('lockedDob').textContent  = store.coverDob ? formatDateDisplay(store.coverDob) : '';
+    document.getElementById('lockedDob').textContent = store.coverDob ? formatDateDisplay(store.coverDob) : '';
     document.getElementById('coverZone').classList.add('is-locked');
   }
 }
 
-/* ---- Photo uploads ---- */
+/* ── Generic field auto-save ── */
+function bindFields(fieldList) {
+  fieldList.forEach(({ id, key, type }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const storeKey = key || id;
+    if (store[storeKey]) el.value = store[storeKey];
+    el.addEventListener('input', () => {
+      store[storeKey] = el.value;
+      saveStore();
+    });
+    el.addEventListener('change', () => {
+      store[storeKey] = el.value;
+      saveStore();
+    });
+  });
+}
+
+/* ── Photo uploads ── */
 function bindPhotoUploads() {
   document.querySelectorAll('.photo-upload-area, .milestone-photo-upload').forEach(area => {
     const input = area.querySelector('input[type=file]');
-    const img   = area.querySelector('img');
-    area.addEventListener('click', (e) => {
-      if (e.target !== input) input && input.click();
+    const img = area.querySelector('img');
+    if (!input) return;
+    area.addEventListener('click', e => {
+      if (e.target !== input) input.click();
     });
     area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('drag-over'); });
     area.addEventListener('dragleave', () => area.classList.remove('drag-over'));
@@ -97,351 +160,169 @@ function bindPhotoUploads() {
       e.preventDefault();
       area.classList.remove('drag-over');
       const file = e.dataTransfer.files[0];
-      if (file && img) {
-        img.src = URL.createObjectURL(file);
-        area.classList.add('has-photo');
-      }
+      if (file && img) { img.src = URL.createObjectURL(file); area.classList.add('has-photo'); }
     });
-    if (input) {
-      input.addEventListener('change', () => {
-        const file = input.files[0];
-        if (file && img) {
-          img.src = URL.createObjectURL(file);
-          area.classList.add('has-photo');
-        }
-      });
-    }
-  });
-}
-
-/* ---- Auto-save birth fields ---- */
-function bindBirthFields() {
-  const fields = [
-    { id: 'birthFullName',    key: 'birthFullName'    },
-    { id: 'birthDate',        key: 'birthDate'        },
-    { id: 'birthTime',        key: 'birthTime'        },
-    { id: 'birthWeight',      key: 'birthWeight'      },
-    { id: 'birthLength',      key: 'birthLength'      },
-    { id: 'birthHospital',    key: 'birthHospital'    },
-    { id: 'birthStoryText',   key: 'birthStoryText'   },
-  ];
-  fields.forEach(({ id, key }) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    if (store[key]) el.value = store[key];
-    el.addEventListener('input', () => {
-      store[key] = el.value;
-      saveStore();
-    });
-  });
-}
-
-/* ---- Auto-save milestone dates ---- */
-function bindMilestoneFields() {
-  document.querySelectorAll('.milestone-date-input').forEach(input => {
-    const key = 'milestone_' + input.dataset.milestone;
-    if (store[key]) input.value = store[key];
     input.addEventListener('change', () => {
-      store[key] = input.value;
-      saveStore();
+      const file = input.files[0];
+      if (file && img) { img.src = URL.createObjectURL(file); area.classList.add('has-photo'); }
     });
   });
 }
 
-/* ---- Auto-save letter fields ---- */
-function bindLetterFields() {
-  document.querySelectorAll('.letter-date-input, .letter-text-input').forEach(el => {
-    const key = el.dataset.letterKey;
-    if (!key) return;
-    if (store[key]) el.value = store[key];
-    el.addEventListener('input', () => {
-      store[key] = el.value;
-      saveStore();
-    });
-  });
-}
-
-/* ============================================================
-   GROWTH CHART
-   ============================================================ */
-let growthChart = null;
-let growthEntries = [];
-
-function renderGrowthTable() {
-  const tbody = document.getElementById('growthTableBody');
-  if (!tbody) return;
-  if (growthEntries.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="3" class="growth-table-empty">No entries yet. Add your first measurement above.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = growthEntries.map(e =>
-    `<tr>
-      <td>${e.month}</td>
-      <td>${e.weight ? e.weight + ' lbs' : '—'}</td>
-      <td>${e.height ? e.height + ' in' : '—'}</td>
-    </tr>`
-  ).join('');
-}
-
-function renderGrowthChart() {
+/* ── Growth chart ── */
+function buildGrowthChart() {
   const canvas = document.getElementById('growthChart');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-
-  const labels  = growthEntries.map(e => e.month);
-  const weights = growthEntries.map(e => parseFloat(e.weight) || null);
-  const heights = growthEntries.map(e => parseFloat(e.height) || null);
-
-  const accent  = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--theme-accent').trim() || '#3dbfbf';
-  const primary = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--theme-primary').trim() || '#7ee8e8';
-
-  if (growthChart) {
-    growthChart.data.labels         = labels;
-    growthChart.data.datasets[0].data = weights;
-    growthChart.data.datasets[1].data = heights;
-    growthChart.update();
-    return;
-  }
-
-  growthChart = new Chart(ctx, {
+  if (!canvas || typeof Chart === 'undefined') return;
+  const entries = store.growthEntries || [];
+  if (growthChart) growthChart.destroy();
+  growthChart = new Chart(canvas, {
     type: 'line',
     data: {
-      labels,
+      labels: entries.map(e => 'Mo ' + e.age),
       datasets: [
-        {
-          label: 'Weight (lbs)',
-          data: weights,
-          borderColor: accent,
-          backgroundColor: accent + '20',
-          fill: true,
-          tension: 0.35,
-          pointRadius: 4,
-          pointBackgroundColor: accent,
-          yAxisID: 'yWeight',
-        },
-        {
-          label: 'Height (in)',
-          data: heights,
-          borderColor: primary,
-          backgroundColor: primary + '20',
-          fill: true,
-          tension: 0.35,
-          pointRadius: 4,
-          pointBackgroundColor: primary,
-          yAxisID: 'yHeight',
-        }
+        { label: 'Weight (lbs)', data: entries.map(e => parseFloat(e.weight) || null),
+          borderColor: '#1aafaf', backgroundColor: 'rgba(94,231,231,.15)',
+          tension: .4, fill: true, pointRadius: 5 },
+        { label: 'Height (in)', data: entries.map(e => parseFloat(e.height) || null),
+          borderColor: '#f97316', backgroundColor: 'rgba(249,115,22,.1)',
+          tension: .4, fill: false, pointRadius: 5 }
       ]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      plugins: {
-        legend: { labels: { font: { size: 12 }, boxWidth: 14 } }
-      },
-      scales: {
-        x: {
-          grid: { color: 'rgba(0,0,0,0.05)' },
-          ticks: { font: { size: 11 } }
-        },
-        yWeight: {
-          type: 'linear',
-          position: 'left',
-          grid: { color: 'rgba(0,0,0,0.05)' },
-          ticks: { font: { size: 11 } },
-          title: { display: true, text: 'lbs', font: { size: 10 } }
-        },
-        yHeight: {
-          type: 'linear',
-          position: 'right',
-          grid: { drawOnChartArea: false },
-          ticks: { font: { size: 11 } },
-          title: { display: true, text: 'in', font: { size: 10 } }
-        }
-      }
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { display: true, position: 'bottom' } },
+      scales: { y: { beginAtZero: false }, x: { grid: { display: false } } }
     }
   });
 }
-
-function addGrowthEntry() {
-  const monthEl  = document.getElementById('growthMonth');
-  const weightEl = document.getElementById('growthWeight');
-  const heightEl = document.getElementById('growthHeight');
-
-  const month  = monthEl  ? monthEl.value.trim()  : '';
-  const weight = weightEl ? weightEl.value.trim() : '';
-  const height = heightEl ? heightEl.value.trim() : '';
-
-  if (!month) { alert('Please enter a month label (e.g. "Month 1" or "June 2025").'); return; }
-
-  growthEntries.push({ month, weight, height });
-  store.growthEntries = growthEntries;
-  saveStore();
-
-  if (monthEl)  monthEl.value  = '';
-  if (weightEl) weightEl.value = '';
-  if (heightEl) heightEl.value = '';
-
-  renderGrowthTable();
-  renderGrowthChart();
-}
-
 function bindGrowthForm() {
-  growthEntries = store.growthEntries || [];
-
-  const addBtn = document.getElementById('growthAddBtn');
-  if (addBtn) addBtn.addEventListener('click', addGrowthEntry);
-
-  renderGrowthTable();
-  if (growthEntries.length > 0) renderGrowthChart();
-}
-
-/* ============================================================
-   DOMContentLoaded
-   ============================================================ */
-
-// ── FIRST YEAR IN PHOTOS ──
-function buildPhotoYearGrid() {
-  const grid = document.getElementById('photoYearGrid');
-  if (!grid) return;
-  const months = [
-    'January','February','March','April','May','June',
-    'July','August','September','October','November','December'
-  ];
-  months.forEach((month, i) => {
-    const card = document.createElement('div');
-    card.className = 'month-photo-card';
-    card.innerHTML = `
-      <div class="month-photo-label">Month ${i+1} &middot; ${month}</div>
-      <div class="month-photo-upload" id="mpu-${i}">
-        <div class="mpu-placeholder">
-          <div class="mpu-camera">📷</div>
-          <div class="mpu-tap">Tap to add photo</div>
-        </div>
-        <img src="" alt="${month}" style="display:none">
-        <input type="file" accept="image/*" style="display:none">
-      </div>
-      <input type="date" class="month-date-input" autocomplete="off" title="${month} date">
-      <input type="text" class="month-caption-input" placeholder="A note about this month..." autocomplete="new-password">
-    `;
-    grid.appendChild(card);
-
-    // Bind upload
-    const area  = card.querySelector('.month-photo-upload');
-    const input = card.querySelector('input[type=file]');
-    const img   = card.querySelector('img');
-    const ph    = card.querySelector('.mpu-placeholder');
-
-    area.addEventListener('click', () => input.click());
-    input.addEventListener('change', () => {
-      const file = input.files[0];
-      if (file) {
-        img.src = URL.createObjectURL(file);
-        img.style.display = 'block';
-        ph.style.display  = 'none';
-      }
-    });
+  const addBtn = document.getElementById('addGrowthBtn');
+  if (!addBtn) return;
+  addBtn.addEventListener('click', () => {
+    const age = document.getElementById('growthAge').value;
+    const weight = document.getElementById('currentWeight').value;
+    const height = document.getElementById('currentHeight').value;
+    const headCirc = document.getElementById('headCirc').value;
+    if (!age) { showToast('Please enter the age in months'); return; }
+    if (!store.growthEntries) store.growthEntries = [];
+    store.growthEntries.push({ age, weight, height, headCirc, date: new Date().toISOString().split('T')[0] });
+    store.growthEntries.sort((a, b) => Number(a.age) - Number(b.age));
+    saveStore();
+    buildGrowthChart();
+    document.getElementById('growthAge').value = '';
+    document.getElementById('currentWeight').value = '';
+    document.getElementById('currentHeight').value = '';
+    document.getElementById('headCirc').value = '';
+    showToast('Growth entry added! 📊');
   });
 }
 
-
-// ── SPARKLE BURST ON TAB CLICK ──
-function spawnSparkles(x, y) {
-  const colors = ['#7ee8e8','#f4a7b9','#c4b5fd','#a8c5a0','#fde68a','#fb7185','#67e8f9'];
-  const container = document.createElement('div');
-  container.className = 'sparkle-container';
-  document.body.appendChild(container);
-
-  const count = 12;
-  for (let i = 0; i < count; i++) {
-    const s = document.createElement('div');
-    s.className = 'sparkle';
-    const angle = (360 / count) * i + (Math.random() * 20 - 10);
-    const dist  = 32 + Math.random() * 36;
-    const rad   = angle * Math.PI / 180;
-    const dx    = Math.cos(rad) * dist;
-    const dy    = Math.sin(rad) * dist;
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    const size  = 4 + Math.random() * 5;
-    s.style.cssText = `
-      left:${x}px; top:${y}px;
-      width:${size}px; height:${size}px;
-      background:${color};
-      --dx:${dx}px; --dy:${dy}px;
-      box-shadow: 0 0 6px ${color};
-    `;
-    container.appendChild(s);
-  }
-  setTimeout(() => container.remove(), 650);
+/* ── First Year Photo Grid ── */
+function buildPhotoYearGrid() {
+  const grid = document.getElementById('photoYearGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  const months = ['January','February','March','April','May','June',
+    'July','August','September','October','November','December'];
+  months.forEach((month, idx) => {
+    const card = document.createElement('div');
+    card.className = 'milestone-card';
+    card.innerHTML = '<div class="milestone-label">📸 ' + month + '</div>' +
+      '<div class="milestone-photo-upload" id="yr-photo-' + idx + '">' +
+      '<div class="ms-placeholder">📷</div>' +
+      '<img alt="Month ' + (idx+1) + ' photo">' +
+      '<input type="file" accept="image/*" capture="environment">' +
+      '</div>' +
+      '<input type="text" id="yr-note-' + idx + '" placeholder="Memory from ' + month + '…" autocomplete="off" style="margin-top:8px;">';
+    grid.appendChild(card);
+    // Bind note field
+    const noteField = document.getElementById('yr-note-' + idx);
+    if (noteField) {
+      const storeKey = 'yr-note-' + idx;
+      if (store[storeKey]) noteField.value = store[storeKey];
+      noteField.addEventListener('input', () => { store[storeKey] = noteField.value; saveStore(); });
+    }
+  });
+  bindPhotoUploads();
 }
 
-
-document.addEventListener('DOMContentLoaded', () => {
+/* ══════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', function() {
   loadStore();
 
-  applyTheme(store.theme || 'teal-dream');
-  applyFont(store.font   || 'soft');
+  // Apply saved theme/font
+  if (store.theme) applyTheme(store.theme);
+  else applyTheme('teal-dream');
+  if (store.font) applyFont(store.font);
 
+  // Bind UI
+  bindSettings();
   bindCoverLock();
   bindPhotoUploads();
-  bindBirthFields();
-  bindMilestoneFields();
-  bindLetterFields();
   bindGrowthForm();
   buildPhotoYearGrid();
+  buildGrowthChart();
 
-  showTab(store.lastTab || 'cover');
+  // Restore last tab
+  if (store.lastTab) showTab(store.lastTab);
+  else showTab('cover');
 
-  // Theme pills
-  document.querySelectorAll('[data-set-theme]').forEach(btn =>
-    btn.addEventListener('click', () => applyTheme(btn.dataset.setTheme))
-  );
+  // Birth fields
+  bindFields([
+    { id: 'birthFullName' }, { id: 'birthDate' }, { id: 'birthTime' },
+    { id: 'birthWeight' }, { id: 'birthLength' }, { id: 'birthHospital' },
+    { id: 'birthStoryText' }
+  ]);
 
-  // Font buttons (if any)
-  document.querySelectorAll('[data-set-font]').forEach(btn =>
-    btn.addEventListener('click', () => applyFont(btn.dataset.setFont))
-  );
+  // Milestone fields
+  bindFields([
+    { id: 'ms-smile-date' }, { id: 'ms-smile-note' },
+    { id: 'ms-sleep-date' }, { id: 'ms-sleep-note' },
+    { id: 'ms-food-date' }, { id: 'ms-food-note' },
+    { id: 'ms-tooth-date' }, { id: 'ms-tooth-note' },
+    { id: 'ms-word-date' }, { id: 'ms-word-note' },
+    { id: 'ms-steps-date' }, { id: 'ms-steps-note' },
+    { id: 'ms-roll-date' }, { id: 'ms-roll-note' },
+    { id: 'ms-toy-name' }, { id: 'ms-toy-note' }
+  ]);
 
-  // Tab buttons
-  document.querySelectorAll('.tab-btn').forEach(btn =>
-    btn.addEventListener('click', () => showTab(btn.dataset.tab))
-  );
+  // Letters
+  bindFields([
+    { id: 'letterToBaby' }, { id: 'firstImpressions' },
+    { id: 'dreamsWishes' }, { id: 'funnyMoments' }
+  ]);
 
-  // Font select
-  const fontSel = document.getElementById('fontSelect');
-  if (fontSel) {
-    fontSel.addEventListener('change', () => applyFont(fontSel.value));
-  }
+  // Family
+  bindFields([
+    { id: 'momName' }, { id: 'momFact' },
+    { id: 'dadName' }, { id: 'dadFact' },
+    { id: 'gmMom' }, { id: 'gpMom' },
+    { id: 'gmDad' }, { id: 'gpDad' },
+    { id: 'siblings' }, { id: 'pets' }
+  ]);
 
-  // ── SETTINGS TRAY ──
-  const settingsBtn  = document.getElementById('settingsBtn');
-  const settingsTray = document.getElementById('settingsTray');
-  if (settingsBtn && settingsTray) {
-    settingsBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = settingsTray.classList.toggle('open');
-      settingsTray.setAttribute('aria-hidden', String(!isOpen));
-      settingsBtn.textContent = isOpen ? '✕' : '⚙️';
-    });
-    // Close tray when tapping anywhere outside it
-    document.addEventListener('click', (e) => {
-      if (!settingsTray.contains(e.target) && e.target !== settingsBtn) {
-        settingsTray.classList.remove('open');
-        settingsTray.setAttribute('aria-hidden', 'true');
-        settingsBtn.textContent = '⚙️';
-      }
-    });
-    // Close tray when a theme or font is picked
-    settingsTray.addEventListener('click', () => {
-      setTimeout(() => {
-        settingsTray.classList.remove('open');
-        settingsTray.setAttribute('aria-hidden', 'true');
-        settingsBtn.textContent = '⚙️';
-      }, 300);
-    });
-  }
+  // Holidays
+  bindFields([
+    { id: 'hol-christmas' }, { id: 'hol-christmas-note' },
+    { id: 'hol-halloween' }, { id: 'hol-halloween-note' },
+    { id: 'hol-easter' }, { id: 'hol-easter-note' },
+    { id: 'hol-thanksgiving' }, { id: 'hol-thanksgiving-note' },
+    { id: 'hol-july4' }, { id: 'hol-july4-note' },
+    { id: 'hol-birthday' }, { id: 'hol-birthday-note' }
+  ]);
 
+  // Name story
+  bindFields([
+    { id: 'nameStory' }, { id: 'nameMeaning' },
+    { id: 'nameOrigin' }, { id: 'nameNicknames' }
+  ]);
 
+  // More
+  bindFields([
+    { id: 'personalityNotes' }, { id: 'favoriteSong' },
+    { id: 'favoriteActivity' }, { id: 'birthZodiac' },
+    { id: 'birthstone' }, { id: 'worldEvents' }, { id: 'anythingElse' }
+  ]);
 });
