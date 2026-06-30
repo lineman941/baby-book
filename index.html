@@ -12,15 +12,128 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Dancing+Script:wght@600;700&family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="style.css">
+<style>
+/* ===== SPIRAL JOURNAL LOOK ===== */
+body { background: #f5ede6; font-family: 'Nunito', sans-serif; }
+
+/* Spiral binding on left */
+.journal-binding {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: 28px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  background: linear-gradient(to right, #c9a87c, #e8d5b7);
+  box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+  pointer-events: none;
+}
+.spiral-ring {
+  width: 20px; height: 20px;
+  border: 3px solid #8B6914;
+  border-radius: 50%;
+  background: #d4a843;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+  flex-shrink: 0;
+}
+.journal-page {
+  margin-left: 28px;
+  min-height: 100vh;
+}
+
+/* Section illustration headers */
+.section-header-illus {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  display: block;
+  border-radius: 0 0 16px 16px;
+  margin-bottom: 12px;
+}
+
+/* Cover page */
+.cover-hero-img {
+  width: 100%;
+  max-height: 55vh;
+  object-fit: cover;
+  display: block;
+}
+.cover-content { padding: 20px 16px; text-align: center; width: 100%; }
+
+/* Milestone illustrated cards */
+.milestone-illus-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  border: 1px solid rgba(94,231,231,0.2);
+}
+.milestone-illus-img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  display: block;
+}
+.milestone-illus-bg {
+  width: 100%;
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px 12px 0 0;
+}
+.milestone-illus-body { padding: 14px; }
+.milestone-illus-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
+  color: #5ee7e7;
+  margin-bottom: 10px;
+}
+
+/* Nav icons using illustrations */
+.nav-thumb {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 2px;
+}
+
+/* Top bar */
+.top-bar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid rgba(94,231,231,0.3);
+}
+</style>
 </head>
 <body>
+
+<!-- Spiral Journal Binding -->
+<div class="journal-binding" aria-hidden="true">
+  <div class="spiral-ring"></div><div class="spiral-ring"></div>
+  <div class="spiral-ring"></div><div class="spiral-ring"></div>
+  <div class="spiral-ring"></div><div class="spiral-ring"></div>
+  <div class="spiral-ring"></div><div class="spiral-ring"></div>
+  <div class="spiral-ring"></div><div class="spiral-ring"></div>
+  <div class="spiral-ring"></div><div class="spiral-ring"></div>
+  <div class="spiral-ring"></div><div class="spiral-ring"></div>
+  <div class="spiral-ring"></div><div class="spiral-ring"></div>
+</div>
+
+<div class="journal-page">
 <canvas id="liquid-canvas" aria-hidden="true"></canvas>
+
 <header class="top-bar">
   <div class="top-bar-inner">
-    <span class="app-title">Our Little Miracle ✨</span>
-    <button class="settings-btn" id="settingsBtn" aria-label="Settings">⚙️</button>
+    <span class="app-title">Our Little Miracle</span>
+    <button class="settings-btn" id="settingsBtn" aria-label="Settings">&#9881;</button>
   </div>
 </header>
+
 <div class="settings-tray" id="settingsTray" aria-hidden="true">
   <div class="settings-tray-inner">
     <div class="settings-label">Theme</div>
@@ -39,34 +152,45 @@
       <option value="modern">Modern (Poppins)</option>
     </select>
     <div style="margin-top:14px;border-top:1px solid rgba(0,0,0,.08);padding-top:12px;display:flex;flex-direction:column;gap:8px;">
-      <a href="etsy-dashboard.html" target="_blank" class="btn-3d btn-3d-primary" style="display:block;text-decoration:none;text-align:center;font-size:13px;padding:10px 16px;">🛍️ Etsy Dashboard</a>
-      <a href="LAUNCH.html" target="_blank" class="btn-3d btn-3d-ghost" style="display:block;text-decoration:none;text-align:center;font-size:13px;padding:10px 16px;">📋 Launch Guide</a>
+      <a href="etsy-dashboard.html" target="_blank" class="btn-3d btn-3d-primary" style="display:block;text-decoration:none;text-align:center;font-size:13px;padding:10px 16px;">Etsy Dashboard</a>
+      <a href="LAUNCH.html" target="_blank" class="btn-3d btn-3d-ghost" style="display:block;text-decoration:none;text-align:center;font-size:13px;padding:10px 16px;">Launch Guide</a>
     </div>
   </div>
 </div>
-<div class="save-indicator" id="saveIndicator">✓ Saved</div>
+
+<div class="save-indicator" id="saveIndicator">Saved</div>
+
+<!-- COVER PAGE -->
 <section class="page-section active" id="section-cover">
   <div class="cover-page">
-    <div class="cover-zone" id="coverZone">
-      <div class="cover-edit-zone">
-        <div class="cover-ornament">🍼</div>
-        <h2 class="cover-headline">Our Little Miracle</h2>
-        <p class="cover-sub">Enter your baby's name to begin</p>
-        <div class="field-card" style="margin-bottom:12px;"><label for="coverName">Baby's Name</label><input type="text" id="coverName" placeholder="e.g. Lily Rose Johnson" autocomplete="off"></div>
-        <div class="field-card" style="margin-bottom:20px;"><label for="coverDob">Date of Birth</label><input type="date" id="coverDob"></div>
-        <button id="coverSaveBtn" class="btn-3d btn-3d-primary btn-full">💾 Save Cover</button>
-      </div>
-      <div class="cover-locked-view">
-        <div class="cover-locked-heart">💗</div>
-        <div class="cover-locked-name" id="lockedName"></div>
-        <div class="cover-locked-dob" id="lockedDob"></div>
-        <button id="coverEditBtn" class="btn-3d btn-3d-ghost btn-full" style="margin-top:20px;">✏️ Edit</button>
+    <img src="assets/cover-hero.jpg" alt="Our Little Miracle cover" class="cover-hero-img">
+    <div class="cover-content">
+      <div class="cover-zone" id="coverZone">
+        <div class="cover-edit-zone">
+          <h2 class="cover-headline">Our Little Miracle</h2>
+          <p class="cover-sub">A Journey of Firsts &amp; Precious Milestones</p>
+          <p class="cover-sub" style="font-size:0.9rem;opacity:0.7">Enter your baby's name to begin</p>
+          <div class="field-card" style="margin-bottom:12px;"><label for="coverName">Baby's Name</label><input type="text" id="coverName" placeholder="e.g. Lily Rose Johnson" autocomplete="off"></div>
+          <div class="field-card" style="margin-bottom:20px;"><label for="coverDob">Date of Birth</label><input type="date" id="coverDob"></div>
+          <button id="coverSaveBtn" class="btn-3d btn-3d-primary btn-full">Save Cover</button>
+        </div>
+        <div class="cover-locked-view">
+          <div class="cover-locked-name" id="lockedName"></div>
+          <div class="cover-locked-dob" id="lockedDob"></div>
+          <button id="coverEditBtn" class="btn-3d btn-3d-ghost btn-full" style="margin-top:20px;">Edit</button>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- BIRTH STORY -->
 <section class="page-section" id="section-birth">
-  <div class="section-header"><h1 class="section-title">Birth Story</h1><p class="section-subtitle">Record the details of your baby's arrival</p></div>
+  <img src="assets/illus-welcome.jpg" alt="Welcome to the World illustration" class="section-header-illus">
+  <div class="section-header">
+    <h1 class="section-title">Birth Story</h1>
+    <p class="section-subtitle">Record the details of your baby's arrival</p>
+  </div>
   <div class="birth-grid">
     <div class="field-card full-width"><label for="birthFullName">Full Name</label><input type="text" id="birthFullName" placeholder="Baby's full name" autocomplete="off"></div>
     <div class="field-card"><label for="birthDate">Date of Birth</label><input type="date" id="birthDate"></div>
@@ -75,143 +199,192 @@
     <div class="field-card"><label for="birthLength">Length</label><input type="text" id="birthLength" placeholder="e.g. 20 inches" autocomplete="off"></div>
     <div class="field-card full-width"><label for="birthHospital">Hospital / Location</label><input type="text" id="birthHospital" placeholder="Where were you born?" autocomplete="off"></div>
     <div class="field-card full-width"><label for="birthStoryText">Birth Story</label><textarea id="birthStoryText" placeholder="Tell the story of this magical day — the moments, the feelings, the joy…" rows="6" autocomplete="off"></textarea></div>
-    <div class="field-card full-width"><label>Birth Photo</label><div class="photo-upload-area" id="birthPhotoArea"><div class="upload-placeholder"><div class="upload-icon">📷</div><div>Tap to add a birth photo</div></div><img id="birthPhotoImg" alt="Birth photo"><input type="file" id="birthPhotoInput" accept="image/*" capture="environment"></div></div>
+    <div class="field-card full-width"><label>Birth Photo</label><div class="photo-upload-area" id="birthPhotoArea"><div class="upload-placeholder"><div class="upload-icon">&#128247;</div><div>Tap to add a birth photo</div></div><img id="birthPhotoImg" alt="Birth photo"><input type="file" id="birthPhotoInput" accept="image/*" capture="environment"></div></div>
   </div>
 </section>
+
+<!-- MILESTONES -->
 <section class="page-section" id="section-milestones">
-  <div class="section-header"><h1 class="section-title">Milestones</h1><p class="section-subtitle">Capture every magical first</p></div>
-  <div class="milestones-grid">
-    <div class="milestone-card"><div class="milestone-label">😊 First Smile</div><input type="date" id="ms-smile-date" style="margin-bottom:6px;"><textarea id="ms-smile-note" placeholder="How it happened…" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea><div class="milestone-photo-upload" id="ms-smile-photo"><div class="ms-placeholder">📷</div><img alt=""><input type="file" accept="image/*"></div></div>
-    <div class="milestone-card"><div class="milestone-label">😴 Slept Through Night</div><input type="date" id="ms-sleep-date" style="margin-bottom:6px;"><textarea id="ms-sleep-note" placeholder="What a relief!" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea><div class="milestone-photo-upload" id="ms-sleep-photo"><div class="ms-placeholder">📷</div><img alt=""><input type="file" accept="image/*"></div></div>
-    <div class="milestone-card"><div class="milestone-label">🍼 First Solid Food</div><input type="date" id="ms-food-date" style="margin-bottom:6px;"><textarea id="ms-food-note" placeholder="What did they eat?" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea><div class="milestone-photo-upload" id="ms-food-photo"><div class="ms-placeholder">📷</div><img alt=""><input type="file" accept="image/*"></div></div>
-    <div class="milestone-card"><div class="milestone-label">🦷 First Tooth</div><input type="date" id="ms-tooth-date" style="margin-bottom:6px;"><textarea id="ms-tooth-note" placeholder="Describe the moment…" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea><div class="milestone-photo-upload" id="ms-tooth-photo"><div class="ms-placeholder">📷</div><img alt=""><input type="file" accept="image/*"></div></div>
-    <div class="milestone-card"><div class="milestone-label">🎵 First Word</div><input type="date" id="ms-word-date" style="margin-bottom:6px;"><textarea id="ms-word-note" placeholder="What did they say?" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea><div class="milestone-photo-upload" id="ms-word-photo"><div class="ms-placeholder">📷</div><img alt=""><input type="file" accept="image/*"></div></div>
-    <div class="milestone-card"><div class="milestone-label">🚶 First Steps</div><input type="date" id="ms-steps-date" style="margin-bottom:6px;"><textarea id="ms-steps-note" placeholder="Where were they going?" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea><div class="milestone-photo-upload" id="ms-steps-photo"><div class="ms-placeholder">📷</div><img alt=""><input type="file" accept="image/*"></div></div>
-    <div class="milestone-card"><div class="milestone-label">👋 Rolled Over</div><input type="date" id="ms-roll-date" style="margin-bottom:6px;"><textarea id="ms-roll-note" placeholder="Describe the moment…" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea><div class="milestone-photo-upload" id="ms-roll-photo"><div class="ms-placeholder">📷</div><img alt=""><input type="file" accept="image/*"></div></div>
-    <div class="milestone-card"><div class="milestone-label">🧸 Favorite Toy</div><input type="text" id="ms-toy-name" placeholder="Name of toy" autocomplete="off" style="margin-bottom:6px;"><textarea id="ms-toy-note" placeholder="Why do they love it?" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea><div class="milestone-photo-upload" id="ms-toy-photo"><div class="ms-placeholder">📷</div><img alt=""><input type="file" accept="image/*"></div></div>
+  <img src="assets/bg-footprints.jpg" alt="" class="section-header-illus" style="max-height:160px;">
+  <div class="section-header">
+    <h1 class="section-title">Milestones</h1>
+    <p class="section-subtitle">Capture every magical first</p>
+  </div>
+  <div style="padding:0 16px 20px;max-width:640px;margin:0 auto;">
+
+    <!-- First Smile -->
+    <div class="milestone-illus-card">
+      <img src="assets/illus-first-smile.jpg" alt="First Smile illustration" class="milestone-illus-img">
+      <div class="milestone-illus-body">
+        <div class="milestone-illus-title">First Smile</div>
+        <input type="date" id="ms-smile-date" style="margin-bottom:6px;">
+        <textarea id="ms-smile-note" placeholder="How it happened…" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
+        <div class="milestone-photo-upload" id="ms-smile-photo"><div class="ms-placeholder">&#128247;</div><img alt=""><input type="file" accept="image/*"></div>
+      </div>
+    </div>
+
+    <!-- First Crawl -->
+    <div class="milestone-illus-card">
+      <img src="assets/illus-first-crawl.jpg" alt="First Crawl illustration" class="milestone-illus-img">
+      <div class="milestone-illus-body">
+        <div class="milestone-illus-title">First Crawl</div>
+        <input type="date" id="ms-roll-date" style="margin-bottom:6px;">
+        <textarea id="ms-roll-note" placeholder="Describe the moment…" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
+        <div class="milestone-photo-upload" id="ms-roll-photo"><div class="ms-placeholder">&#128247;</div><img alt=""><input type="file" accept="image/*"></div>
+      </div>
+    </div>
+
+    <!-- First Tooth -->
+    <div class="milestone-illus-card">
+      <img src="assets/illus-first-tooth.jpg" alt="First Tooth illustration" class="milestone-illus-img">
+      <div class="milestone-illus-body">
+        <div class="milestone-illus-title">First Tooth</div>
+        <input type="date" id="ms-tooth-date" style="margin-bottom:6px;">
+        <textarea id="ms-tooth-note" placeholder="Describe the moment…" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
+        <div class="milestone-photo-upload" id="ms-tooth-photo"><div class="ms-placeholder">&#128247;</div><img alt=""><input type="file" accept="image/*"></div>
+      </div>
+    </div>
+
+    <!-- First Steps -->
+    <div class="milestone-illus-card">
+      <img src="assets/illus-first-steps.jpg" alt="First Steps illustration" class="milestone-illus-img">
+      <div class="milestone-illus-body">
+        <div class="milestone-illus-title">First Steps</div>
+        <input type="date" id="ms-steps-date" style="margin-bottom:6px;">
+        <textarea id="ms-steps-note" placeholder="Where were they going?" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
+        <div class="milestone-photo-upload" id="ms-steps-photo"><div class="ms-placeholder">&#128247;</div><img alt=""><input type="file" accept="image/*"></div>
+      </div>
+    </div>
+
+    <!-- Slept Through Night -->
+    <div class="milestone-illus-card">
+      <div class="milestone-illus-bg" style="background-image:url('assets/bg-moon-clouds.jpg');"></div>
+      <div class="milestone-illus-body">
+        <div class="milestone-illus-title">Slept Through the Night</div>
+        <input type="date" id="ms-sleep-date" style="margin-bottom:6px;">
+        <textarea id="ms-sleep-note" placeholder="What a relief!" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
+        <div class="milestone-photo-upload" id="ms-sleep-photo"><div class="ms-placeholder">&#128247;</div><img alt=""><input type="file" accept="image/*"></div>
+      </div>
+    </div>
+
+    <!-- First Solid Food -->
+    <div class="milestone-illus-card">
+      <div class="milestone-illus-bg" style="background-image:url('assets/bg-stroller-clouds.jpg');"></div>
+      <div class="milestone-illus-body">
+        <div class="milestone-illus-title">First Solid Food</div>
+        <input type="date" id="ms-food-date" style="margin-bottom:6px;">
+        <textarea id="ms-food-note" placeholder="What did they eat?" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
+        <div class="milestone-photo-upload" id="ms-food-photo"><div class="ms-placeholder">&#128247;</div><img alt=""><input type="file" accept="image/*"></div>
+      </div>
+    </div>
+
+    <!-- First Word -->
+    <div class="milestone-illus-card">
+      <div class="milestone-illus-bg" style="background-image:url('assets/bg-alphabet-blocks.jpg');"></div>
+      <div class="milestone-illus-body">
+        <div class="milestone-illus-title">First Word</div>
+        <input type="date" id="ms-word-date" style="margin-bottom:6px;">
+        <textarea id="ms-word-note" placeholder="What did they say?" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
+        <div class="milestone-photo-upload" id="ms-word-photo"><div class="ms-placeholder">&#128247;</div><img alt=""><input type="file" accept="image/*"></div>
+      </div>
+    </div>
+
+    <!-- Favorite Toy -->
+    <div class="milestone-illus-card">
+      <div class="milestone-illus-body">
+        <div class="milestone-illus-title">Favorite Toy</div>
+        <input type="text" id="ms-toy-name" placeholder="Name of toy" autocomplete="off" style="margin-bottom:6px;">
+        <textarea id="ms-toy-note" placeholder="Why do they love it?" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
+        <div class="milestone-photo-upload" id="ms-toy-photo"><div class="ms-placeholder">&#128247;</div><img alt=""><input type="file" accept="image/*"></div>
+      </div>
+    </div>
+
   </div>
 </section>
+
+<!-- LETTERS -->
 <section class="page-section" id="section-letters">
+  <img src="assets/bg-footprints.jpg" alt="" class="section-header-illus" style="max-height:140px;">
   <div class="section-header"><h1 class="section-title">Letters &amp; Notes</h1><p class="section-subtitle">Words from the heart to keep forever</p></div>
-  <div class="memory-card"><div class="memory-title">💌 Letter to Baby</div><textarea id="letterToBaby" placeholder="Dear little one, on the day you were born…" rows="8" autocomplete="off"></textarea></div>
-  <div class="memory-card"><div class="memory-title">💭 First Impressions</div><textarea id="firstImpressions" placeholder="The moment I first saw you, I thought…" rows="5" autocomplete="off"></textarea></div>
-  <div class="memory-card"><div class="memory-title">🌙 Dreams &amp; Wishes</div><textarea id="dreamsWishes" placeholder="All the things I hope for you…" rows="5" autocomplete="off"></textarea></div>
-  <div class="memory-card"><div class="memory-title">😂 Funny Moments</div><textarea id="funnyMoments" placeholder="You made us laugh when…" rows="5" autocomplete="off"></textarea></div>
+  <div class="memory-card"><div class="memory-title">Letter to Baby</div><textarea id="letterToBaby" placeholder="Dear little one, on the day you were born…" rows="8" autocomplete="off"></textarea></div>
+  <div class="memory-card"><div class="memory-title">First Impressions</div><textarea id="firstImpressions" placeholder="The moment I first saw you, I thought…" rows="5" autocomplete="off"></textarea></div>
+  <div class="memory-card"><div class="memory-title">Dreams &amp; Wishes</div><textarea id="dreamsWishes" placeholder="All the things I hope for you…" rows="5" autocomplete="off"></textarea></div>
+  <div class="memory-card"><div class="memory-title">Funny Moments</div><textarea id="funnyMoments" placeholder="You made us laugh when…" rows="5" autocomplete="off"></textarea></div>
 </section>
+
+<!-- GROWTH -->
 <section class="page-section" id="section-growth">
+  <img src="assets/bg-stroller-clouds.jpg" alt="" class="section-header-illus" style="max-height:160px;">
   <div class="section-header"><h1 class="section-title">Growth</h1><p class="section-subtitle">Track your baby's amazing growth</p></div>
   <div class="stats-grid">
     <div class="field-card"><label for="currentWeight">Weight</label><input type="text" id="currentWeight" placeholder="e.g. 15 lbs" autocomplete="off"></div>
     <div class="field-card"><label for="currentHeight">Height</label><input type="text" id="currentHeight" placeholder="e.g. 24 in" autocomplete="off"></div>
     <div class="field-card"><label for="growthAge">Age (months)</label><input type="number" id="growthAge" placeholder="e.g. 6" min="0" max="36"></div>
     <div class="field-card"><label for="headCirc">Head Circ.</label><input type="text" id="headCirc" placeholder="e.g. 16 in" autocomplete="off"></div>
-    <div class="field-card full-width" style="text-align:center;"><button id="addGrowthBtn" class="btn-3d btn-3d-primary">📈 Add Growth Entry</button></div>
-    <div class="chart-card"><div class="chart-title">📊 Growth Chart</div><canvas id="growthChart" height="200"></canvas></div>
+    <div class="field-card full-width" style="text-align:center;"><button id="addGrowthBtn" class="btn-3d btn-3d-primary">Add Growth Entry</button></div>
+    <div class="chart-card"><div class="chart-title">Growth Chart</div><canvas id="growthChart" height="200"></canvas></div>
   </div>
 </section>
+
+<!-- FIRST YEAR PHOTOS -->
 <section class="page-section" id="section-photos">
+  <img src="assets/bg-balloons-birthday.jpg" alt="" class="section-header-illus" style="max-height:160px;">
   <div class="section-header"><h1 class="section-title">First Year</h1><p class="section-subtitle">A photo for every month</p></div>
   <div id="photoYearGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 20px;max-width:640px;margin:0 auto;"></div>
 </section>
+
+<!-- FAMILY -->
 <section class="page-section" id="section-family">
+  <img src="assets/bg-footprints.jpg" alt="" class="section-header-illus" style="max-height:140px;">
   <div class="section-header"><h1 class="section-title">Family Tree</h1><p class="section-subtitle">The people who love you</p></div>
   <div class="parents-grid">
-    <div class="field-card"><label>👩 Mother</label><input type="text" id="momName" placeholder="Full name" autocomplete="off"><input type="text" id="momFact" placeholder="Fun fact about Mom" autocomplete="off" style="margin-top:8px;"></div>
-    <div class="field-card"><label>👨 Father</label><input type="text" id="dadName" placeholder="Full name" autocomplete="off"><input type="text" id="dadFact" placeholder="Fun fact about Dad" autocomplete="off" style="margin-top:8px;"></div>
-    <div class="field-card"><label>👵 Grandma (Mom's)</label><input type="text" id="gmMom" placeholder="Name" autocomplete="off"></div>
-    <div class="field-card"><label>👴 Grandpa (Mom's)</label><input type="text" id="gpMom" placeholder="Name" autocomplete="off"></div>
-    <div class="field-card"><label>👵 Grandma (Dad's)</label><input type="text" id="gmDad" placeholder="Name" autocomplete="off"></div>
-    <div class="field-card"><label>👴 Grandpa (Dad's)</label><input type="text" id="gpDad" placeholder="Name" autocomplete="off"></div>
-    <div class="field-card full-width"><label>👶 Siblings</label><textarea id="siblings" placeholder="Names and ages of brothers and sisters…" rows="3" autocomplete="off"></textarea></div>
-    <div class="field-card full-width"><label>🐾 Pets</label><textarea id="pets" placeholder="Our furry family members…" rows="2" autocomplete="off"></textarea></div>
+    <div class="field-card"><label>Mother</label><input type="text" id="momName" placeholder="Full name" autocomplete="off"><input type="text" id="momFact" placeholder="Fun fact about Mom" autocomplete="off" style="margin-top:8px;"></div>
+    <div class="field-card"><label>Father</label><input type="text" id="dadName" placeholder="Full name" autocomplete="off"><input type="text" id="dadFact" placeholder="Fun fact about Dad" autocomplete="off" style="margin-top:8px;"></div>
+    <div class="field-card"><label>Grandparent 1</label><input type="text" id="gp1Name" placeholder="Full name" autocomplete="off"></div>
+    <div class="field-card"><label>Grandparent 2</label><input type="text" id="gp2Name" placeholder="Full name" autocomplete="off"></div>
+    <div class="field-card"><label>Grandparent 3</label><input type="text" id="gp3Name" placeholder="Full name" autocomplete="off"></div>
+    <div class="field-card"><label>Grandparent 4</label><input type="text" id="gp4Name" placeholder="Full name" autocomplete="off"></div>
   </div>
+  <div class="field-card" style="margin:0 16px 20px;"><label for="siblingsNote">Siblings</label><textarea id="siblingsNote" placeholder="Names and ages of siblings…" rows="3" autocomplete="off"></textarea></div>
 </section>
-<section class="page-section" id="section-holidays">
-  <div class="section-header"><h1 class="section-title">First Holidays</h1><p class="section-subtitle">Every special first deserves a memory</p></div>
-  <div class="holidays-grid">
-    <div class="holiday-card"><div class="holiday-icon">🎄</div><div class="holiday-name">First Christmas</div><input type="date" id="hol-christmas" style="width:100%;margin-bottom:6px;"><textarea id="hol-christmas-note" placeholder="Your first Christmas…" rows="2" autocomplete="off"></textarea><div class="milestone-photo-upload" id="hol-christmas-photo" style="margin-top:8px;height:80px;"><div class="ms-placeholder">📷</div><img alt=""><input type="file" accept="image/*"></div></div>
-    <div class="holiday-card"><div class="holiday-icon">🎃</div><div class="holiday-name">First Halloween</div><input type="date" id="hol-halloween" style="width:100%;margin-bottom:6px;"><textarea id="hol-halloween-note" placeholder="Your costume was…" rows="2" autocomplete="off"></textarea><div class="milestone-photo-upload" id="hol-halloween-photo" style="margin-top:8px;height:80px;"><div class="ms-placeholder">📷</div><img alt=""><input type="file" accept="image/*"></div></div>
-    <div class="holiday-card"><div class="holiday-icon">🐣</div><div class="holiday-name">First Easter</div><input type="date" id="hol-easter" style="width:100%;margin-bottom:6px;"><textarea id="hol-easter-note" placeholder="Easter memory…" rows="2" autocomplete="off"></textarea><div class="milestone-photo-upload" id="hol-easter-photo" style="margin-top:8px;height:80px;"><div class="ms-placeholder">📷</div><img alt=""><input type="file" accept="image/*"></div></div>
-    <div class="holiday-card"><div class="holiday-icon">🦃</div><div class="holiday-name">First Thanksgiving</div><input type="date" id="hol-thanksgiving" style="width:100%;margin-bottom:6px;"><textarea id="hol-thanksgiving-note" placeholder="Thanksgiving memory…" rows="2" autocomplete="off"></textarea><div class="milestone-photo-upload" id="hol-thanksgiving-photo" style="margin-top:8px;height:80px;"><div class="ms-placeholder">📷</div><img alt=""><input type="file" accept="image/*"></div></div>
-    <div class="holiday-card"><div class="holiday-icon">🎆</div><div class="holiday-name">First 4th of July</div><input type="date" id="hol-july4" style="width:100%;margin-bottom:6px;"><textarea id="hol-july4-note" placeholder="Reaction to fireworks…" rows="2" autocomplete="off"></textarea><div class="milestone-photo-upload" id="hol-july4-photo" style="margin-top:8px;height:80px;"><div class="ms-placeholder">📷</div><img alt=""><input type="file" accept="image/*"></div></div>
-    <div class="holiday-card"><div class="holiday-icon">🎂</div><div class="holiday-name">First Birthday</div><input type="date" id="hol-birthday" style="width:100%;margin-bottom:6px;"><textarea id="hol-birthday-note" placeholder="How you celebrated…" rows="2" autocomplete="off"></textarea><div class="milestone-photo-upload" id="hol-birthday-photo" style="margin-top:8px;height:80px;"><div class="ms-placeholder">📷</div><img alt=""><input type="file" accept="image/*"></div></div>
-  </div>
+
+<!-- MEMORIES -->
+<section class="page-section" id="section-memories">
+  <img src="assets/bg-alphabet-blocks.jpg" alt="" class="section-header-illus" style="max-height:140px;">
+  <div class="section-header"><h1 class="section-title">Memories</h1><p class="section-subtitle">Moments to treasure forever</p></div>
+  <div id="memoriesGrid" style="padding:0 16px 20px;"></div>
+  <div style="padding:0 16px;"><button id="addMemoryBtn" class="btn-3d btn-3d-primary btn-full">Add Memory</button></div>
 </section>
-<section class="page-section" id="section-name">
-  <div class="section-header"><h1 class="section-title">Your Name</h1><p class="section-subtitle">The story behind your name</p></div>
-  <div class="birth-grid">
-    <div class="field-card full-width"><label for="nameStory">Why We Chose Your Name</label><textarea id="nameStory" placeholder="We chose your name because…" rows="5" autocomplete="off"></textarea></div>
-    <div class="field-card"><label for="nameMeaning">Name Meaning</label><input type="text" id="nameMeaning" placeholder="e.g. Light of God" autocomplete="off"></div>
-    <div class="field-card"><label for="nameOrigin">Name Origin</label><input type="text" id="nameOrigin" placeholder="e.g. Hebrew, Latin…" autocomplete="off"></div>
-    <div class="field-card full-width"><label for="nameNicknames">Nicknames</label><input type="text" id="nameNicknames" placeholder="All the little names we call you…" autocomplete="off"></div>
-  </div>
-</section>
-<section class="page-section" id="section-more">
-  <div class="section-header"><h1 class="section-title">More About You</h1><p class="section-subtitle">All the little things that make you unique</p></div>
-  <div class="birth-grid">
-    <div class="field-card full-width"><label for="personalityNotes">Your Personality</label><textarea id="personalityNotes" placeholder="From day one, you were…" rows="4" autocomplete="off"></textarea></div>
-    <div class="field-card"><label for="favoriteSong">Favorite Lullaby</label><input type="text" id="favoriteSong" placeholder="Song that soothes you" autocomplete="off"></div>
-    <div class="field-card"><label for="favoriteActivity">Favorite Activity</label><input type="text" id="favoriteActivity" placeholder="What you love to do" autocomplete="off"></div>
-    <div class="field-card"><label for="birthZodiac">Star Sign</label><input type="text" id="birthZodiac" placeholder="e.g. Cancer" autocomplete="off"></div>
-    <div class="field-card"><label for="birthstone">Birthstone</label><input type="text" id="birthstone" placeholder="e.g. Ruby" autocomplete="off"></div>
-    <div class="field-card full-width"><label for="worldEvents">World Events at Birth</label><textarea id="worldEvents" placeholder="What was happening in the world when you were born…" rows="3" autocomplete="off"></textarea></div>
-    <div class="field-card full-width"><label for="anythingElse">Anything Else</label><textarea id="anythingElse" placeholder="Everything else we want you to know…" rows="4" autocomplete="off"></textarea></div>
-  </div>
-</section>
-<nav class="tab-nav" id="tabNav">
-  <button class="tab-btn active" data-tab="cover"><span class="tab-icon">📖</span><span class="tab-label">Cover</span></button>
-  <button class="tab-btn" data-tab="birth"><span class="tab-icon">🐣</span><span class="tab-label">Birth</span></button>
-  <button class="tab-btn" data-tab="milestones"><span class="tab-icon">⭐</span><span class="tab-label">Moments</span></button>
-  <button class="tab-btn" data-tab="letters"><span class="tab-icon">💌</span><span class="tab-label">Letters</span></button>
-  <button class="tab-btn" data-tab="growth"><span class="tab-icon">📊</span><span class="tab-label">Growth</span></button>
-  <button class="tab-btn" data-tab="photos"><span class="tab-icon">📸</span><span class="tab-label">Year</span></button>
-  <button class="tab-btn" data-tab="family"><span class="tab-icon">👨‍👩‍👧</span><span class="tab-label">Family</span></button>
-  <button class="tab-btn" data-tab="holidays"><span class="tab-icon">🎄</span><span class="tab-label">Holidays</span></button>
-  <button class="tab-btn" data-tab="name"><span class="tab-icon">🏷️</span><span class="tab-label">Name</span></button>
-  <button class="tab-btn" data-tab="more"><span class="tab-icon">✨</span><span class="tab-label">More</span></button>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav" role="navigation" aria-label="Main navigation">
+  <button class="nav-btn active" data-section="cover" aria-label="Cover">
+    <img src="assets/cover-hero.jpg" alt="" class="nav-thumb"><span>Cover</span>
+  </button>
+  <button class="nav-btn" data-section="birth" aria-label="Birth">
+    <img src="assets/illus-welcome.jpg" alt="" class="nav-thumb"><span>Birth</span>
+  </button>
+  <button class="nav-btn" data-section="milestones" aria-label="Milestones">
+    <img src="assets/illus-first-smile.jpg" alt="" class="nav-thumb"><span>Firsts</span>
+  </button>
+  <button class="nav-btn" data-section="letters" aria-label="Letters">
+    <img src="assets/bg-footprints.jpg" alt="" class="nav-thumb"><span>Letters</span>
+  </button>
+  <button class="nav-btn" data-section="growth" aria-label="Growth">
+    <img src="assets/bg-stroller-clouds.jpg" alt="" class="nav-thumb"><span>Growth</span>
+  </button>
+  <button class="nav-btn" data-section="photos" aria-label="Photos">
+    <img src="assets/bg-balloons-birthday.jpg" alt="" class="nav-thumb"><span>Year 1</span>
+  </button>
+  <button class="nav-btn" data-section="family" aria-label="Family">
+    <img src="assets/bg-alphabet-blocks.jpg" alt="" class="nav-thumb"><span>Family</span>
+  </button>
+  <button class="nav-btn" data-section="memories" aria-label="Memories">
+    <img src="assets/illus-first-crawl.jpg" alt="" class="nav-thumb"><span>Memories</span>
+  </button>
 </nav>
-<div class="toast" id="toast"></div>
+
+</div><!-- end journal-page -->
 <script src="app.js"></script>
-<script>
-(function(){
-  var c=document.getElementById('liquid-canvas');
-  if(!c)return;
-  var x=c.getContext('2d'),W,H,rips=[],mx=0,my=0,idle=0;
-  function sz(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
-  sz();window.addEventListener('resize',sz,{passive:true});
-  function gc(){var v=getComputedStyle(document.documentElement).getPropertyValue('--tp').trim()||'#5ee7e7';var h=v.replace('#','');if(h.length===3)h=h.split('').map(function(ch){return ch+ch;}).join('');var n=parseInt(h,16);return[(n>>16)&255,(n>>8)&255,n&255];}
-  function ar(px,py,o,mR,sp){rips.push({x:px,y:py,r:0,mR:mR||(90+Math.random()*70),o:o||.18,sp:sp||(1+Math.random()*.8)});}
-  document.addEventListener('mousemove',function(e){var dx=e.clientX-mx,dy=e.clientY-my;if(Math.sqrt(dx*dx+dy*dy)>6){ar(e.clientX,e.clientY);mx=e.clientX;my=e.clientY;}},{passive:true});
-  document.addEventListener('touchmove',function(e){var t=e.touches[0];var dx=t.clientX-mx,dy=t.clientY-my;if(Math.sqrt(dx*dx+dy*dy)>10){ar(t.clientX,t.clientY,.18,60,.7);mx=t.clientX;my=t.clientY;}},{passive:true});
-  function amb(){ar(W*(.1+Math.random()*.8),H*(.15+Math.random()*.7),.09,55+Math.random()*35,.5+Math.random()*.3);}
-  setTimeout(amb,400);setTimeout(amb,1400);setTimeout(amb,2400);
-  function draw(){
-    x.clearRect(0,0,W,H);
-    var rgb=gc();
-    rips=rips.filter(function(r){return r.o>.003;});
-    for(var i=0;i<rips.length;i++){
-      var r=rips[i];r.r+=r.sp;r.o*=.972;
-      if(r.r>r.mR)continue;
-      var g=x.createRadialGradient(r.x,r.y,r.r*.1,r.x,r.y,r.r);
-      var col='rgba('+rgb[0]+','+rgb[1]+','+rgb[2]+',';
-      g.addColorStop(0,col+'0)');g.addColorStop(.55,col+r.o+')');g.addColorStop(1,col+'0)');
-      x.beginPath();x.arc(r.x,r.y,r.r,0,Math.PI*2);x.fillStyle=g;x.fill();
-    }
-    idle++;if(idle%100===0)amb();
-    requestAnimationFrame(draw);
-  }
-  draw();
-  var s=document.createElement('style');
-  s.textContent='@keyframes br{0%{transform:scale(0);opacity:.6}100%{transform:scale(4);opacity:0}}';
-  document.head.appendChild(s);
-  document.addEventListener('click',function(e){
-    var b=e.target.closest('.btn-3d');if(!b)return;
-    var rect=b.getBoundingClientRect();
-    var sp=document.createElement('span');
-    sp.style.cssText='position:absolute;border-radius:50%;pointer-events:none;transform:scale(0);animation:br .5s ease-out forwards;background:rgba(255,255,255,.4);width:100px;height:100px;left:'+(e.clientX-rect.left-50)+'px;top:'+(e.clientY-rect.top-50)+'px;z-index:99';
-    b.appendChild(sp);setTimeout(function(){sp.remove();},500);
-  },{passive:true});
-})();
-</script>
 </body>
 </html>
