@@ -102,7 +102,7 @@ def main() -> None:
     )
 
     leftovers = [
-        pat for pat in ("vendor/", 'src="app.js"', 'href="style.css"', "assets/")
+        pat for pat in ("vendor/", 'src="app.js"', 'href="style.css"', 'src="assets/', "url('assets/")
         if pat in html
     ]
     if leftovers:

@@ -8,6 +8,12 @@ const STORE_KEY = 'olm_baby_book';
 let store = {};
 let growthChart = null;
 
+/* Asset lookup: repo build uses assets/ paths; the single-file product build
+   injects OLM_ASSETS (name -> data URI) before this script. */
+function assetUrl(name) {
+  return (typeof OLM_ASSETS !== 'undefined' && OLM_ASSETS[name]) ? OLM_ASSETS[name] : 'assets/' + name;
+}
+
 /* ── Storage ── */
 function loadStore() {
   try { store = JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch(e) { store = {}; }
@@ -79,7 +85,7 @@ function bindSettings() {
       tray.setAttribute('aria-hidden', !open);
     });
     document.addEventListener('click', e => {
-      if (!tray.contains(e.target) && e.target !== btn) {
+      if (!tray.contains(e.target) && !btn.contains(e.target)) {
         tray.classList.remove('open');
         tray.setAttribute('aria-hidden', 'true');
       }
@@ -160,7 +166,7 @@ function lockCover() {
   document.getElementById('lockedName').textContent = nameVal;
   document.getElementById('lockedDob').textContent = dobVal ? formatDateDisplay(dobVal) : '';
   document.getElementById('coverZone').classList.add('is-locked');
-  showToast('Cover saved! 💗');
+  showToast('Cover saved');
 }
 function unlockCover() {
   document.getElementById('coverZone').classList.remove('is-locked');
@@ -299,7 +305,7 @@ function bindGrowthForm() {
     document.getElementById('currentWeight').value = '';
     document.getElementById('currentHeight').value = '';
     document.getElementById('headCirc').value = '';
-    showToast('Growth entry added! 📊');
+    showToast('Growth entry added');
   });
 }
 
@@ -313,9 +319,9 @@ function buildPhotoYearGrid() {
   months.forEach((month, idx) => {
     const card = document.createElement('div');
     card.className = 'milestone-card';
-    card.innerHTML = '<div class="milestone-label">📸 ' + month + '</div>' +
+    card.innerHTML = '<div class="milestone-label">' + month + '</div>' +
       '<div class="milestone-photo-upload" id="yr-photo-' + idx + '">' +
-      '<div class="ms-placeholder">📷</div>' +
+      '<div class="ms-placeholder"><img src="' + assetUrl('icon-camera.jpg') + '" alt=""></div>' +
       '<img alt="Month ' + (idx+1) + ' photo">' +
       '<input type="file" accept="image/*" capture="environment">' +
       '</div>' +
@@ -375,7 +381,7 @@ function bindMemories() {
       const title = document.getElementById('memoryTitle').value.trim();
       const date = document.getElementById('memoryDate').value;
       const text = document.getElementById('memoryText').value.trim();
-      if (!title && !text) { showToast('Write a little something first 💛'); return; }
+      if (!title && !text) { showToast('Write a little something first'); return; }
       store.memories.push({ id: Date.now(), title, date, text });
       saveStore();
       document.getElementById('memoryTitle').value = '';
@@ -383,7 +389,7 @@ function bindMemories() {
       document.getElementById('memoryText').value = '';
       if (form) form.style.display = 'none';
       renderMemories();
-      showToast('Memory saved! ✨');
+      showToast('Memory saved');
     });
   }
   renderMemories();

@@ -20,14 +20,14 @@ Digital Downloads → Templates → Other Templates
 
 ## LISTING DESCRIPTION
 
-🌱 THE BABY BOOK FOR REAL MOMS AT 3AM
+THE BABY BOOK FOR REAL MOMS AT 3AM
 
 No app. No account. No printing required. Just open it on your phone and start writing.
 
 This is a beautiful, editable digital baby journal that lives right in your browser — fill it in from anywhere, add your own photos to the pages, and it saves automatically on your device. When you're ready, print it to a beautiful PDF or keep it digital forever.
 
 ———————————————————————
-✨ WHAT'S INCLUDED
+WHAT'S INCLUDED
 ———————————————————————
 
 • Cover Page — baby's name and birth date in a hand-lettered style
@@ -46,7 +46,7 @@ This is a beautiful, editable digital baby journal that lives right in your brow
 • Print to PDF — beautiful on any home printer
 
 ———————————————————————
-📱 WORKS ON EVERY DEVICE
+WORKS ON EVERY DEVICE
 ———————————————————————
 
 iPhone ✓ Android ✓ iPad ✓ Laptop ✓ Desktop ✓
@@ -54,7 +54,7 @@ iPhone ✓ Android ✓ iPad ✓ Laptop ✓ Desktop ✓
 No subscriptions. No app store. Nothing to install.
 
 ———————————————————————
-⬇️ HOW IT WORKS
+HOW IT WORKS
 ———————————————————————
 
 1. Purchase → instant download arrives in your email
@@ -62,19 +62,19 @@ No subscriptions. No app store. Nothing to install.
 3. Start filling in your baby's story — it saves as you type
 4. Add your favorite photos to any page
 5. Choose your color theme and font style
-6. Print to PDF or keep it digital forever ✨
+6. Print to PDF or keep it digital forever 
 
 ———————————————————————
-💝 PERFECT GIFT FOR
+PERFECT GIFT FOR
 ———————————————————————
 
 • New moms & dads
 • Baby showers
 • First-time grandparents who want to document everything
-• Moms who've been meaning to start a baby book for months 😅
+• Moms who've been meaning to start a baby book for months 
 
 ———————————————————————
-❓ FAQ
+FAQ
 ———————————————————————
 
 Q: Do I need to download any software?
@@ -96,14 +96,14 @@ Q: Is this a one-time purchase?
 A: Yes! Pay once, it's yours forever. No subscriptions, ever.
 
 ———————————————————————
-📦 WHAT YOU'LL RECEIVE
+WHAT YOU'LL RECEIVE
 ———————————————————————
 
 • 1 × HTML file (opens in any browser, works fully offline)
 • Quick-Start Guide (1 page PDF)
 • Support via messages if you need help
 
-Questions? Message me anytime — I respond within a few hours. 💛
+Questions? Message me anytime — I respond within a few hours. 
 
 ## TAGS (13 max, comma separated)
 
@@ -145,10 +145,10 @@ The title front-loads "Digital Baby Journal" and "Editable Baby Book" — the tw
 
 ## AUTOMATED THANK-YOU MESSAGE (set in Shop Manager → Info & Appearance)
 
-Thank you so much for your purchase! 💛
+Thank you so much for your purchase! 
 
 Your digital baby journal is ready — check your email for the download link, or go to Etsy → Purchases & Reviews → Download.
 
 Open the file in Chrome or Safari (phone or computer — either works!).
 
-If you have any questions or need help, just reply to this message. I'm here! 😊
+If you have any questions or need help, just reply to this message. I'm here! 
