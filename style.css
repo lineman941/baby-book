@@ -3,8 +3,6 @@
    One-of-a-kind UI · 3-D buttons · Liquid ripple BG
 ══════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;600;700&display=swap');
-
 /* COLOR THEMES */
 [data-color-theme="teal-dream"] {
   --tp:#5ee7e7;--ta:#1aafaf;--tbg:#e4f8f8;
@@ -97,7 +95,7 @@ body {
   transition:max-height .35s cubic-bezier(.4,0,.2,1),padding .35s;
   padding:0 18px;
 }
-.settings-tray.open { max-height:180px;padding:16px 18px 18px; }
+.settings-tray.open { max-height:420px;padding:16px 18px 18px;overflow-y:auto; }
 .settings-tray-inner { display:flex;flex-direction:column;gap:8px; }
 .settings-label {
   font-size:10px;font-weight:800;text-transform:uppercase;
