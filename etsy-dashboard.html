@@ -301,10 +301,12 @@
  </div>
 
  <div class="card">
- <div class="card-title"> App Credentials (Read-only)</div>
- <div class="fg"><label>API Key (Client ID)</label><div class="code-block" id="showClientId"></div></div>
- <div class="fg"><label>Shop ID</label><div class="code-block" id="showShopId"></div></div>
- <div class="fg"><label>Redirect URI</label><div class="code-block" id="showRedirectUri"></div></div>
+ <div class="card-title"> App Credentials</div>
+ <div class="step-desc" style="margin-bottom:12px">Paste these once — they're saved in this browser. Find them at <a href="https://www.etsy.com/developers/your-apps" target="_blank">etsy.com/developers/your-apps</a> (API Key = "Keystring") and your Shop ID at <a href="https://www.etsy.com/your/shops/me" target="_blank">your shop dashboard</a> (the number in the URL).</div>
+ <div class="fg"><label>API Key (Client ID / Keystring)</label><input type="text" id="credClientId" placeholder="Paste your Etsy API keystring"></div>
+ <div class="fg"><label>Shop ID</label><input type="text" id="credShopId" placeholder="e.g. 43678215"></div>
+ <button class="btn btn-green" onclick="saveCredentials()" style="margin-top:4px"> Save Credentials</button>
+ <div class="fg" style="margin-top:14px"><label>Redirect URI (add this in your Etsy app settings)</label><div class="code-block" id="showRedirectUri"></div></div>
  <button class="btn btn-outline" onclick="clearToken()" style="margin-top:4px"> Clear Saved Token</button>
  </div>
  </div>
@@ -313,9 +315,23 @@
 
 <script>
 // ── CONFIG ──
-const CLIENT_ID = 'YOUR_ETSY_API_KEY';
-const SHOP_ID = 'YOUR_SHOP_ID';
+// Credentials are entered on the Auth & Settings page and stored in this
+// browser's localStorage — no code editing needed.
+let CLIENT_ID = localStorage.getItem('etsy_client_id') || 'YOUR_ETSY_API_KEY';
+let SHOP_ID = localStorage.getItem('etsy_shop_id') || 'YOUR_SHOP_ID';
 const SCOPES = 'listings_w listings_r';
+
+function saveCredentials() {
+  const cid = document.getElementById('credClientId').value.trim();
+  const sid = document.getElementById('credShopId').value.trim().replace(/\D/g, '');
+  if (!cid || !sid) { alert('Enter both the API keystring and your Shop ID.'); return; }
+  localStorage.setItem('etsy_client_id', cid);
+  localStorage.setItem('etsy_shop_id', sid);
+  CLIENT_ID = cid;
+  SHOP_ID = sid;
+  log('Credentials saved for shop ' + sid, 'ok');
+  alert('Saved. Now use Connect Etsy Account above.');
+}
 
 // Copy kept in sync with sales-kit/etsy-listing.md \u2014 only claims the app actually delivers.
 const DEFAULT_TITLE = 'Digital Baby Journal | Editable Baby Book | Phone Friendly | Drag Drop Photos | 5 Color Themes | Instant Download';
@@ -661,9 +677,9 @@ window.addEventListener('DOMContentLoaded', () => {
  document.getElementById('editDesc').value = DEFAULT_DESC;
  syncPreview();
 
- // Credential display
- document.getElementById('showClientId').textContent = CLIENT_ID;
- document.getElementById('showShopId').textContent = SHOP_ID;
+ // Credential prefill (saved values from this browser)
+ if (CLIENT_ID !== 'YOUR_ETSY_API_KEY') document.getElementById('credClientId').value = CLIENT_ID;
+ if (SHOP_ID !== 'YOUR_SHOP_ID') document.getElementById('credShopId').value = SHOP_ID;
 
  // Redirect URI
  const ruri = getRedirectUri();

@@ -24,6 +24,11 @@ const EXECUTABLES = [
   });
   const page = await browser.newPage({ deviceScaleFactor: 2 });
   await page.goto('file://' + path.join(__dirname, 'listing-images.html'));
+  // If the watercolor accents are still tiny placeholders, hide their slots
+  const accent = path.join(__dirname, '..', 'assets', 'accent-stork.jpg');
+  if (fs.existsSync(accent) && fs.statSync(accent).size < 2048) {
+    await page.addStyleTag({ content: '.gic { display: none !important; }' });
+  }
   await page.waitForTimeout(1200); // fonts + images
   for (const id of ['s1', 's2', 's3', 's4', 's5']) {
     const el = page.locator('#' + id);
