@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pinterest pin templates — render with marketing-kit/pins/render-pins.js</title>
+<link rel="stylesheet" href="../../vendor/fonts.css">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #333; font-family: 'Nunito', sans-serif; }
+.pin {
+  width: 1000px; height: 1500px; position: relative; overflow: hidden;
+  background: linear-gradient(170deg, #f5ede6 0%, #e4f8f8 100%);
+  margin: 20px auto; display: flex; flex-direction: column; align-items: center;
+}
+.script { font-family: 'Dancing Script', cursive; }
+.teal { color: #1aafaf; }
+.pin h1 { font-weight: 900; color: #1a1a2e; letter-spacing: -.02em; text-align: center; line-height: 1.12; }
+.kicker {
+  background: #1aafaf; color: #fff; font-weight: 900; font-size: 26px;
+  padding: 12px 34px; border-radius: 40px; letter-spacing: .04em;
+  box-shadow: 0 8px 24px rgba(26,175,175,.35); text-transform: uppercase;
+}
+.kicker.orange { background: #f97316; box-shadow: 0 8px 24px rgba(249,115,22,.35); }
+.phone {
+  border: 12px solid #1a1a2e; border-radius: 52px; overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,.28); background: #1a1a2e;
+}
+.phone img { display: block; width: 100%; }
+.strip {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: #1a1a2e; color: #fff; text-align: center;
+  font-size: 30px; font-weight: 800; padding: 26px;
+}
+.strip .script { color: #5ee7e7; font-size: 34px; }
+.checks { list-style: none; }
+.checks li {
+  font-size: 34px; font-weight: 700; color: #333;
+  margin-bottom: 22px; display: flex; gap: 18px; align-items: flex-start; text-align: left;
+}
+.checks li::before {
+  content: "✓"; color: #fff; background: #1aafaf; border-radius: 50%;
+  min-width: 44px; height: 44px; display: flex; align-items: center;
+  justify-content: center; font-size: 24px; font-weight: 900; flex-shrink: 0;
+}
+.bigquote { font-size: 58px; }
+.card {
+  background: rgba(255,255,255,.9); border: 2px solid rgba(26,175,175,.25);
+  border-radius: 28px; padding: 34px 40px; box-shadow: 0 12px 32px rgba(0,0,0,.08);
+}
+</style>
+</head>
+<body>
+
+<!-- Layout A: hook top, phone bottom -->
+<div class="pin" data-name="pin-01" style="padding:70px 60px 0;">
+  <div class="kicker">Digital Baby Memory Book</div>
+  <h1 style="font-size:72px;margin:34px 0 10px;">Edit It On<br>Your <span class="script teal" style="font-size:84px;">Phone</span></h1>
+  <p style="font-size:32px;color:#555;font-weight:700;margin-bottom:40px;text-align:center;">No app · no account · saves itself</p>
+  <div class="phone" style="width:520px;"><img src="../../assets/screen-cover.jpg" alt=""></div>
+  <div class="strip"><span class="script">Our Little Miracle</span> · Instant Download</div>
+</div>
+
+<div class="pin" data-name="pin-02" style="padding:70px 60px 0;">
+  <div class="kicker orange">For Exhausted New Moms</div>
+  <h1 style="font-size:66px;margin:34px 0 10px;">The Baby Book You'll<br><span class="script teal" style="font-size:80px;">Actually Keep Up With</span></h1>
+  <p style="font-size:32px;color:#555;font-weight:700;margin-bottom:40px;text-align:center;">Filled in one-handed during night feeds</p>
+  <div class="phone" style="width:520px;"><img src="../../assets/screen-milestones.jpg" alt=""></div>
+  <div class="strip">It saves itself as you type</div>
+</div>
+
+<div class="pin" data-name="pin-03" style="padding:70px 60px 0;">
+  <div class="kicker">Baby Milestone Tracker</div>
+  <h1 style="font-size:68px;margin:34px 0 10px;">Every First,<br><span class="script teal" style="font-size:82px;">With the Photo</span></h1>
+  <p style="font-size:32px;color:#555;font-weight:700;margin-bottom:40px;text-align:center;">First smile · first steps · first word · first tooth</p>
+  <div class="phone" style="width:520px;"><img src="../../assets/screen-milestones.jpg" alt=""></div>
+  <div class="strip">Works on any phone · <span class="script">Our Little Miracle</span></div>
+</div>
+
+<!-- Layout B: full text checklist -->
+<div class="pin" data-name="pin-04" style="padding:70px 80px 130px;justify-content:center;">
+  <div class="kicker orange">Baby Shower Gift Idea</div>
+  <h1 style="font-size:74px;margin:44px 0 50px;">Delivered in<br><span class="script teal" style="font-size:90px;">30 Seconds</span></h1>
+  <div class="card">
+    <ul class="checks" style="margin-bottom:0;">
+      <li>Instant digital delivery — no shipping</li>
+      <li>They fill it with their own story</li>
+      <li>100% private, on their device</li>
+      <li>One-time purchase, theirs forever</li>
+      <li>Under $15</li>
+    </ul>
+  </div>
+  <div class="strip">The gift they keep for a lifetime</div>
+</div>
+
+<div class="pin" data-name="pin-05" style="padding:70px 70px 130px;justify-content:center;">
+  <div class="kicker">3AM Thought</div>
+  <h1 class="bigquote" style="font-size:64px;margin:50px 0 30px;">"Did I ever write down<br>her first smile?"</h1>
+  <p style="font-size:34px;color:#555;font-weight:700;text-align:center;margin-bottom:50px;">You think you'll remember.<br>You won't. Type it in before it blurs.</p>
+  <div class="phone" style="width:460px;"><img src="../../assets/screen-cover.jpg" alt=""></div>
+  <div class="strip">The baby book that lives in your hand</div>
+</div>
+
+<div class="pin" data-name="pin-06" style="padding:70px 60px 0;">
+  <div class="kicker">Watch It Draw Itself</div>
+  <h1 style="font-size:68px;margin:34px 0 10px;">Baby Growth Chart<br><span class="script teal" style="font-size:82px;">Made Beautiful</span></h1>
+  <p style="font-size:32px;color:#555;font-weight:700;margin-bottom:40px;text-align:center;">Log weight &amp; height — the chart updates itself</p>
+  <div class="phone" style="width:520px;"><img src="../../assets/screen-growth.jpg" alt=""></div>
+  <div class="strip">Part of a complete digital baby journal</div>
+</div>
+
+<div class="pin" data-name="pin-07" style="padding:70px 80px 130px;justify-content:center;">
+  <div class="kicker orange">Why Moms Are Switching</div>
+  <h1 style="font-size:70px;margin:44px 0 50px;">Paper Baby Book<br>vs <span class="script teal" style="font-size:86px;">Phone Baby Book</span></h1>
+  <div class="card" style="width:100%;">
+    <ul class="checks" style="margin-bottom:0;">
+      <li>Never lost under the couch</li>
+      <li>Always in your hand at 3am</li>
+      <li>Photos added straight from camera roll</li>
+      <li>Backs up in one tap</li>
+      <li>Prints to a keepsake PDF anytime</li>
+    </ul>
+  </div>
+  <div class="strip"><span class="script">Our Little Miracle</span> · Digital Baby Journal</div>
+</div>
+
+<div class="pin" data-name="pin-08" style="padding:70px 60px 0;">
+  <div class="kicker">No Canva · No GoodNotes · No Printer</div>
+  <h1 style="font-size:66px;margin:34px 0 10px;">Opens in Your Browser,<br><span class="script teal" style="font-size:80px;">Ready to Write</span></h1>
+  <p style="font-size:32px;color:#555;font-weight:700;margin-bottom:40px;text-align:center;">Personalize the cover · 5 color themes</p>
+  <div class="phone" style="width:520px;"><img src="../../assets/screen-cover.jpg" alt=""></div>
+  <div class="strip">One file. Yours forever.</div>
+</div>
+
+<div class="pin" data-name="pin-09" style="padding:70px 70px 130px;justify-content:center;">
+  <div class="kicker orange">New Mom Gift Under $15</div>
+  <h1 style="font-size:70px;margin:44px 0 30px;">She'll Fill It With<br><span class="script teal" style="font-size:86px;">First Everythings</span></h1>
+  <p style="font-size:34px;color:#555;font-weight:700;text-align:center;margin-bottom:50px;">First smiles. Midnight thoughts.<br>Letters she'll read to them at 18.</p>
+  <div class="phone" style="width:460px;"><img src="../../assets/screen-milestones.jpg" alt=""></div>
+  <div class="strip">Instant delivery · hers forever</div>
+</div>
+
+<div class="pin" data-name="pin-10" style="padding:70px 80px 130px;justify-content:center;">
+  <div class="kicker">Too Tired for a Baby Book?</div>
+  <h1 style="font-size:70px;margin:44px 0 50px;">Start Tonight in<br><span class="script teal" style="font-size:86px;">60 Seconds</span></h1>
+  <div class="card" style="width:100%;">
+    <ul class="checks" style="margin-bottom:0;">
+      <li>Open the file on your phone</li>
+      <li>Type your baby's name</li>
+      <li>Write one memory</li>
+      <li>Done — it saved itself</li>
+    </ul>
+  </div>
+  <div class="strip">Skip the craft store. Keep the memories.</div>
+</div>
+
+<div class="pin" data-name="pin-11" style="padding:70px 60px 0;">
+  <div class="kicker">Pregnancy → First Year</div>
+  <h1 style="font-size:66px;margin:34px 0 10px;">The Whole Story,<br><span class="script teal" style="font-size:80px;">One Beautiful Place</span></h1>
+  <p style="font-size:31px;color:#555;font-weight:700;margin-bottom:40px;text-align:center;">Birth story · milestones · letters · growth · family tree</p>
+  <div class="phone" style="width:520px;"><img src="../../assets/screen-cover.jpg" alt=""></div>
+  <div class="strip">Digital download · no subscription ever</div>
+</div>
+
+<div class="pin" data-name="pin-12" style="padding:70px 80px 130px;justify-content:center;">
+  <div class="kicker orange">Don't Miss These</div>
+  <h1 style="font-size:70px;margin:44px 0 50px;">8 Baby Firsts<br><span class="script teal" style="font-size:86px;">You'll Want to Keep</span></h1>
+  <div class="card" style="width:100%;">
+    <ul class="checks" style="margin-bottom:0;font-size:30px;">
+      <li>First smile &amp; first laugh</li>
+      <li>First crawl &amp; first steps</li>
+      <li>First tooth &amp; first word</li>
+      <li>First food &amp; first full night's sleep</li>
+    </ul>
+  </div>
+  <div class="strip">One page for each — with the photo</div>
+</div>
+
+<div class="pin" data-name="pin-13" style="padding:70px 70px 130px;justify-content:center;">
+  <div class="kicker">Grandparent Gift Idea</div>
+  <h1 style="font-size:68px;margin:44px 0 30px;">If They Can Open a Text,<br><span class="script teal" style="font-size:82px;">They Can Fill This In</span></h1>
+  <p style="font-size:34px;color:#555;font-weight:700;text-align:center;margin-bottom:50px;">First-time grandparents document<br>everything — make it easy for them.</p>
+  <div class="phone" style="width:460px;"><img src="../../assets/screen-growth.jpg" alt=""></div>
+  <div class="strip">No app to learn · nothing to install</div>
+</div>
+
+<div class="pin" data-name="pin-14" style="padding:70px 80px 130px;justify-content:center;">
+  <div class="kicker">100% Private</div>
+  <h1 style="font-size:70px;margin:44px 0 30px;">Your Baby's Photos<br><span class="script teal" style="font-size:86px;">Stay On Your Phone</span></h1>
+  <p style="font-size:34px;color:#555;font-weight:700;text-align:center;margin-bottom:50px;">No cloud. No account. No app tracking.<br>A baby book that's actually private.</p>
+  <div class="card" style="width:100%;">
+    <ul class="checks" style="margin-bottom:0;">
+      <li>Nothing uploaded, ever</li>
+      <li>Saves on your own device</li>
+      <li>One-tap private backup file</li>
+    </ul>
+  </div>
+  <div class="strip"><span class="script">Our Little Miracle</span> · Digital Baby Journal</div>
+</div>
+
+<div class="pin" data-name="pin-15" style="padding:70px 60px 0;">
+  <div class="kicker orange">Write It Now, Print It Later</div>
+  <h1 style="font-size:66px;margin:34px 0 10px;">Digital Today,<br><span class="script teal" style="font-size:80px;">Keepsake Forever</span></h1>
+  <p style="font-size:32px;color:#555;font-weight:700;margin-bottom:40px;text-align:center;">Prints to a beautiful PDF whenever you're ready</p>
+  <div class="phone" style="width:520px;"><img src="../../assets/screen-milestones.jpg" alt=""></div>
+  <div class="strip">The best of both worlds</div>
+</div>
+
+<div class="pin" data-name="pin-16" style="padding:70px 70px 130px;justify-content:center;">
+  <div class="kicker">Not Just Dates</div>
+  <h1 style="font-size:70px;margin:44px 0 30px;">Write the Story,<br><span class="script teal" style="font-size:86px;">Not Just the Date</span></h1>
+  <p style="font-size:34px;color:#555;font-weight:700;text-align:center;margin-bottom:50px;">Where you were. How it felt.<br>The tiny details you'll treasure at their wedding.</p>
+  <div class="phone" style="width:460px;"><img src="../../assets/screen-milestones.jpg" alt=""></div>
+  <div class="strip">Room for the real memories</div>
+</div>
+
+<div class="pin" data-name="pin-17" style="padding:70px 80px 130px;justify-content:center;">
+  <div class="kicker orange">Last-Minute Gift</div>
+  <h1 style="font-size:72px;margin:44px 0 50px;">Forgot the<br><span class="script teal" style="font-size:88px;">Baby Shower Gift?</span></h1>
+  <div class="card" style="width:100%;">
+    <ul class="checks" style="margin-bottom:0;">
+      <li>Delivered to email in seconds</li>
+      <li>Beautiful &amp; deeply personal</li>
+      <li>Under $15</li>
+      <li>Kept for a lifetime</li>
+    </ul>
+  </div>
+  <div class="strip">Instant digital download</div>
+</div>
+
+<div class="pin" data-name="pin-18" style="padding:70px 70px 130px;justify-content:center;">
+  <div class="kicker">One-Tap Backup</div>
+  <h1 style="font-size:68px;margin:44px 0 30px;">Lost Phones Happen.<br><span class="script teal" style="font-size:82px;">Lost Memories Don't Have To.</span></h1>
+  <p style="font-size:34px;color:#555;font-weight:700;text-align:center;margin-bottom:50px;">Your whole book — words and photos —<br>exports to one file you keep anywhere.</p>
+  <div class="phone" style="width:440px;"><img src="../../assets/screen-cover.jpg" alt=""></div>
+  <div class="strip">Never lose a single memory</div>
+</div>
+
+<div class="pin" data-name="pin-19" style="padding:70px 60px 0;">
+  <div class="kicker">See Inside</div>
+  <h1 style="font-size:70px;margin:34px 0 10px;">Real Pages.<br><span class="script teal" style="font-size:86px;">Real Memories.</span></h1>
+  <p style="font-size:32px;color:#555;font-weight:700;margin-bottom:40px;text-align:center;">Milestones · growth · letters · monthly photos</p>
+  <div style="display:flex;gap:26px;">
+    <div class="phone" style="width:340px;transform:rotate(-4deg);border-width:9px;"><img src="../../assets/screen-milestones.jpg" alt=""></div>
+    <div class="phone" style="width:340px;transform:rotate(4deg);margin-top:30px;border-width:9px;"><img src="../../assets/screen-growth.jpg" alt=""></div>
+  </div>
+  <div class="strip">Try the free demo — link in bio</div>
+</div>
+
+<div class="pin" data-name="pin-20" style="padding:70px 80px 130px;justify-content:center;">
+  <div class="kicker orange">Pay Once. Never Again.</div>
+  <h1 style="font-size:68px;margin:44px 0 50px;">Baby Book Apps Charge<br><span class="script teal" style="font-size:82px;">$96 a Year</span></h1>
+  <div class="card" style="width:100%;">
+    <ul class="checks" style="margin-bottom:0;">
+      <li>This one: $14.97 once</li>
+      <li>No subscription, ever</li>
+      <li>Never lose access to your memories</li>
+      <li>Works offline, forever</li>
+    </ul>
+  </div>
+  <div class="strip">Stop renting your baby's memory book</div>
+</div>
+
+</body>
+</html>

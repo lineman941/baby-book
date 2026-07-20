@@ -5,700 +5,718 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Our Little Miracle — Etsy Control Panel</title>
 <style>
-  :root {
-    --teal: #7ee8e8;
-    --teal-dark: #3dbfbf;
-    --teal-light: #e0fafa;
-    --green: #22c55e;
-    --green-dark: #16a34a;
-    --orange: #f97316;
-    --red: #ef4444;
-    --g50: #f9fafb;
-    --g100: #f3f4f6;
-    --g200: #e5e7eb;
-    --g300: #d1d5db;
-    --g400: #9ca3af;
-    --g500: #6b7280;
-    --g600: #4b5563;
-    --g700: #374151;
-    --g800: #1f2937;
-    --g900: #111827;
-    --sidebar-w: 240px;
-    --r: 12px;
-    --shadow: 0 2px 12px rgba(0,0,0,0.08);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--g100); color: var(--g800); min-height: 100vh; display: flex; }
+ :root {
+ --teal: #7ee8e8;
+ --teal-dark: #3dbfbf;
+ --teal-light: #e0fafa;
+ --green: #22c55e;
+ --green-dark: #16a34a;
+ --orange: #f97316;
+ --red: #ef4444;
+ --g50: #f9fafb;
+ --g100: #f3f4f6;
+ --g200: #e5e7eb;
+ --g300: #d1d5db;
+ --g400: #9ca3af;
+ --g500: #6b7280;
+ --g600: #4b5563;
+ --g700: #374151;
+ --g800: #1f2937;
+ --g900: #111827;
+ --sidebar-w: 240px;
+ --r: 12px;
+ --shadow: 0 2px 12px rgba(0,0,0,0.08);
+ }
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--g100); color: var(--g800); min-height: 100vh; display: flex; }
 
-  /* SIDEBAR */
-  #sidebar {
-    width: var(--sidebar-w); min-height: 100vh; background: #fff;
-    border-right: 1px solid var(--g200); display: flex; flex-direction: column;
-    position: fixed; left:0; top:0; bottom:0; z-index: 100; transition: transform .3s;
-  }
-  .sb-logo { padding: 20px 16px 14px; border-bottom: 1px solid var(--g100); }
-  .sb-brand { font-size: 13px; font-weight: 700; color: var(--g800); line-height: 1.2; }
-  .sb-sub { font-size: 11px; color: var(--g400); margin-top: 2px; }
-  .sb-dot { display:inline-block; width:8px; height:8px; background:var(--teal-dark); border-radius:50%; margin-right:6px; }
-  nav { flex:1; padding: 12px 8px; }
-  nav a {
-    display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px;
-    font-size:13px; font-weight:500; color:var(--g600); text-decoration:none; cursor:pointer;
-    margin-bottom:2px; transition: background .15s, color .15s;
-  }
-  nav a:hover { background: var(--g100); color: var(--g800); }
-  nav a.active { background: var(--teal-light); color: var(--teal-dark); font-weight:600; }
-  nav a .ic { font-size:16px; width:20px; text-align:center; }
-  .nav-lbl { font-size:10px; font-weight:700; letter-spacing:.08em; color:var(--g400); text-transform:uppercase; padding:10px 12px 4px; margin-top:6px; }
-  .sb-foot { padding:14px 16px; border-top:1px solid var(--g100); }
-  .auth-pill {
-    display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px;
-    background:var(--g100); font-size:11px;
-  }
-  .auth-pill .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-  .auth-pill.connected .dot { background:var(--green); }
-  .auth-pill.disconnected .dot { background:var(--red); }
-  .auth-pill .lbl { font-weight:600; color:var(--g700); }
-  .auth-pill .sts { color:var(--g400); font-size:10px; }
+ /* SIDEBAR */
+ #sidebar {
+ width: var(--sidebar-w); min-height: 100vh; background: #fff;
+ border-right: 1px solid var(--g200); display: flex; flex-direction: column;
+ position: fixed; left:0; top:0; bottom:0; z-index: 100; transition: transform .3s;
+ }
+ .sb-logo { padding: 20px 16px 14px; border-bottom: 1px solid var(--g100); }
+ .sb-brand { font-size: 13px; font-weight: 700; color: var(--g800); line-height: 1.2; }
+ .sb-sub { font-size: 11px; color: var(--g400); margin-top: 2px; }
+ .sb-dot { display:inline-block; width:8px; height:8px; background:var(--teal-dark); border-radius:50%; margin-right:6px; }
+ nav { flex:1; padding: 12px 8px; }
+ nav a {
+ display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px;
+ font-size:13px; font-weight:500; color:var(--g600); text-decoration:none; cursor:pointer;
+ margin-bottom:2px; transition: background .15s, color .15s;
+ }
+ nav a:hover { background: var(--g100); color: var(--g800); }
+ nav a.active { background: var(--teal-light); color: var(--teal-dark); font-weight:600; }
+ nav a .ic { font-size:16px; width:20px; text-align:center; }
+ .nav-lbl { font-size:10px; font-weight:700; letter-spacing:.08em; color:var(--g400); text-transform:uppercase; padding:10px 12px 4px; margin-top:6px; }
+ .sb-foot { padding:14px 16px; border-top:1px solid var(--g100); }
+ .auth-pill {
+ display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px;
+ background:var(--g100); font-size:11px;
+ }
+ .auth-pill .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+ .auth-pill.connected .dot { background:var(--green); }
+ .auth-pill.disconnected .dot { background:var(--red); }
+ .auth-pill .lbl { font-weight:600; color:var(--g700); }
+ .auth-pill .sts { color:var(--g400); font-size:10px; }
 
-  /* MAIN */
-  #main { margin-left:var(--sidebar-w); flex:1; min-height:100vh; padding:28px 24px; max-width:900px; }
-  .page { display:none; }
-  .page.active { display:block; }
-  .pg-title { font-size:22px; font-weight:700; color:var(--g900); margin-bottom:4px; }
-  .pg-sub { font-size:14px; color:var(--g500); margin-bottom:24px; }
+ /* MAIN */
+ #main { margin-left:var(--sidebar-w); flex:1; min-height:100vh; padding:28px 24px; max-width:900px; }
+ .page { display:none; }
+ .page.active { display:block; }
+ .pg-title { font-size:22px; font-weight:700; color:var(--g900); margin-bottom:4px; }
+ .pg-sub { font-size:14px; color:var(--g500); margin-bottom:24px; }
 
-  /* CARD */
-  .card { background:#fff; border:1px solid var(--g200); border-radius:var(--r); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); }
-  .card-title { font-size:13px; font-weight:700; color:var(--g700); text-transform:uppercase; letter-spacing:.06em; margin-bottom:14px; display:flex; align-items:center; gap:6px; }
+ /* CARD */
+ .card { background:#fff; border:1px solid var(--g200); border-radius:var(--r); padding:20px; margin-bottom:16px; box-shadow:var(--shadow); }
+ .card-title { font-size:13px; font-weight:700; color:var(--g700); text-transform:uppercase; letter-spacing:.06em; margin-bottom:14px; display:flex; align-items:center; gap:6px; }
 
-  /* LISTING PREVIEW */
-  .listing-preview { background:var(--g50); border:1px solid var(--g200); border-radius:10px; padding:16px; margin-bottom:16px; }
-  .p-title { font-size:15px; font-weight:700; color:var(--g900); line-height:1.4; margin-bottom:8px; }
-  .p-price { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-  .p-sale { font-size:20px; font-weight:800; color:var(--green-dark); }
-  .p-anchor { font-size:14px; color:var(--g400); text-decoration:line-through; }
-  .p-badge { background:var(--red); color:#fff; font-size:11px; font-weight:700; padding:2px 7px; border-radius:20px; }
-  .p-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
-  .tag-chip { background:var(--teal-light); color:var(--teal-dark); font-size:11px; font-weight:600; padding:3px 9px; border-radius:20px; }
-  .p-desc { font-size:12px; color:var(--g600); line-height:1.6; white-space:pre-wrap; }
-  .p-type { display:inline-block; margin-top:8px; background:var(--g200); color:var(--g600); font-size:11px; font-weight:600; padding:2px 8px; border-radius:6px; }
+ /* LISTING PREVIEW */
+ .listing-preview { background:var(--g50); border:1px solid var(--g200); border-radius:10px; padding:16px; margin-bottom:16px; }
+ .p-title { font-size:15px; font-weight:700; color:var(--g900); line-height:1.4; margin-bottom:8px; }
+ .p-price { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+ .p-sale { font-size:20px; font-weight:800; color:var(--green-dark); }
+ .p-anchor { font-size:14px; color:var(--g400); text-decoration:line-through; }
+ .p-badge { background:var(--red); color:#fff; font-size:11px; font-weight:700; padding:2px 7px; border-radius:20px; }
+ .p-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+ .tag-chip { background:var(--teal-light); color:var(--teal-dark); font-size:11px; font-weight:600; padding:3px 9px; border-radius:20px; }
+ .p-desc { font-size:12px; color:var(--g600); line-height:1.6; white-space:pre-wrap; }
+ .p-type { display:inline-block; margin-top:8px; background:var(--g200); color:var(--g600); font-size:11px; font-weight:600; padding:2px 8px; border-radius:6px; }
 
-  /* FIELDS */
-  .fg { margin-bottom:14px; }
-  label { display:block; font-size:12px; font-weight:600; color:var(--g600); margin-bottom:5px; }
-  input[type=text], input[type=number], textarea {
-    width:100%; padding:9px 12px; border:1px solid var(--g200); border-radius:8px;
-    font-size:13px; color:var(--g800); background:#fff; outline:none; transition:border-color .15s;
-  }
-  input[type=text]:focus, input[type=number]:focus, textarea:focus {
-    border-color:var(--teal-dark); box-shadow:0 0 0 3px rgba(126,232,232,.25);
-  }
-  textarea { resize:vertical; min-height:90px; font-family:inherit; line-height:1.5; }
-  .price-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+ /* FIELDS */
+ .fg { margin-bottom:14px; }
+ label { display:block; font-size:12px; font-weight:600; color:var(--g600); margin-bottom:5px; }
+ input[type=text], input[type=number], textarea {
+ width:100%; padding:9px 12px; border:1px solid var(--g200); border-radius:8px;
+ font-size:13px; color:var(--g800); background:#fff; outline:none; transition:border-color .15s;
+ }
+ input[type=text]:focus, input[type=number]:focus, textarea:focus {
+ border-color:var(--teal-dark); box-shadow:0 0 0 3px rgba(126,232,232,.25);
+ }
+ textarea { resize:vertical; min-height:90px; font-family:inherit; line-height:1.5; }
+ .price-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 
-  /* BUTTONS */
-  .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 20px; border-radius:9px; border:none; font-size:14px; font-weight:700; cursor:pointer; transition:background .15s, transform .1s, box-shadow .15s; }
-  .btn:active { transform:scale(.97); }
-  .btn-green { background:var(--green); color:#fff; box-shadow:0 2px 8px rgba(34,197,94,.3); }
-  .btn-green:hover { background:var(--green-dark); }
-  .btn-green:disabled { background:var(--g300); box-shadow:none; cursor:not-allowed; }
-  .btn-teal { background:var(--teal-dark); color:#fff; }
-  .btn-teal:hover { background:#2fa0a0; }
-  .btn-outline { background:#fff; color:var(--g700); border:1px solid var(--g300); }
-  .btn-outline:hover { background:var(--g100); }
-  .btn-orange { background:var(--orange); color:#fff; }
-  .btn-orange:hover { background:#ea6c08; }
-  .btn-full { width:100%; }
+ /* BUTTONS */
+ .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 20px; border-radius:9px; border:none; font-size:14px; font-weight:700; cursor:pointer; transition:background .15s, transform .1s, box-shadow .15s; }
+ .btn:active { transform:scale(.97); }
+ .btn-green { background:var(--green); color:#fff; box-shadow:0 2px 8px rgba(34,197,94,.3); }
+ .btn-green:hover { background:var(--green-dark); }
+ .btn-green:disabled { background:var(--g300); box-shadow:none; cursor:not-allowed; }
+ .btn-teal { background:var(--teal-dark); color:#fff; }
+ .btn-teal:hover { background:#2fa0a0; }
+ .btn-outline { background:#fff; color:var(--g700); border:1px solid var(--g300); }
+ .btn-outline:hover { background:var(--g100); }
+ .btn-orange { background:var(--orange); color:#fff; }
+ .btn-orange:hover { background:#ea6c08; }
+ .btn-full { width:100%; }
 
-  /* APPROVE HERO */
-  .approve-hero {
-    background:linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    border-radius:14px; padding:20px 24px;
-    display:flex; align-items:center; justify-content:space-between;
-    margin-bottom:20px; color:#fff; box-shadow:0 4px 20px rgba(34,197,94,.35);
-  }
-  .hero-title { font-size:16px; font-weight:800; }
-  .hero-sub { font-size:12px; opacity:.85; margin-top:2px; }
-  #approveBtn {
-    background:#fff; color:var(--green-dark); font-size:14px; font-weight:800;
-    padding:12px 24px; border-radius:10px; border:none; cursor:pointer; white-space:nowrap;
-    box-shadow:0 2px 8px rgba(0,0,0,.15); transition:transform .15s, box-shadow .15s;
-  }
-  #approveBtn:hover { transform:scale(1.03); box-shadow:0 4px 16px rgba(0,0,0,.2); }
-  #approveBtn:disabled { opacity:.6; cursor:not-allowed; transform:none; }
+ /* APPROVE HERO */
+ .approve-hero {
+ background:linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+ border-radius:14px; padding:20px 24px;
+ display:flex; align-items:center; justify-content:space-between;
+ margin-bottom:20px; color:#fff; box-shadow:0 4px 20px rgba(34,197,94,.35);
+ }
+ .hero-title { font-size:16px; font-weight:800; }
+ .hero-sub { font-size:12px; opacity:.85; margin-top:2px; }
+ #approveBtn {
+ background:#fff; color:var(--green-dark); font-size:14px; font-weight:800;
+ padding:12px 24px; border-radius:10px; border:none; cursor:pointer; white-space:nowrap;
+ box-shadow:0 2px 8px rgba(0,0,0,.15); transition:transform .15s, box-shadow .15s;
+ }
+ #approveBtn:hover { transform:scale(1.03); box-shadow:0 4px 16px rgba(0,0,0,.2); }
+ #approveBtn:disabled { opacity:.6; cursor:not-allowed; transform:none; }
 
-  /* ACTIVITY LOG */
-  #activityLog {
-    background:var(--g900); border-radius:10px; padding:14px 16px;
-    max-height:180px; overflow-y:auto;
-    font-family:'Courier New', monospace; font-size:12px;
-  }
-  .log-line { margin-bottom:4px; }
-  .log-ts { color:var(--g400); margin-right:6px; }
-  .log-ok { color:#4ade80; }
-  .log-err { color:#f87171; }
-  .log-info { color:var(--g300); }
+ /* ACTIVITY LOG */
+ #activityLog {
+ background:var(--g900); border-radius:10px; padding:14px 16px;
+ max-height:180px; overflow-y:auto;
+ font-family:'Courier New', monospace; font-size:12px;
+ }
+ .log-line { margin-bottom:4px; }
+ .log-ts { color:var(--g400); margin-right:6px; }
+ .log-ok { color:#4ade80; }
+ .log-err { color:#f87171; }
+ .log-info { color:var(--g300); }
 
-  /* PHASE CARDS */
-  .phase-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-  .phase-card { border:2px solid var(--g200); border-radius:10px; padding:16px; transition:border-color .2s; }
-  .phase-card:hover { border-color:var(--teal-dark); }
-  .phase-card.current { border-color:var(--green); background:#f0fdf4; }
-  .ph-lbl { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--g400); margin-bottom:6px; }
-  .ph-name { font-size:15px; font-weight:800; color:var(--g900); margin-bottom:4px; }
-  .ph-timing { font-size:12px; color:var(--g500); margin-bottom:10px; }
-  .ph-prices { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
-  .ph-sale { font-size:22px; font-weight:800; color:var(--green-dark); }
-  .ph-anchor { font-size:13px; color:var(--g400); text-decoration:line-through; }
-  .ph-off { background:var(--red); color:#fff; font-size:10px; font-weight:700; padding:2px 6px; border-radius:12px; }
-  .apply-btn { width:100%; padding:9px; border-radius:8px; border:none; font-size:12px; font-weight:700; cursor:pointer; background:var(--teal-light); color:var(--teal-dark); transition:background .15s; }
-  .apply-btn:hover { background:var(--teal-dark); color:#fff; }
+ /* PHASE CARDS */
+ .phase-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+ .phase-card { border:2px solid var(--g200); border-radius:10px; padding:16px; transition:border-color .2s; }
+ .phase-card:hover { border-color:var(--teal-dark); }
+ .phase-card.current { border-color:var(--green); background:#f0fdf4; }
+ .ph-lbl { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--g400); margin-bottom:6px; }
+ .ph-name { font-size:15px; font-weight:800; color:var(--g900); margin-bottom:4px; }
+ .ph-timing { font-size:12px; color:var(--g500); margin-bottom:10px; }
+ .ph-prices { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+ .ph-sale { font-size:22px; font-weight:800; color:var(--green-dark); }
+ .ph-anchor { font-size:13px; color:var(--g400); text-decoration:line-through; }
+ .ph-off { background:var(--red); color:#fff; font-size:10px; font-weight:700; padding:2px 6px; border-radius:12px; }
+ .apply-btn { width:100%; padding:9px; border-radius:8px; border:none; font-size:12px; font-weight:700; cursor:pointer; background:var(--teal-light); color:var(--teal-dark); transition:background .15s; }
+ .apply-btn:hover { background:var(--teal-dark); color:#fff; }
 
-  /* AUTH */
-  .auth-step { display:flex; align-items:flex-start; gap:14px; padding:16px; border:1px solid var(--g200); border-radius:10px; margin-bottom:12px; }
-  .step-num { width:28px; height:28px; border-radius:50%; background:var(--teal-dark); color:#fff; font-size:13px; font-weight:800; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
-  .step-title { font-size:14px; font-weight:700; color:var(--g800); margin-bottom:4px; }
-  .step-desc { font-size:12px; color:var(--g500); margin-bottom:10px; }
-  .code-block { background:var(--g100); border-radius:6px; padding:8px 12px; font-family:monospace; font-size:11px; color:var(--g700); word-break:break-all; margin-bottom:8px; }
-  .token-status { padding:10px 14px; border-radius:8px; font-size:12px; font-weight:600; }
-  .token-ok { background:#f0fdf4; color:var(--green-dark); border:1px solid #bbf7d0; }
-  .token-none { background:var(--g100); color:var(--g500); border:1px solid var(--g200); }
+ /* AUTH */
+ .auth-step { display:flex; align-items:flex-start; gap:14px; padding:16px; border:1px solid var(--g200); border-radius:10px; margin-bottom:12px; }
+ .step-num { width:28px; height:28px; border-radius:50%; background:var(--teal-dark); color:#fff; font-size:13px; font-weight:800; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+ .step-title { font-size:14px; font-weight:700; color:var(--g800); margin-bottom:4px; }
+ .step-desc { font-size:12px; color:var(--g500); margin-bottom:10px; }
+ .code-block { background:var(--g100); border-radius:6px; padding:8px 12px; font-family:monospace; font-size:11px; color:var(--g700); word-break:break-all; margin-bottom:8px; }
+ .token-status { padding:10px 14px; border-radius:8px; font-size:12px; font-weight:600; }
+ .token-ok { background:#f0fdf4; color:var(--green-dark); border:1px solid #bbf7d0; }
+ .token-none { background:var(--g100); color:var(--g500); border:1px solid var(--g200); }
 
-  /* MOBILE */
-  #mobOverlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:90; cursor:pointer; }
-  #menuBtn { display:none; position:fixed; top:14px; left:14px; z-index:200; background:#fff; border:1px solid var(--g200); border-radius:8px; padding:8px 10px; cursor:pointer; font-size:18px; box-shadow:var(--shadow); }
+ /* MOBILE */
+ #mobOverlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:90; cursor:pointer; }
+ #menuBtn { display:none; position:fixed; top:14px; left:14px; z-index:200; background:#fff; border:1px solid var(--g200); border-radius:8px; padding:8px 10px; cursor:pointer; font-size:18px; box-shadow:var(--shadow); }
 
-  @media (max-width:700px) {
-    #sidebar { transform:translateX(-100%); }
-    #sidebar.open { transform:translateX(0); }
-    #mobOverlay.show { display:block; }
-    #menuBtn { display:block; }
-    #main { margin-left:0; padding:60px 14px 20px; }
-    .phase-grid { grid-template-columns:1fr; }
-    .price-row { grid-template-columns:1fr; }
-    .approve-hero { flex-direction:column; gap:14px; text-align:center; }
-    #approveBtn { width:100%; }
-  }
+ @media (max-width:700px) {
+ #sidebar { transform:translateX(-100%); }
+ #sidebar.open { transform:translateX(0); }
+ #mobOverlay.show { display:block; }
+ #menuBtn { display:block; }
+ #main { margin-left:0; padding:60px 14px 20px; }
+ .phase-grid { grid-template-columns:1fr; }
+ .price-row { grid-template-columns:1fr; }
+ .approve-hero { flex-direction:column; gap:14px; text-align:center; }
+ #approveBtn { width:100%; }
+ }
 </style>
 </head>
 <body>
 
-<button id="menuBtn" onclick="toggleMobile()">☰</button>
+<button id="menuBtn" onclick="toggleMobile()"></button>
 <div id="mobOverlay" onclick="closeMobile()"></div>
 
 <aside id="sidebar">
-  <div class="sb-logo">
-    <div class="sb-brand"><span class="sb-dot"></span>Our Little Miracle</div>
-    <div class="sb-sub">Etsy Control Panel</div>
-  </div>
-  <nav>
-    <div class="nav-lbl">Automation</div>
-    <a class="active" onclick="showPage('approve',this)"><span class="ic">✅</span> Review &amp; Approve</a>
-    <a onclick="showPage('schedule',this)"><span class="ic">📅</span> Price Schedule</a>
-    <a onclick="showPage('auth',this)"><span class="ic">🔑</span> Auth &amp; Settings</a>
-    <div class="nav-lbl">Quick Links</div>
-    <a href="index.html" target="_blank"><span class="ic">📖</span> Baby Book App</a>
-    <a href="marketing.html" target="_blank"><span class="ic">🛍️</span> Marketing Page</a>
-    <a href="https://www.etsy.com/your/shops/manage/listings" target="_blank"><span class="ic">🧡</span> Etsy Listings</a>
-  </nav>
-  <div class="sb-foot">
-    <div class="auth-pill disconnected" id="authPill">
-      <div class="dot"></div>
-      <div><div class="lbl">Etsy</div><div class="sts" id="authPillSts">Not connected</div></div>
-    </div>
-  </div>
+ <div class="sb-logo">
+ <div class="sb-brand"><span class="sb-dot"></span>Our Little Miracle</div>
+ <div class="sb-sub">Etsy Control Panel</div>
+ </div>
+ <nav>
+ <div class="nav-lbl">Automation</div>
+ <a class="active" onclick="showPage('approve',this)">Review &amp; Approve</a>
+ <a onclick="showPage('schedule',this)">Price Schedule</a>
+ <a onclick="showPage('auth',this)">Auth &amp; Settings</a>
+ <div class="nav-lbl">Quick Links</div>
+ <a href="app.html" target="_blank">Baby Book App</a>
+ <a href="index.html" target="_blank">Marketing Page</a>
+ <a href="https://www.etsy.com/your/shops/manage/listings" target="_blank">Etsy Listings</a>
+ </nav>
+ <div class="sb-foot">
+ <div class="auth-pill disconnected" id="authPill">
+ <div class="dot"></div>
+ <div><div class="lbl">Etsy</div><div class="sts" id="authPillSts">Not connected</div></div>
+ </div>
+ </div>
 </aside>
 
 <main id="main">
 
-  <!-- PAGE: REVIEW & APPROVE -->
-  <div class="page active" id="pg-approve">
-    <div class="pg-title">Review &amp; Approve Listing</div>
-    <div class="pg-sub">Preview your Etsy listing, make edits, then hit Approve to post live.</div>
+ <!-- PAGE: REVIEW & APPROVE -->
+ <div class="page active" id="pg-approve">
+ <div class="pg-title">Review &amp; Approve Listing</div>
+ <div class="pg-sub">Preview your Etsy listing, make edits, then hit Approve to post live.</div>
 
-    <div class="approve-hero">
-      <div><div class="hero-title">Ready to post to Etsy?</div><div class="hero-sub" id="heroSub">Connect Etsy first → Auth &amp; Settings</div></div>
-      <button id="approveBtn" disabled onclick="approveListing()">🚀 Approve &amp; Post</button>
-    </div>
+ <div class="approve-hero">
+ <div><div class="hero-title">Ready to post to Etsy?</div><div class="hero-sub" id="heroSub">Connect Etsy first → Auth &amp; Settings</div></div>
+ <button id="approveBtn" disabled onclick="approveListing()"> Approve &amp; Post</button>
+ </div>
 
-    <div class="card">
-      <div class="card-title">📋 Listing Preview</div>
-      <div class="listing-preview">
-        <div class="p-title" id="pvTitle"></div>
-        <div class="p-price"><span class="p-sale" id="pvSale"></span><span class="p-anchor" id="pvAnchor"></span><span class="p-badge" id="pvBadge"></span></div>
-        <div class="p-tags" id="pvTags"></div>
-        <div class="p-desc" id="pvDesc"></div>
-        <span class="p-type">Digital Download · Instant Delivery</span>
-      </div>
-    </div>
+ <div class="card">
+ <div class="card-title"> Listing Preview</div>
+ <div class="listing-preview">
+ <div class="p-title" id="pvTitle"></div>
+ <div class="p-price"><span class="p-sale" id="pvSale"></span><span class="p-anchor" id="pvAnchor"></span><span class="p-badge" id="pvBadge"></span></div>
+ <div class="p-tags" id="pvTags"></div>
+ <div class="p-desc" id="pvDesc"></div>
+ <span class="p-type">Digital Download · Instant Delivery</span>
+ </div>
+ </div>
 
-    <div class="card">
-      <div class="card-title">✏️ Edit Listing</div>
-      <div class="fg"><label>Listing Title</label><input type="text" id="editTitle" oninput="syncPreview()"></div>
-      <div class="price-row">
-        <div class="fg"><label>Sale Price ($)</label><input type="number" id="editSale" step="0.01" min="0.01" oninput="syncPreview()"></div>
-        <div class="fg"><label>Anchor / Original Price ($)</label><input type="number" id="editAnchor" step="0.01" min="0.01" oninput="syncPreview()"></div>
-      </div>
-      <div class="fg"><label>Tags (comma-separated, max 13)</label><input type="text" id="editTags" oninput="syncPreview()"></div>
-      <div class="fg"><label>Description</label><textarea id="editDesc" rows="7" oninput="syncPreview()"></textarea></div>
-    </div>
+ <div class="card">
+ <div class="card-title"> Edit Listing</div>
+ <div class="fg"><label>Listing Title</label><input type="text" id="editTitle" oninput="syncPreview()"></div>
+ <div class="price-row">
+ <div class="fg"><label>Sale Price ($)</label><input type="number" id="editSale" step="0.01" min="0.01" oninput="syncPreview()"></div>
+ <div class="fg"><label>Anchor / Original Price ($)</label><input type="number" id="editAnchor" step="0.01" min="0.01" oninput="syncPreview()"></div>
+ </div>
+ <div class="fg"><label>Tags (comma-separated, max 13)</label><input type="text" id="editTags" oninput="syncPreview()"></div>
+ <div class="fg"><label>Description</label><textarea id="editDesc" rows="7" oninput="syncPreview()"></textarea></div>
+ </div>
 
-    <div class="card">
-      <div class="card-title">📟 Activity Log</div>
-      <div id="activityLog"><div class="log-line"><span class="log-ts">--:--:--</span><span class="log-info">Dashboard ready. Connect Etsy to get started.</span></div></div>
-    </div>
-  </div>
+ <div class="card">
+ <div class="card-title"> Activity Log</div>
+ <div id="activityLog"><div class="log-line"><span class="log-ts">--:--:--</span><span class="log-info">Dashboard ready. Connect Etsy to get started.</span></div></div>
+ </div>
+ </div>
 
-  <!-- PAGE: PRICE SCHEDULE -->
-  <div class="page" id="pg-schedule">
-    <div class="pg-title">Launch Price Schedule</div>
-    <div class="pg-sub">Apply pricing phases to your live listing with one click. Listing ID auto-saves after first post.</div>
-    <div class="card">
-      <div class="card-title">🏷️ Pricing Phases</div>
-      <div class="phase-grid" id="phaseGrid"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">⚙️ Manual Price Update</div>
-      <div class="fg"><label>Listing ID (auto-filled after first post)</label><input type="text" id="manualLid" placeholder="e.g. 1234567890"></div>
-      <div class="price-row">
-        <div class="fg"><label>New Sale Price ($)</label><input type="number" id="manualPrice" step="0.01" min="0.01" placeholder="8.97"></div>
-        <div class="fg"><label>Anchor Price ($)</label><input type="number" id="manualAnchor" step="0.01" min="0.01" placeholder="19.97"></div>
-      </div>
-      <button class="btn btn-teal" onclick="manualPriceUpdate()">Update Price on Etsy</button>
-    </div>
-  </div>
+ <!-- PAGE: PRICE SCHEDULE -->
+ <div class="page" id="pg-schedule">
+ <div class="pg-title">Launch Price Schedule</div>
+ <div class="pg-sub">Apply pricing phases to your live listing with one click. Listing ID auto-saves after first post.</div>
+ <div class="card">
+ <div class="card-title"> Pricing Phases</div>
+ <div class="phase-grid" id="phaseGrid"></div>
+ </div>
+ <div class="card">
+ <div class="card-title"> Manual Price Update</div>
+ <div class="fg"><label>Listing ID (auto-filled after first post)</label><input type="text" id="manualLid" placeholder="e.g. 1234567890"></div>
+ <div class="price-row">
+ <div class="fg"><label>New Sale Price ($)</label><input type="number" id="manualPrice" step="0.01" min="0.01" placeholder="14.97"></div>
+ <div class="fg"><label>Anchor Price ($)</label><input type="number" id="manualAnchor" step="0.01" min="0.01" placeholder="39.97"></div>
+ </div>
+ <button class="btn btn-teal" onclick="manualPriceUpdate()">Update Price on Etsy</button>
+ </div>
+ </div>
 
-  <!-- PAGE: AUTH & SETTINGS -->
-  <div class="page" id="pg-auth">
-    <div class="pg-title">Auth &amp; Settings</div>
-    <div class="pg-sub">Connect your Etsy account using OAuth 2.0 (PKCE). Tokens expire every hour — re-authorize as needed.</div>
+ <!-- PAGE: AUTH & SETTINGS -->
+ <div class="page" id="pg-auth">
+ <div class="pg-title">Auth &amp; Settings</div>
+ <div class="pg-sub">Connect your Etsy account using OAuth 2.0 (PKCE). Tokens expire every hour — re-authorize as needed.</div>
 
-    <div class="card">
-      <div class="card-title">🔐 Etsy OAuth Connection</div>
-      <div class="auth-step">
-        <div class="step-num">1</div>
-        <div style="flex:1">
-          <div class="step-title">Authorize with Etsy</div>
-          <div class="step-desc">Opens Etsy login. After approving, you'll be redirected back here automatically.</div>
-          <div class="code-block" id="redirectUriDisplay">Loading…</div>
-          <button class="btn btn-orange" onclick="startOAuth()">🔗 Connect Etsy Account</button>
-        </div>
-      </div>
-      <div class="auth-step">
-        <div class="step-num">2</div>
-        <div style="flex:1">
-          <div class="step-title">Exchange Code for Token</div>
-          <div class="step-desc">Auto-detected on redirect. Or paste the code below manually.</div>
-          <div class="fg" style="margin-bottom:10px"><input type="text" id="authCodeInput" placeholder="Auth code (auto-filled on redirect)"></div>
-          <button class="btn btn-teal" onclick="exchangeToken()">⚡ Get Access Token</button>
-        </div>
-      </div>
-      <div style="margin-top:14px">
-        <div class="card-title">🟢 Token Status</div>
-        <div class="token-status token-none" id="tokenStatus">No token — authorize above first.</div>
-      </div>
-    </div>
+ <div class="card">
+ <div class="card-title"> Etsy OAuth Connection</div>
+ <div class="auth-step">
+ <div class="step-num">1</div>
+ <div style="flex:1">
+ <div class="step-title">Authorize with Etsy</div>
+ <div class="step-desc">Opens Etsy login. After approving, you'll be redirected back here automatically.</div>
+ <div class="code-block" id="redirectUriDisplay">Loading…</div>
+ <button class="btn btn-orange" onclick="startOAuth()"> Connect Etsy Account</button>
+ </div>
+ </div>
+ <div class="auth-step">
+ <div class="step-num">2</div>
+ <div style="flex:1">
+ <div class="step-title">Exchange Code for Token</div>
+ <div class="step-desc">Auto-detected on redirect. Or paste the code below manually.</div>
+ <div class="fg" style="margin-bottom:10px"><input type="text" id="authCodeInput" placeholder="Auth code (auto-filled on redirect)"></div>
+ <button class="btn btn-teal" onclick="exchangeToken()"> Get Access Token</button>
+ </div>
+ </div>
+ <div style="margin-top:14px">
+ <div class="card-title"> Token Status</div>
+ <div class="token-status token-none" id="tokenStatus">No token — authorize above first.</div>
+ </div>
+ </div>
 
-    <div class="card">
-      <div class="card-title">📋 App Credentials (Read-only)</div>
-      <div class="fg"><label>API Key (Client ID)</label><div class="code-block" id="showClientId"></div></div>
-      <div class="fg"><label>Shop ID</label><div class="code-block" id="showShopId"></div></div>
-      <div class="fg"><label>Redirect URI</label><div class="code-block" id="showRedirectUri"></div></div>
-      <button class="btn btn-outline" onclick="clearToken()" style="margin-top:4px">🗑️ Clear Saved Token</button>
-    </div>
-  </div>
+ <div class="card">
+ <div class="card-title"> App Credentials</div>
+ <div class="step-desc" style="margin-bottom:12px">Paste these once — they're saved in this browser. Find them at <a href="https://www.etsy.com/developers/your-apps" target="_blank">etsy.com/developers/your-apps</a> (API Key = "Keystring") and your Shop ID at <a href="https://www.etsy.com/your/shops/me" target="_blank">your shop dashboard</a> (the number in the URL).</div>
+ <div class="fg"><label>API Key (Client ID / Keystring)</label><input type="text" id="credClientId" placeholder="Paste your Etsy API keystring"></div>
+ <div class="fg"><label>Shop ID</label><input type="text" id="credShopId" placeholder="e.g. 43678215"></div>
+ <button class="btn btn-green" onclick="saveCredentials()" style="margin-top:4px"> Save Credentials</button>
+ <div class="fg" style="margin-top:14px"><label>Redirect URI (add this in your Etsy app settings)</label><div class="code-block" id="showRedirectUri"></div></div>
+ <button class="btn btn-outline" onclick="clearToken()" style="margin-top:4px"> Clear Saved Token</button>
+ </div>
+ </div>
 
 </main>
 
 <script>
 // ── CONFIG ──
-const CLIENT_ID = 'YOUR_ETSY_API_KEY';
-const SHOP_ID   = 'YOUR_SHOP_ID';
-const SCOPES    = 'listings_w listings_r';
+// Credentials are entered on the Auth & Settings page and stored in this
+// browser's localStorage — no code editing needed.
+let CLIENT_ID = localStorage.getItem('etsy_client_id') || 'YOUR_ETSY_API_KEY';
+let SHOP_ID = localStorage.getItem('etsy_shop_id') || 'YOUR_SHOP_ID';
+const SCOPES = 'listings_w listings_r';
 
-const DEFAULT_TITLE = 'Our Little Miracle \u2014 Digital Baby Book | No-Download Baby Journal | Milestone Tracker | 5 Themes | Works on Any Phone';
-const DEFAULT_DESC  = `\u2728 THE BABY BOOK FOR REAL MOMS AT 3AM \u2728
+function saveCredentials() {
+  const cid = document.getElementById('credClientId').value.trim();
+  const sid = document.getElementById('credShopId').value.trim().replace(/\D/g, '');
+  if (!cid || !sid) { alert('Enter both the API keystring and your Shop ID.'); return; }
+  localStorage.setItem('etsy_client_id', cid);
+  localStorage.setItem('etsy_shop_id', sid);
+  CLIENT_ID = cid;
+  SHOP_ID = sid;
+  log('Credentials saved for shop ' + sid, 'ok');
+  alert('Saved. Now use Connect Etsy Account above.');
+}
 
-No app to download. No Canva. No GoodNotes. Just open it in any browser on your phone \u2014 it works instantly.
+// Copy kept in sync with sales-kit/etsy-listing.md \u2014 only claims the app actually delivers.
+const DEFAULT_TITLE = 'Digital Baby Journal | Editable Baby Book | Phone Friendly | Drag Drop Photos | 5 Color Themes | Instant Download';
+const DEFAULT_DESC = `\ud83c\udf31 THE BABY BOOK FOR REAL MOMS AT 3AM
 
-\ud83d\udcf1 WHAT YOU GET (Base Book \u2014 $4.97):
-\u2022 5 beautiful color themes (Teal Dream, Rose Gold, Sage, Lavender, Classic Cream)
-\u2022 Cover page with your baby\u2019s name + date of birth
-\u2022 Birth Story page with all the details
-\u2022 12 Milestone cards (first smile, first steps, first tooth + more)
-\u2022 4 Love Letter pages (Mom, Dad, Future Message, From the Village)
-\u2022 Monthly Growth Tracker with visual charts
-\u2022 First Year in Photos \u2014 12 monthly photo cards
-\u2022 Family Tree page with photo uploads
-\u2022 First Holidays keepsake page
-\u2022 Your Name Story page
-\u2022 Photo upload for every milestone
-\u2022 Auto-saves as you type \u2014 pick up right where you left off
-\u2022 Works on iPhone, Android, iPad, laptop \u2014 any browser
+No app. No account. No printing required. Just open it on your phone and start writing.
 
-\u2b50 UPGRADE: THE COMPLETE STORY PACK (+$3.97):
-Unlock 7 extra bonus pages inside the app:
-\u2022 \ud83e\udd30 Before You Were Born \u2014 the full pregnancy story
-\u2022 \ud83d\udc69\u200d\ud83d\udc66 All About Mom \u2014 who she was the day you changed everything
-\u2022 \ud83d\udc68\u200d\ud83d\udc66 All About Dad \u2014 his favorites, personality & photo
-\u2022 \ud83d\udc9d Things You Love Right Now \u2014 monthly favorites snapshot
-\u2022 \ud83d\udc89 Doctor Visits & Vaccines \u2014 first-year health tracker
-\u2022 \ud83c\udf1f Wishes For You \u2014 family writes one wish each (the most emotional page)
-\u2022 \ud83d\udd90\ufe0f Handprint & Footprint \u2014 upload tiny hands + feet forever
-Find it in the \u2728 More tab inside your book \u2014 just $3.97 (60% off $9.97)!
+This is a beautiful, editable digital baby journal that lives right in your browser \u2014 fill it in from anywhere, add your own photos to the pages, and it saves automatically on your device. When you're ready, print it to a beautiful PDF or keep it digital forever.
 
-\ud83d\udca1 WHY MOMS LOVE IT:
-\u2022 Open it at 3AM when baby just fell asleep and your heart is full
-\u2022 No subscription, no account needed
-\u2022 One-time purchase, use forever
-\u2022 Perfect baby shower gift
+\u2728 WHAT'S INCLUDED
+\u2022 Cover Page \u2014 baby's name and birth date in a hand-lettered style
+\u2022 Birth Story \u2014 date, time, weight, length, hospital, your full story + a birth photo
+\u2022 Milestone Firsts \u2014 first smile, first crawl, first tooth, first steps, first word, first solid food, sleeping through the night, favorite toy \u2014 each with date, notes, and a photo
+\u2022 Letters & Notes \u2014 Letter to Baby, First Impressions, Dreams & Wishes, Funny Moments
+\u2022 Growth Tracker \u2014 log weight/height by month; a chart draws itself as you add entries
+\u2022 First Year Photo Grid \u2014 one photo + memory note for every month
+\u2022 Family Tree \u2014 parents, grandparents, siblings
+\u2022 Memories \u2014 add unlimited memory cards for anything you never want to forget
+\u2022 5 Color Themes + 4 Font Styles
+\u2022 One-tap Backup & Restore \u2014 your whole book (photos included) in a single file
+\u2022 Print to PDF \u2014 beautiful on any home printer
 
-\ud83d\udce6 INSTANT DIGITAL DOWNLOAD \u2014 you\u2019ll receive access immediately after purchase.
+\ud83d\udcf1 WORKS ON EVERY DEVICE
+iPhone \u2713 Android \u2713 iPad \u2713 Laptop \u2713 Desktop \u2713 \u2014 works fully offline, too.
 
-\u2764\ufe0f Every moment with your little one is worth remembering. Don\u2019t let a single one slip away.`;
+\ud83d\udd12 100% PRIVATE \u2014 everything stays on your own device. Nothing is uploaded anywhere, ever.
 
-const DEFAULT_TAGS = 'digital baby book,baby journal,milestone tracker,baby memory book,new mom gift,baby shower gift,printable baby book,baby first year,digital download,baby keepsake,new baby gift,mom gift,baby milestone';
+\u2b07\ufe0f HOW IT WORKS
+1. Purchase \u2192 instant download arrives in your email
+2. Open the file in any browser (Chrome, Safari, Firefox)
+3. Start filling in your baby's story \u2014 it saves as you type
+4. Add your favorite photos to any page
+5. Print to PDF or keep it digital forever \u2728
+
+\ud83d\udc9d PERFECT GIFT FOR
+New moms & dads \u2022 baby showers \u2022 first-time grandparents \u2022 anyone who's been meaning to start a baby book for months
+
+\ud83d\udce6 WHAT YOU'LL RECEIVE
+\u2022 1 \u00d7 HTML file (opens in any browser, works fully offline)
+\u2022 Quick-Start Guide (1 page PDF)
+\u2022 Support via messages if you need help
+
+One-time purchase. No subscription, ever. Questions? Message me anytime \u2014 I respond within a few hours. \ud83d\udc9b`;
+
+const DEFAULT_TAGS = 'digital baby journal,baby book download,editable baby book,printable baby journal,baby shower gift,new mom gift,digital download baby,baby milestone tracker,baby memory book,phone baby book,instant download baby,baby book template,first year baby book';
 
 const PHASES = [
-  { label:'Week 1 Launch', timing:'Days 1\u20137', sale:4.97, anchor:19.97, off:'75% off' },
-  { label:'Week 2',        timing:'Days 8\u201314', sale:6.97, anchor:19.97, off:'65% off' },
-  { label:'Month 2+',      timing:'Day 15+',        sale:8.97, anchor:19.97, off:'55% off' },
-  { label:'50+ Reviews',   timing:'Milestone price', sale:11.97, anchor:19.97, off:'40% off' }
+ { label:'Week 1 Launch', timing:'Days 1\u20137', sale:9.97, anchor:39.97, off:'75% off' },
+ { label:'Week 2', timing:'Days 8\u201314', sale:11.97, anchor:39.97, off:'70% off' },
+ { label:'Month 2+', timing:'Day 15+', sale:14.97, anchor:39.97, off:'62% off' },
+ { label:'50+ Reviews', timing:'Milestone price', sale:16.97, anchor:39.97, off:'58% off' }
 ];
 
 // ── STATE ──
-let accessToken   = sessionStorage.getItem('etsy_token') || '';
-let savedListingId = sessionStorage.getItem('etsy_lid')  || '';
-let pkceVerifier  = '';
-let pkceState     = '';
+let accessToken = sessionStorage.getItem('etsy_token') || '';
+let savedListingId = sessionStorage.getItem('etsy_lid') || '';
+let pkceVerifier = '';
+let pkceState = '';
 
 // ── NAV ──
 function showPage(name, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-  const pg = document.getElementById('pg-' + name);
-  if (pg) pg.classList.add('active');
-  if (el) el.classList.add('active');
-  closeMobile();
+ document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+ document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+ const pg = document.getElementById('pg-' + name);
+ if (pg) pg.classList.add('active');
+ if (el) el.classList.add('active');
+ closeMobile();
 }
 
 function toggleMobile() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('mobOverlay').classList.toggle('show');
+ document.getElementById('sidebar').classList.toggle('open');
+ document.getElementById('mobOverlay').classList.toggle('show');
 }
 function closeMobile() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('mobOverlay').classList.remove('show');
+ document.getElementById('sidebar').classList.remove('open');
+ document.getElementById('mobOverlay').classList.remove('show');
 }
 
 // ── LOG ──
 function log(msg, type='info') {
-  const box = document.getElementById('activityLog');
-  const ts  = new Date().toLocaleTimeString();
-  const div = document.createElement('div');
-  div.className = 'log-line';
-  div.innerHTML = '<span class="log-ts">' + ts + '</span><span class="log-' + type + '">' + msg + '</span>';
-  box.appendChild(div);
-  box.scrollTop = box.scrollHeight;
+ const box = document.getElementById('activityLog');
+ const ts = new Date().toLocaleTimeString();
+ const div = document.createElement('div');
+ div.className = 'log-line';
+ div.innerHTML = '<span class="log-ts">' + ts + '</span><span class="log-' + type + '">' + msg + '</span>';
+ box.appendChild(div);
+ box.scrollTop = box.scrollHeight;
 }
 
 // ── PREVIEW SYNC ──
 function syncPreview() {
-  const title  = document.getElementById('editTitle').value;
-  const sale   = parseFloat(document.getElementById('editSale').value) || 0;
-  const anchor = parseFloat(document.getElementById('editAnchor').value) || 0;
-  const tagsRaw = document.getElementById('editTags').value;
-  const desc   = document.getElementById('editDesc').value;
+ const title = document.getElementById('editTitle').value;
+ const sale = parseFloat(document.getElementById('editSale').value) || 0;
+ const anchor = parseFloat(document.getElementById('editAnchor').value) || 0;
+ const tagsRaw = document.getElementById('editTags').value;
+ const desc = document.getElementById('editDesc').value;
 
-  document.getElementById('pvTitle').textContent = title;
-  document.getElementById('pvSale').textContent  = '$' + sale.toFixed(2);
-  document.getElementById('pvAnchor').textContent = anchor > 0 ? '$' + anchor.toFixed(2) : '';
-  if (anchor > 0 && sale < anchor) {
-    const pct = Math.round((1 - sale/anchor)*100);
-    document.getElementById('pvBadge').textContent = pct + '% off';
-  } else {
-    document.getElementById('pvBadge').textContent = '';
-  }
+ document.getElementById('pvTitle').textContent = title;
+ document.getElementById('pvSale').textContent = '$' + sale.toFixed(2);
+ document.getElementById('pvAnchor').textContent = anchor > 0 ? '$' + anchor.toFixed(2) : '';
+ if (anchor > 0 && sale < anchor) {
+ const pct = Math.round((1 - sale/anchor)*100);
+ document.getElementById('pvBadge').textContent = pct + '% off';
+ } else {
+ document.getElementById('pvBadge').textContent = '';
+ }
 
-  const tagsEl = document.getElementById('pvTags');
-  tagsEl.innerHTML = '';
-  tagsRaw.split(',').map(t => t.trim()).filter(Boolean).slice(0,13).forEach(tag => {
-    const chip = document.createElement('span');
-    chip.className = 'tag-chip';
-    chip.textContent = tag;
-    tagsEl.appendChild(chip);
-  });
+ const tagsEl = document.getElementById('pvTags');
+ tagsEl.innerHTML = '';
+ tagsRaw.split(',').map(t => t.trim()).filter(Boolean).slice(0,13).forEach(tag => {
+ const chip = document.createElement('span');
+ chip.className = 'tag-chip';
+ chip.textContent = tag;
+ tagsEl.appendChild(chip);
+ });
 
-  document.getElementById('pvDesc').textContent = desc;
+ document.getElementById('pvDesc').textContent = desc;
 }
 
 // ── PHASE CARDS ──
 function buildPhaseCards() {
-  const grid = document.getElementById('phaseGrid');
-  grid.innerHTML = '';
-  PHASES.forEach((ph, i) => {
-    const card = document.createElement('div');
-    card.className = 'phase-card' + (i === 0 ? ' current' : '');
-    card.innerHTML = '<div class="ph-lbl">Phase ' + (i+1) + '</div>' +
-      '<div class="ph-name">' + ph.label + '</div>' +
-      '<div class="ph-timing">' + ph.timing + '</div>' +
-      '<div class="ph-prices"><span class="ph-sale">$' + ph.sale.toFixed(2) + '</span>' +
-      '<span class="ph-anchor">$' + ph.anchor.toFixed(2) + '</span>' +
-      '<span class="ph-off">' + ph.off + '</span></div>' +
-      '<button class="apply-btn" onclick="applyPhase(' + i + ')">Apply This Price</button>';
-    grid.appendChild(card);
-  });
+ const grid = document.getElementById('phaseGrid');
+ grid.innerHTML = '';
+ PHASES.forEach((ph, i) => {
+ const card = document.createElement('div');
+ card.className = 'phase-card' + (i === 0 ? ' current' : '');
+ card.innerHTML = '<div class="ph-lbl">Phase ' + (i+1) + '</div>' +
+ '<div class="ph-name">' + ph.label + '</div>' +
+ '<div class="ph-timing">' + ph.timing + '</div>' +
+ '<div class="ph-prices"><span class="ph-sale">$' + ph.sale.toFixed(2) + '</span>' +
+ '<span class="ph-anchor">$' + ph.anchor.toFixed(2) + '</span>' +
+ '<span class="ph-off">' + ph.off + '</span></div>' +
+ '<button class="apply-btn" onclick="applyPhase(' + i + ')">Apply This Price</button>';
+ grid.appendChild(card);
+ });
 }
 
 async function applyPhase(i) {
-  const ph = PHASES[i];
-  const lid = document.getElementById('manualLid').value || savedListingId;
-  if (!lid) { alert('No listing ID. Post a listing first or enter one manually.'); return; }
-  if (!accessToken) { alert('Not authenticated. Go to Auth & Settings first.'); return; }
-  log('Applying ' + ph.label + ' pricing ($' + ph.sale + ') to listing ' + lid + '…', 'info');
-  try {
-    const r = await fetch('https://api.etsy.com/v3/application/shops/' + SHOP_ID + '/listings/' + lid, {
-      method: 'PATCH',
-      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+accessToken, 'x-api-key':CLIENT_ID },
-      body: JSON.stringify({ price: ph.sale, regular_price: ph.anchor })
-    });
-    if (!r.ok) { const e = await r.json(); log('Price update failed: ' + (e.error_description || r.status), 'err'); return; }
-    log('\u2705 Price updated to $' + ph.sale + ' (was $' + ph.anchor + '). ' + ph.off + '!', 'ok');
-    // update edit fields
-    document.getElementById('editSale').value = ph.sale;
-    document.getElementById('editAnchor').value = ph.anchor;
-    syncPreview();
-  } catch(e) { log('Error: ' + e.message, 'err'); }
+ const ph = PHASES[i];
+ const lid = document.getElementById('manualLid').value || savedListingId;
+ if (!lid) { alert('No listing ID. Post a listing first or enter one manually.'); return; }
+ if (!accessToken) { alert('Not authenticated. Go to Auth & Settings first.'); return; }
+ log('Applying ' + ph.label + ' pricing ($' + ph.sale + ') to listing ' + lid + '…', 'info');
+ try {
+ const r = await fetch('https://api.etsy.com/v3/application/shops/' + SHOP_ID + '/listings/' + lid, {
+ method: 'PATCH',
+ headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+accessToken, 'x-api-key':CLIENT_ID },
+ body: JSON.stringify({ price: ph.sale, regular_price: ph.anchor })
+ });
+ if (!r.ok) { const e = await r.json(); log('Price update failed: ' + (e.error_description || r.status), 'err'); return; }
+ log('\u2705 Price updated to $' + ph.sale + ' (was $' + ph.anchor + '). ' + ph.off + '!', 'ok');
+ // update edit fields
+ document.getElementById('editSale').value = ph.sale;
+ document.getElementById('editAnchor').value = ph.anchor;
+ syncPreview();
+ } catch(e) { log('Error: ' + e.message, 'err'); }
 }
 
 async function manualPriceUpdate() {
-  const lid = document.getElementById('manualLid').value || savedListingId;
-  const price = parseFloat(document.getElementById('manualPrice').value);
-  const anchor = parseFloat(document.getElementById('manualAnchor').value) || 19.97;
-  if (!lid || !price) { alert('Enter a listing ID and price.'); return; }
-  if (!accessToken) { alert('Not authenticated. Go to Auth & Settings first.'); return; }
-  log('Updating price to $' + price + ' for listing ' + lid + '…', 'info');
-  try {
-    const r = await fetch('https://api.etsy.com/v3/application/shops/' + SHOP_ID + '/listings/' + lid, {
-      method:'PATCH',
-      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+accessToken, 'x-api-key':CLIENT_ID },
-      body: JSON.stringify({ price, regular_price: anchor })
-    });
-    if (!r.ok) { const e = await r.json(); log('Update failed: ' + (e.error_description || r.status), 'err'); return; }
-    log('\u2705 Price updated to $' + price + '.', 'ok');
-  } catch(e) { log('Error: ' + e.message, 'err'); }
+ const lid = document.getElementById('manualLid').value || savedListingId;
+ const price = parseFloat(document.getElementById('manualPrice').value);
+ const anchor = parseFloat(document.getElementById('manualAnchor').value) || 39.97;
+ if (!lid || !price) { alert('Enter a listing ID and price.'); return; }
+ if (!accessToken) { alert('Not authenticated. Go to Auth & Settings first.'); return; }
+ log('Updating price to $' + price + ' for listing ' + lid + '…', 'info');
+ try {
+ const r = await fetch('https://api.etsy.com/v3/application/shops/' + SHOP_ID + '/listings/' + lid, {
+ method:'PATCH',
+ headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+accessToken, 'x-api-key':CLIENT_ID },
+ body: JSON.stringify({ price, regular_price: anchor })
+ });
+ if (!r.ok) { const e = await r.json(); log('Update failed: ' + (e.error_description || r.status), 'err'); return; }
+ log('\u2705 Price updated to $' + price + '.', 'ok');
+ } catch(e) { log('Error: ' + e.message, 'err'); }
 }
 
 // ── OAUTH PKCE ──
 async function sha256(plain) {
-  const enc = new TextEncoder().encode(plain);
-  const hash = await crypto.subtle.digest('SHA-256', enc);
-  return btoa(String.fromCharCode(...new Uint8Array(hash)))
-    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+ const enc = new TextEncoder().encode(plain);
+ const hash = await crypto.subtle.digest('SHA-256', enc);
+ return btoa(String.fromCharCode(...new Uint8Array(hash)))
+ .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
 function randomStr(len) {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
-  let s='';
-  for(let i=0;i<len;i++) s += chars[Math.floor(Math.random()*chars.length)];
-  return s;
+ const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+ let s='';
+ for(let i=0;i<len;i++) s += chars[Math.floor(Math.random()*chars.length)];
+ return s;
 }
 
 function getRedirectUri() {
-  return window.location.href.split('?')[0].split('#')[0];
+ return window.location.href.split('?')[0].split('#')[0];
 }
 
 async function startOAuth() {
-  pkceVerifier = randomStr(64);
-  pkceState    = randomStr(16);
-  const challenge = await sha256(pkceVerifier);
-  sessionStorage.setItem('pkce_v', pkceVerifier);
-  sessionStorage.setItem('pkce_s', pkceState);
-  const uri = getRedirectUri();
-  const url = 'https://www.etsy.com/oauth/connect'
-    + '?response_type=code'
-    + '&client_id=' + encodeURIComponent(CLIENT_ID)
-    + '&redirect_uri=' + encodeURIComponent(uri)
-    + '&scope=' + encodeURIComponent(SCOPES)
-    + '&state=' + pkceState
-    + '&code_challenge=' + challenge
-    + '&code_challenge_method=S256';
-  log('Redirecting to Etsy authorization…', 'info');
-  window.location.href = url;
+ pkceVerifier = randomStr(64);
+ pkceState = randomStr(16);
+ const challenge = await sha256(pkceVerifier);
+ sessionStorage.setItem('pkce_v', pkceVerifier);
+ sessionStorage.setItem('pkce_s', pkceState);
+ const uri = getRedirectUri();
+ const url = 'https://www.etsy.com/oauth/connect'
+ + '?response_type=code'
+ + '&client_id=' + encodeURIComponent(CLIENT_ID)
+ + '&redirect_uri=' + encodeURIComponent(uri)
+ + '&scope=' + encodeURIComponent(SCOPES)
+ + '&state=' + pkceState
+ + '&code_challenge=' + challenge
+ + '&code_challenge_method=S256';
+ log('Redirecting to Etsy authorization…', 'info');
+ window.location.href = url;
 }
 
 async function exchangeToken() {
-  const code = document.getElementById('authCodeInput').value.trim();
-  if (!code) { alert('No auth code. Authorize with Etsy first.'); return; }
-  const verifier = sessionStorage.getItem('pkce_v') || pkceVerifier;
-  if (!verifier) { alert('PKCE verifier missing. Please authorize again.'); return; }
-  const uri = getRedirectUri();
-  log('Exchanging code for access token…', 'info');
-  try {
-    const r = await fetch('https://api.etsy.com/v3/public/oauth/token', {
-      method:'POST',
-      headers: { 'Content-Type':'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        grant_type: 'authorization_code',
-        client_id: CLIENT_ID,
-        redirect_uri: uri,
-        code,
-        code_verifier: verifier
-      })
-    });
-    const data = await r.json();
-    if (!r.ok || !data.access_token) {
-      log('Token exchange failed: ' + (data.error_description || JSON.stringify(data)), 'err');
-      return;
-    }
-    accessToken = data.access_token;
-    sessionStorage.setItem('etsy_token', accessToken);
-    updateAuthUI(true, 'Connected \u2014 token expires in 1h');
-    log('\u2705 Access token obtained! You can now approve and post listings.', 'ok');
-    document.getElementById('tokenStatus').className = 'token-status token-ok';
-    document.getElementById('tokenStatus').textContent = '\u2705 Connected \u2014 token expires in ~1 hour.';
-    document.getElementById('approveBtn').disabled = false;
-    document.getElementById('heroSub').textContent = 'Token active \u2014 ready to post!';
-    // Clean URL
-    window.history.replaceState({}, document.title, window.location.pathname);
-  } catch(e) { log('Error: ' + e.message, 'err'); }
+ const code = document.getElementById('authCodeInput').value.trim();
+ if (!code) { alert('No auth code. Authorize with Etsy first.'); return; }
+ const verifier = sessionStorage.getItem('pkce_v') || pkceVerifier;
+ if (!verifier) { alert('PKCE verifier missing. Please authorize again.'); return; }
+ const uri = getRedirectUri();
+ log('Exchanging code for access token…', 'info');
+ try {
+ const r = await fetch('https://api.etsy.com/v3/public/oauth/token', {
+ method:'POST',
+ headers: { 'Content-Type':'application/x-www-form-urlencoded' },
+ body: new URLSearchParams({
+ grant_type: 'authorization_code',
+ client_id: CLIENT_ID,
+ redirect_uri: uri,
+ code,
+ code_verifier: verifier
+ })
+ });
+ const data = await r.json();
+ if (!r.ok || !data.access_token) {
+ log('Token exchange failed: ' + (data.error_description || JSON.stringify(data)), 'err');
+ return;
+ }
+ accessToken = data.access_token;
+ sessionStorage.setItem('etsy_token', accessToken);
+ updateAuthUI(true, 'Connected \u2014 token expires in 1h');
+ log('\u2705 Access token obtained! You can now approve and post listings.', 'ok');
+ document.getElementById('tokenStatus').className = 'token-status token-ok';
+ document.getElementById('tokenStatus').textContent = '\u2705 Connected \u2014 token expires in ~1 hour.';
+ document.getElementById('approveBtn').disabled = false;
+ document.getElementById('heroSub').textContent = 'Token active \u2014 ready to post!';
+ // Clean URL
+ window.history.replaceState({}, document.title, window.location.pathname);
+ } catch(e) { log('Error: ' + e.message, 'err'); }
 }
 
 function clearToken() {
-  accessToken = '';
-  sessionStorage.removeItem('etsy_token');
-  sessionStorage.removeItem('pkce_v');
-  sessionStorage.removeItem('pkce_s');
-  updateAuthUI(false, 'Not connected');
-  document.getElementById('tokenStatus').className = 'token-status token-none';
-  document.getElementById('tokenStatus').textContent = 'No token \u2014 authorize above first.';
-  document.getElementById('approveBtn').disabled = true;
-  document.getElementById('heroSub').textContent = 'Connect Etsy first \u2192 Auth & Settings';
-  log('Token cleared.', 'info');
+ accessToken = '';
+ sessionStorage.removeItem('etsy_token');
+ sessionStorage.removeItem('pkce_v');
+ sessionStorage.removeItem('pkce_s');
+ updateAuthUI(false, 'Not connected');
+ document.getElementById('tokenStatus').className = 'token-status token-none';
+ document.getElementById('tokenStatus').textContent = 'No token \u2014 authorize above first.';
+ document.getElementById('approveBtn').disabled = true;
+ document.getElementById('heroSub').textContent = 'Connect Etsy first \u2192 Auth & Settings';
+ log('Token cleared.', 'info');
 }
 
 function updateAuthUI(ok, msg) {
-  const pill = document.getElementById('authPill');
-  pill.className = 'auth-pill ' + (ok ? 'connected' : 'disconnected');
-  document.getElementById('authPillSts').textContent = msg;
+ const pill = document.getElementById('authPill');
+ pill.className = 'auth-pill ' + (ok ? 'connected' : 'disconnected');
+ document.getElementById('authPillSts').textContent = msg;
 }
 
 // ── APPROVE & POST ──
 async function approveListing() {
-  if (!accessToken) { alert('Not authenticated. Go to Auth & Settings first.'); return; }
-  const btn = document.getElementById('approveBtn');
-  btn.disabled = true;
-  btn.textContent = '\u23f3 Posting…';
+ if (!accessToken) { alert('Not authenticated. Go to Auth & Settings first.'); return; }
+ const btn = document.getElementById('approveBtn');
+ btn.disabled = true;
+ btn.textContent = '\u23f3 Posting…';
 
-  const title   = document.getElementById('editTitle').value.trim();
-  const price   = parseFloat(document.getElementById('editSale').value);
-  const anchor  = parseFloat(document.getElementById('editAnchor').value) || 19.97;
-  const tagsRaw = document.getElementById('editTags').value;
-  const desc    = document.getElementById('editDesc').value.trim();
+ const title = document.getElementById('editTitle').value.trim();
+ const price = parseFloat(document.getElementById('editSale').value);
+ const anchor = parseFloat(document.getElementById('editAnchor').value) || 39.97;
+ const tagsRaw = document.getElementById('editTags').value;
+ const desc = document.getElementById('editDesc').value.trim();
 
-  if (!title || !price) {
-    alert('Title and price are required.'); btn.disabled=false; btn.textContent='\ud83d\ude80 Approve & Post'; return;
-  }
+ if (!title || !price) {
+ alert('Title and price are required.'); btn.disabled=false; btn.textContent='\ud83d\ude80 Approve & Post'; return;
+ }
 
-  const tags = tagsRaw.split(',').map(t=>t.trim()).filter(Boolean).slice(0,13);
-  if (tags.length < 1) { alert('Add at least one tag.'); btn.disabled=false; btn.textContent='\ud83d\ude80 Approve & Post'; return; }
+ const tags = tagsRaw.split(',').map(t=>t.trim()).filter(Boolean).slice(0,13);
+ if (tags.length < 1) { alert('Add at least one tag.'); btn.disabled=false; btn.textContent='\ud83d\ude80 Approve & Post'; return; }
 
-  const body = {
-    title,
-    description: desc,
-    price,
-    regular_price: anchor,
-    quantity: 999,
-    who_made: 'i_did',
-    when_made: '2020_2024',
-    taxonomy_id: 2078,
-    type: 'download',
-    is_digital: true,
-    should_auto_renew: true,
-    tags,
-    state: 'draft'
-  };
+ const body = {
+ title,
+ description: desc,
+ price,
+ regular_price: anchor,
+ quantity: 999,
+ who_made: 'i_did',
+ when_made: '2020_2024',
+ taxonomy_id: 2078,
+ type: 'download',
+ is_digital: true,
+ should_auto_renew: true,
+ tags,
+ state: 'draft'
+ };
 
-  log('\ud83d\ude80 Posting listing to Etsy (draft)…', 'info');
-  log('Title: ' + title, 'info');
-  log('Price: $' + price + ' (anchor $' + anchor + ')', 'info');
+ log('\ud83d\ude80 Posting listing to Etsy (draft)…', 'info');
+ log('Title: ' + title, 'info');
+ log('Price: $' + price + ' (anchor $' + anchor + ')', 'info');
 
-  try {
-    const r = await fetch('https://api.etsy.com/v3/application/shops/' + SHOP_ID + '/listings', {
-      method:'POST',
-      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+accessToken, 'x-api-key':CLIENT_ID },
-      body: JSON.stringify(body)
-    });
-    const data = await r.json();
-    if (!r.ok) {
-      log('\u274c Post failed: ' + (data.error_description || JSON.stringify(data)), 'err');
-      btn.disabled=false; btn.textContent='\ud83d\ude80 Approve & Post'; return;
-    }
-    const lid = data.listing_id || data.id;
-    savedListingId = String(lid);
-    sessionStorage.setItem('etsy_lid', savedListingId);
-    document.getElementById('manualLid').value = savedListingId;
-    log('\u2705 Listing created as DRAFT! Listing ID: ' + lid, 'ok');
-    log('\ud83d\udd17 Etsy: https://www.etsy.com/listing/' + lid, 'ok');
-    log('\ud83d\udca1 Go to Etsy Listings to publish the draft when ready.', 'info');
-    btn.textContent = '\u2705 Posted as Draft!';
-    setTimeout(()=>{ btn.textContent='\ud83d\ude80 Approve & Post'; btn.disabled=false; }, 4000);
-  } catch(e) {
-    log('\u274c Error: ' + e.message, 'err');
-    btn.disabled=false; btn.textContent='\ud83d\ude80 Approve & Post';
-  }
+ try {
+ const r = await fetch('https://api.etsy.com/v3/application/shops/' + SHOP_ID + '/listings', {
+ method:'POST',
+ headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+accessToken, 'x-api-key':CLIENT_ID },
+ body: JSON.stringify(body)
+ });
+ const data = await r.json();
+ if (!r.ok) {
+ log('\u274c Post failed: ' + (data.error_description || JSON.stringify(data)), 'err');
+ btn.disabled=false; btn.textContent='\ud83d\ude80 Approve & Post'; return;
+ }
+ const lid = data.listing_id || data.id;
+ savedListingId = String(lid);
+ sessionStorage.setItem('etsy_lid', savedListingId);
+ document.getElementById('manualLid').value = savedListingId;
+ log('\u2705 Listing created as DRAFT! Listing ID: ' + lid, 'ok');
+ log('\ud83d\udd17 Etsy: https://www.etsy.com/listing/' + lid, 'ok');
+ log('\ud83d\udca1 Go to Etsy Listings to publish the draft when ready.', 'info');
+ btn.textContent = '\u2705 Posted as Draft!';
+ setTimeout(()=>{ btn.textContent='\ud83d\ude80 Approve & Post'; btn.disabled=false; }, 4000);
+ } catch(e) {
+ log('\u274c Error: ' + e.message, 'err');
+ btn.disabled=false; btn.textContent='\ud83d\ude80 Approve & Post';
+ }
 }
 
 // ── INIT ──
 window.addEventListener('DOMContentLoaded', () => {
-  // Prefill edit fields
-  document.getElementById('editTitle').value   = DEFAULT_TITLE;
-  document.getElementById('editSale').value    = '4.97';
-  document.getElementById('editAnchor').value  = '19.97';
-  document.getElementById('editTags').value    = DEFAULT_TAGS;
-  document.getElementById('editDesc').value    = DEFAULT_DESC;
-  syncPreview();
+ // Prefill edit fields
+ document.getElementById('editTitle').value = DEFAULT_TITLE;
+ document.getElementById('editSale').value = '9.97';
+ document.getElementById('editAnchor').value = '39.97';
+ document.getElementById('editTags').value = DEFAULT_TAGS;
+ document.getElementById('editDesc').value = DEFAULT_DESC;
+ syncPreview();
 
-  // Credential display
-  document.getElementById('showClientId').textContent  = CLIENT_ID;
-  document.getElementById('showShopId').textContent    = SHOP_ID;
+ // Credential prefill (saved values from this browser)
+ if (CLIENT_ID !== 'YOUR_ETSY_API_KEY') document.getElementById('credClientId').value = CLIENT_ID;
+ if (SHOP_ID !== 'YOUR_SHOP_ID') document.getElementById('credShopId').value = SHOP_ID;
 
-  // Redirect URI
-  const ruri = getRedirectUri();
-  document.getElementById('redirectUriDisplay').textContent = ruri;
-  document.getElementById('showRedirectUri').textContent    = ruri;
+ // Redirect URI
+ const ruri = getRedirectUri();
+ document.getElementById('redirectUriDisplay').textContent = ruri;
+ document.getElementById('showRedirectUri').textContent = ruri;
 
-  // Phase cards
-  buildPhaseCards();
+ // Phase cards
+ buildPhaseCards();
 
-  // Restore listing ID
-  if (savedListingId) {
-    document.getElementById('manualLid').value = savedListingId;
-    log('Restored listing ID: ' + savedListingId, 'info');
-  }
+ // Restore listing ID
+ if (savedListingId) {
+ document.getElementById('manualLid').value = savedListingId;
+ log('Restored listing ID: ' + savedListingId, 'info');
+ }
 
-  // Restore token
-  if (accessToken) {
-    updateAuthUI(true, 'Token restored from session');
-    document.getElementById('approveBtn').disabled = false;
-    document.getElementById('heroSub').textContent = 'Token active \u2014 ready to post!';
-    document.getElementById('tokenStatus').className = 'token-status token-ok';
-    document.getElementById('tokenStatus').textContent = '\u2705 Token restored \u2014 may expire, re-authorize if posts fail.';
-    log('Token restored from session storage.', 'ok');
-  }
+ // Restore token
+ if (accessToken) {
+ updateAuthUI(true, 'Token restored from session');
+ document.getElementById('approveBtn').disabled = false;
+ document.getElementById('heroSub').textContent = 'Token active \u2014 ready to post!';
+ document.getElementById('tokenStatus').className = 'token-status token-ok';
+ document.getElementById('tokenStatus').textContent = '\u2705 Token restored \u2014 may expire, re-authorize if posts fail.';
+ log('Token restored from session storage.', 'ok');
+ }
 
-  // Handle OAuth redirect (code in URL)
-  const params = new URLSearchParams(window.location.search);
-  const code   = params.get('code');
-  const state  = params.get('state');
-  if (code) {
-    document.getElementById('authCodeInput').value = code;
-    log('\ud83d\udd11 Auth code detected! Hit "Get Access Token" to complete login.', 'ok');
-    // Auto-switch to auth page
-    showPage('auth', document.querySelector('nav a:nth-child(4)'));
-    // Auto exchange
-    exchangeToken();
-  }
+ // Handle OAuth redirect (code in URL)
+ const params = new URLSearchParams(window.location.search);
+ const code = params.get('code');
+ const state = params.get('state');
+ if (code) {
+ document.getElementById('authCodeInput').value = code;
+ log('\ud83d\udd11 Auth code detected! Hit "Get Access Token" to complete login.', 'ok');
+ // Auto-switch to auth page
+ showPage('auth', document.querySelector('nav a:nth-child(4)'));
+ // Auto exchange
+ exchangeToken();
+ }
 });
 </script>
 </body>

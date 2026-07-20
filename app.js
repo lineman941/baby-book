@@ -1,21 +1,32 @@
 /* ============================================================
-   Our Little Miracle — app.js  (COMPLETE REBUILD)
-   All sections wired, auto-save, growth chart, photo uploads
+   Our Little Miracle — app.js
+   All sections wired, auto-save (text + photos), growth chart,
+   memories, backup/restore, print to PDF
 ============================================================ */
 
 const STORE_KEY = 'olm_baby_book';
 let store = {};
 let growthChart = null;
 
+/* Asset lookup: repo build uses assets/ paths; the single-file product build
+   injects OLM_ASSETS (name -> data URI) before this script. */
+function assetUrl(name) {
+  return (typeof OLM_ASSETS !== 'undefined' && OLM_ASSETS[name]) ? OLM_ASSETS[name] : 'assets/' + name;
+}
+
 /* ── Storage ── */
 function loadStore() {
   try { store = JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch(e) { store = {}; }
+  if (!store.photos) store.photos = {};
+  if (!store.memories) store.memories = [];
 }
 function saveStore() {
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify(store));
     flashSave();
-  } catch(e) {}
+  } catch(e) {
+    showToast('Storage is full — use Backup, or remove a photo');
+  }
 }
 function flashSave() {
   const ind = document.getElementById('saveIndicator');
@@ -29,7 +40,8 @@ function showToast(msg) {
   if (!t) return;
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
 /* ── Theme ── */
@@ -73,7 +85,7 @@ function bindSettings() {
       tray.setAttribute('aria-hidden', !open);
     });
     document.addEventListener('click', e => {
-      if (!tray.contains(e.target) && e.target !== btn) {
+      if (!tray.contains(e.target) && !btn.contains(e.target)) {
         tray.classList.remove('open');
         tray.setAttribute('aria-hidden', 'true');
       }
@@ -87,6 +99,52 @@ function bindSettings() {
   document.querySelectorAll('.tab-btn').forEach(b => {
     b.addEventListener('click', () => showTab(b.dataset.tab));
   });
+}
+
+/* ── Backup / Restore / Print ── */
+function exportBackup() {
+  const name = (store.coverName || 'baby').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+  const blob = new Blob([JSON.stringify(store)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'our-little-miracle-' + name + '-backup.json';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  showToast('Backup downloaded — keep it somewhere safe!');
+}
+function importBackup(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (!data || typeof data !== 'object') throw new Error('bad');
+      store = data;
+      if (!store.photos) store.photos = {};
+      if (!store.memories) store.memories = [];
+      localStorage.setItem(STORE_KEY, JSON.stringify(store));
+      showToast('Book restored! Reloading…');
+      setTimeout(() => location.reload(), 900);
+    } catch(e) {
+      showToast("That doesn't look like a backup file");
+    }
+  };
+  reader.readAsText(file);
+}
+function bindBackup() {
+  const exp = document.getElementById('backupBtn');
+  if (exp) exp.addEventListener('click', exportBackup);
+  const impBtn = document.getElementById('restoreBtn');
+  const impInput = document.getElementById('restoreInput');
+  if (impBtn && impInput) {
+    impBtn.addEventListener('click', () => impInput.click());
+    impInput.addEventListener('change', () => {
+      if (impInput.files[0]) importBackup(impInput.files[0]);
+      impInput.value = '';
+    });
+  }
+  const printBtn = document.getElementById('printBtn');
+  if (printBtn) printBtn.addEventListener('click', () => window.print());
 }
 
 /* ── Cover lock ── */
@@ -108,7 +166,7 @@ function lockCover() {
   document.getElementById('lockedName').textContent = nameVal;
   document.getElementById('lockedDob').textContent = dobVal ? formatDateDisplay(dobVal) : '';
   document.getElementById('coverZone').classList.add('is-locked');
-  showToast('Cover saved! 💗');
+  showToast('Cover saved');
 }
 function unlockCover() {
   document.getElementById('coverZone').classList.remove('is-locked');
@@ -129,7 +187,7 @@ function bindCoverLock() {
 
 /* ── Generic field auto-save ── */
 function bindFields(fieldList) {
-  fieldList.forEach(({ id, key, type }) => {
+  fieldList.forEach(({ id, key }) => {
     const el = document.getElementById(id);
     if (!el) return;
     const storeKey = key || id;
@@ -145,12 +203,50 @@ function bindFields(fieldList) {
   });
 }
 
-/* ── Photo uploads ── */
+/* ── Photo uploads (persisted) ── */
+function resizeImageFile(file, cb) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 1000;
+      let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) {
+        const scale = MAX / Math.max(w, h);
+        w = Math.round(w * scale);
+        h = Math.round(h * scale);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      cb(canvas.toDataURL('image/jpeg', 0.82));
+    };
+    img.onerror = () => showToast("Couldn't read that photo");
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+function setAreaPhoto(area, dataUrl, persist) {
+  const img = area.querySelector('img');
+  if (!img) return;
+  img.src = dataUrl;
+  area.classList.add('has-photo');
+  if (persist && area.id) {
+    store.photos[area.id] = dataUrl;
+    saveStore();
+  }
+}
+function handlePhotoFile(area, file) {
+  if (!file || !file.type || file.type.indexOf('image') !== 0) return;
+  resizeImageFile(file, dataUrl => setAreaPhoto(area, dataUrl, true));
+}
 function bindPhotoUploads() {
   document.querySelectorAll('.photo-upload-area, .milestone-photo-upload').forEach(area => {
+    if (area._photoBound) return;
+    area._photoBound = true;
     const input = area.querySelector('input[type=file]');
-    const img = area.querySelector('img');
     if (!input) return;
+    if (area.id && store.photos[area.id]) setAreaPhoto(area, store.photos[area.id], false);
     area.addEventListener('click', e => {
       if (e.target !== input) input.click();
     });
@@ -159,13 +255,9 @@ function bindPhotoUploads() {
     area.addEventListener('drop', e => {
       e.preventDefault();
       area.classList.remove('drag-over');
-      const file = e.dataTransfer.files[0];
-      if (file && img) { img.src = URL.createObjectURL(file); area.classList.add('has-photo'); }
+      handlePhotoFile(area, e.dataTransfer.files[0]);
     });
-    input.addEventListener('change', () => {
-      const file = input.files[0];
-      if (file && img) { img.src = URL.createObjectURL(file); area.classList.add('has-photo'); }
-    });
+    input.addEventListener('change', () => handlePhotoFile(area, input.files[0]));
   });
 }
 
@@ -213,7 +305,7 @@ function bindGrowthForm() {
     document.getElementById('currentWeight').value = '';
     document.getElementById('currentHeight').value = '';
     document.getElementById('headCirc').value = '';
-    showToast('Growth entry added! 📊');
+    showToast('Growth entry added');
   });
 }
 
@@ -227,15 +319,14 @@ function buildPhotoYearGrid() {
   months.forEach((month, idx) => {
     const card = document.createElement('div');
     card.className = 'milestone-card';
-    card.innerHTML = '<div class="milestone-label">📸 ' + month + '</div>' +
+    card.innerHTML = '<div class="milestone-label">' + month + '</div>' +
       '<div class="milestone-photo-upload" id="yr-photo-' + idx + '">' +
-      '<div class="ms-placeholder">📷</div>' +
+      '<div class="ms-placeholder"><img src="' + assetUrl('icon-camera.jpg') + '" alt=""></div>' +
       '<img alt="Month ' + (idx+1) + ' photo">' +
       '<input type="file" accept="image/*" capture="environment">' +
       '</div>' +
       '<input type="text" id="yr-note-' + idx + '" placeholder="Memory from ' + month + '…" autocomplete="off" style="margin-top:8px;">';
     grid.appendChild(card);
-    // Bind note field
     const noteField = document.getElementById('yr-note-' + idx);
     if (noteField) {
       const storeKey = 'yr-note-' + idx;
@@ -244,6 +335,64 @@ function buildPhotoYearGrid() {
     }
   });
   bindPhotoUploads();
+}
+
+/* ── Memories ── */
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+function renderMemories() {
+  const grid = document.getElementById('memoriesGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  (store.memories || []).forEach(mem => {
+    const card = document.createElement('div');
+    card.className = 'memory-card';
+    card.style.width = '100%';
+    card.innerHTML =
+      '<div class="memory-title">' + escapeHtml(mem.title || 'Memory') +
+        (mem.date ? ' · ' + escapeHtml(formatDateDisplay(mem.date)) : '') + '</div>' +
+      '<div style="font-size:14px;line-height:1.6;color:#333;white-space:pre-wrap;">' + escapeHtml(mem.text || '') + '</div>' +
+      '<button class="memory-delete" data-mem-id="' + mem.id + '" aria-label="Delete memory" ' +
+        'style="background:none;border:none;color:#c97b8a;font-size:12px;font-weight:700;cursor:pointer;margin-top:10px;padding:0;">Remove</button>';
+    grid.appendChild(card);
+  });
+  grid.querySelectorAll('.memory-delete').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!confirm('Remove this memory?')) return;
+      store.memories = store.memories.filter(m => String(m.id) !== btn.dataset.memId);
+      saveStore();
+      renderMemories();
+    });
+  });
+}
+function bindMemories() {
+  const addBtn = document.getElementById('addMemoryBtn');
+  const form = document.getElementById('memoryForm');
+  if (!addBtn) return;
+  addBtn.addEventListener('click', () => {
+    if (form) { form.style.display = form.style.display === 'none' ? 'block' : 'none'; return; }
+  });
+  const saveBtn = document.getElementById('memorySaveBtn');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', () => {
+      const title = document.getElementById('memoryTitle').value.trim();
+      const date = document.getElementById('memoryDate').value;
+      const text = document.getElementById('memoryText').value.trim();
+      if (!title && !text) { showToast('Write a little something first'); return; }
+      store.memories.push({ id: Date.now(), title, date, text });
+      saveStore();
+      document.getElementById('memoryTitle').value = '';
+      document.getElementById('memoryDate').value = '';
+      document.getElementById('memoryText').value = '';
+      if (form) form.style.display = 'none';
+      renderMemories();
+      showToast('Memory saved');
+    });
+  }
+  renderMemories();
 }
 
 /* ══════════════════════════════════════════════════════
@@ -259,11 +408,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Bind UI
   bindSettings();
+  bindBackup();
   bindCoverLock();
-  bindPhotoUploads();
   bindGrowthForm();
   buildPhotoYearGrid();
   buildGrowthChart();
+  bindMemories();
+  bindPhotoUploads();
 
   // Restore last tab
   if (store.lastTab) showTab(store.lastTab);
@@ -298,31 +449,8 @@ document.addEventListener('DOMContentLoaded', function() {
   bindFields([
     { id: 'momName' }, { id: 'momFact' },
     { id: 'dadName' }, { id: 'dadFact' },
-    { id: 'gmMom' }, { id: 'gpMom' },
-    { id: 'gmDad' }, { id: 'gpDad' },
-    { id: 'siblings' }, { id: 'pets' }
-  ]);
-
-  // Holidays
-  bindFields([
-    { id: 'hol-christmas' }, { id: 'hol-christmas-note' },
-    { id: 'hol-halloween' }, { id: 'hol-halloween-note' },
-    { id: 'hol-easter' }, { id: 'hol-easter-note' },
-    { id: 'hol-thanksgiving' }, { id: 'hol-thanksgiving-note' },
-    { id: 'hol-july4' }, { id: 'hol-july4-note' },
-    { id: 'hol-birthday' }, { id: 'hol-birthday-note' }
-  ]);
-
-  // Name story
-  bindFields([
-    { id: 'nameStory' }, { id: 'nameMeaning' },
-    { id: 'nameOrigin' }, { id: 'nameNicknames' }
-  ]);
-
-  // More
-  bindFields([
-    { id: 'personalityNotes' }, { id: 'favoriteSong' },
-    { id: 'favoriteActivity' }, { id: 'birthZodiac' },
-    { id: 'birthstone' }, { id: 'worldEvents' }, { id: 'anythingElse' }
+    { id: 'gp1Name' }, { id: 'gp2Name' },
+    { id: 'gp3Name' }, { id: 'gp4Name' },
+    { id: 'siblingsNote' }
   ]);
 });

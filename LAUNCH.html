@@ -14,279 +14,203 @@
     max-width: 640px;
     margin: 0 auto;
   }
-  .logo {
-    text-align: center;
-    font-size: 28px;
-    font-weight: 800;
-    color: #3dbfbf;
-    margin-bottom: 4px;
-    letter-spacing: -0.5px;
-  }
-  .tagline {
-    text-align: center;
-    font-size: 13px;
-    color: #888;
-    margin-bottom: 32px;
-  }
-  h2 {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    color: #aaa;
-    margin: 28px 0 12px;
-  }
+  .logo { text-align: center; font-size: 28px; font-weight: 800; color: #3dbfbf; margin-bottom: 4px; letter-spacing: -0.5px; }
+  .tagline { text-align: center; font-size: 13px; color: #888; margin-bottom: 32px; }
+  h2 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: #aaa; margin: 28px 0 12px; }
   .step {
-    background: #fff;
-    border-radius: 14px;
-    padding: 18px 20px;
-    margin-bottom: 10px;
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-    box-shadow: 0 1px 4px rgba(0,0,0,.06);
-    border-left: 4px solid #7ee8e8;
+    background: #fff; border-radius: 14px; padding: 18px 20px; margin-bottom: 10px;
+    display: flex; gap: 16px; align-items: flex-start;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06); border-left: 4px solid #7ee8e8;
   }
   .step.orange { border-left-color: #ff6b35; }
   .step.green  { border-left-color: #4caf87; }
   .step.purple { border-left-color: #9b8ff4; }
   .step-num {
-    width: 30px;
-    height: 30px;
-    background: #7ee8e8;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 800;
-    color: #fff;
-    flex-shrink: 0;
-    margin-top: 1px;
+    width: 30px; height: 30px; background: #7ee8e8; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 800; color: #fff; flex-shrink: 0; margin-top: 1px;
   }
   .step.orange .step-num { background: #ff6b35; }
   .step.green  .step-num { background: #4caf87; }
   .step.purple .step-num { background: #9b8ff4; }
-  .step-title {
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .step-desc {
-    font-size: 13px;
-    color: #555;
-    line-height: 1.55;
-  }
-  .step-desc a {
-    color: #3dbfbf;
-    font-weight: 600;
-    text-decoration: none;
-  }
-  .step-desc code {
-    background: #f0f0f0;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-family: monospace;
-  }
+  .step-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .step-desc { font-size: 13px; color: #555; line-height: 1.55; }
+  .step-desc a { color: #3dbfbf; font-weight: 600; text-decoration: none; }
+  .step-desc code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-size: 12px; font-family: monospace; }
   .tip {
-    background: #fffbe6;
-    border: 1px solid #ffe58f;
-    border-radius: 10px;
-    padding: 12px 16px;
-    font-size: 13px;
-    color: #7a5c00;
-    margin-bottom: 10px;
-    line-height: 1.5;
+    background: #fffbe6; border: 1px solid #ffe58f; border-radius: 10px;
+    padding: 12px 16px; font-size: 13px; color: #7a5c00; margin-bottom: 10px; line-height: 1.5;
   }
   .tip strong { color: #5c4000; }
   .badge {
-    display: inline-block;
-    background: #7ee8e8;
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 20px;
-    margin-left: 6px;
-    vertical-align: middle;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    display: inline-block; background: #7ee8e8; color: #fff; font-size: 11px; font-weight: 700;
+    padding: 2px 8px; border-radius: 20px; margin-left: 6px; vertical-align: middle;
+    text-transform: uppercase; letter-spacing: 0.5px;
   }
   .badge.orange { background: #ff6b35; }
-  .divider {
-    border: none;
-    border-top: 1px solid #eee;
-    margin: 28px 0 4px;
-  }
-  .footer {
-    text-align: center;
-    font-size: 12px;
-    color: #bbb;
-    margin-top: 40px;
-  }
-  .price-row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 8px;
-  }
+  .badge.green { background: #4caf87; }
+  .divider { border: none; border-top: 1px solid #eee; margin: 28px 0 4px; }
+  .footer { text-align: center; font-size: 12px; color: #bbb; margin-top: 40px; }
+  .price-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
   .price-pill {
-    background: #f0fafa;
-    border: 1px solid #7ee8e8;
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #3dbfbf;
+    background: #f0fafa; border: 1px solid #7ee8e8; border-radius: 20px;
+    padding: 4px 12px; font-size: 12px; font-weight: 600; color: #3dbfbf;
   }
-  .check { color: #4caf87; font-weight: 700; }
 </style>
 </head>
 <body>
 
-<div class="logo">✨ Our Little Miracle</div>
-<div class="tagline">Launch Guide — read this before you go live</div>
+<div class="logo">Our Little Miracle</div>
+<div class="tagline">$0 Launch Guide — everything is prepared, you do the ~30 minutes only a human can do</div>
 
-<!-- SECTION 1: YOUR LINKS -->
-<h2>Your Links</h2>
-
-<div class="step">
-  <div class="step-num">🔗</div>
-  <div>
-    <div class="step-title">Baby Book App (share this with buyers)</div>
-    <div class="step-desc">
-      This is what customers receive after purchase.<br>
-      <a href="https://www.perplexity.ai/computer/a/our-little-miracle-baby-book-zpv2YdV9RbKMlCLiQkGQqA" target="_blank">
-        perplexity.ai/computer/a/our-little-miracle-baby-book-zpv2YdV9RbKMlCLiQkGQqA
-      </a>
-    </div>
-  </div>
+<div class="tip">
+  <strong>The model:</strong> the product is ONE self-contained file (<code>dist/OurLittleMiracle.html</code>).
+  Buyers download it from Payhip (free to use, 5% only when you sell). Your free GitHub Pages site is the
+  storefront + free demo. Marketing is free organic content — everything is pre-written in <code>marketing-kit/</code>.
 </div>
 
-<div class="step">
-  <div class="step-num">📣</div>
-  <div>
-    <div class="step-title">Marketing Page</div>
-    <div class="step-desc">
-      Share this link on social media, TikTok, Instagram, etc.<br>
-      Same URL as above but open <code>marketing.html</code> instead of <code>index.html</code>
-    </div>
-  </div>
-</div>
-
-<div class="step">
-  <div class="step-num">🛍️</div>
-  <div>
-    <div class="step-title">Etsy Dashboard (your control panel)</div>
-    <div class="step-desc">
-      Use this to post your listing, schedule price changes, and manage everything.<br>
-      Open <code>etsy-dashboard.html</code> from your app.
-    </div>
-  </div>
-</div>
-
-<!-- SECTION 2: LAUNCH STEPS -->
-<h2>Launch Steps — Do These in Order</h2>
+<!-- STEP GROUP 1: HOSTING -->
+<h2>Part 1 — Turn On Your Free Website (5 min, one time)</h2>
 
 <div class="step orange">
   <div class="step-num">1</div>
   <div>
-    <div class="step-title">Open the Etsy Dashboard</div>
-    <div class="step-desc">Go to <code>etsy-dashboard.html</code>. This is your launch control panel. Everything is pre-filled — title, description, tags, and pricing.</div>
+    <div class="step-title">Make the repo public</div>
+    <div class="step-desc">GitHub → <code>lineman941/baby-book</code> → Settings → General → Danger Zone → <strong>Change visibility → Public</strong>. (Free GitHub Pages requires a public repo.)</div>
   </div>
 </div>
 
 <div class="step orange">
   <div class="step-num">2</div>
   <div>
-    <div class="step-title">Connect Your Etsy Account</div>
-    <div class="step-desc">Click <strong>Auth &amp; Settings</strong> in the sidebar → tap <strong>🔗 Connect Etsy Account</strong>. A popup opens, log in to Etsy and approve. You'll be redirected back automatically. <span class="badge orange">Required</span></div>
+    <div class="step-title">Enable GitHub Pages</div>
+    <div class="step-desc">Settings → <strong>Pages</strong> → under "Build and deployment" set Source to <strong>GitHub Actions</strong>. After the next push to <code>main</code>, your site goes live at<br><strong>https://lineman941.github.io/baby-book/</strong></div>
   </div>
 </div>
 
 <div class="step orange">
   <div class="step-num">3</div>
   <div>
-    <div class="step-title">Review Your Listing</div>
-    <div class="step-desc">Go to <strong>Review &amp; Approve</strong>. Check the title, price ($4.97 launch price), and description. Make any edits you want — the live preview updates as you type.</div>
+    <div class="step-title">Check both pages work</div>
+    <div class="step-desc">Landing page: <code>…/baby-book/</code> · Free demo: <code>…/baby-book/app.html</code>. Open them on your phone.</div>
   </div>
 </div>
 
-<div class="step orange">
+<!-- STEP GROUP 2: PAYHIP -->
+<h2>Part 2 — Create Your Free Store (15 min, one time)</h2>
+
+<div class="step green">
   <div class="step-num">4</div>
   <div>
-    <div class="step-title">Post to Etsy as DRAFT</div>
-    <div class="step-desc">Hit <strong>Post to Etsy</strong>. It goes up as a DRAFT (not live yet) so you can log into Etsy, add photos, and double-check before publishing. <span class="badge">Safe</span></div>
+    <div class="step-title">Sign up at Payhip (free)</div>
+    <div class="step-desc">Go to <a href="https://payhip.com" target="_blank">payhip.com</a> → Sign up with your email. When asked for your store link, try to claim <code>payhip.com/OurLittleMiracle</code> — the buy buttons on your landing page already point there. (If taken, pick another and update the links — see step 8.)</div>
   </div>
 </div>
 
 <div class="step green">
   <div class="step-num">5</div>
   <div>
-    <div class="step-title">Add Mockup Photos on Etsy</div>
-    <div class="step-desc">Log into your Etsy shop and open the draft listing. Upload these 4 mockup images in this order:<br><br>
-      <span class="check">①</span> <code>mockup_nursery_phone.png</code> — hero shot<br>
-      <span class="check">②</span> <code>mockup_flatlay_marble.png</code> — lifestyle<br>
-      <span class="check">③</span> <code>mockup_mom_3am.png</code> — emotional hook<br>
-      <span class="check">④</span> <code>mockup_two_screens.png</code> — feature showcase
-    </div>
+    <div class="step-title">Connect your payout</div>
+    <div class="step-desc">Payhip → Settings → Payment details → connect <strong>PayPal</strong> or <strong>Stripe</strong> (both free to create). This is where your money arrives.</div>
   </div>
 </div>
 
 <div class="step green">
   <div class="step-num">6</div>
   <div>
-    <div class="step-title">Publish the Listing</div>
-    <div class="step-desc">Once photos are added, click <strong>Publish</strong> on Etsy. You're live. 🎉</div>
+    <div class="step-title">Create the product listing</div>
+    <div class="step-desc">Products → Add New Product → <strong>Digital Product</strong>.<br>
+    • Upload <code>dist/OurLittleMiracle.html</code> and <code>sales-kit/welcome-guide.pdf</code><br>
+    • Copy the name, price ($14.97) and description from <code>sales-kit/payhip-listing.md</code><br>
+    • Upload the 5 images from <code>sales-kit/images/</code></div>
   </div>
 </div>
 
-<!-- SECTION 3: PRICING -->
-<h2>Pricing Schedule <span class="badge">Auto from Dashboard</span></h2>
-
-<div class="tip">
-  <strong>After launch</strong>, go to the <strong>Price Schedule</strong> tab in the Etsy Dashboard to update prices with one tap — no need to log into Etsy manually.
+<div class="step green">
+  <div class="step-num">7</div>
+  <div>
+    <div class="step-title">Publish and test-buy</div>
+    <div class="step-desc">Publish the listing, then use Payhip's <strong>preview/test checkout</strong> to confirm the download arrives by email. Open the downloaded file on your phone — type something, close, reopen: it should still be there.</div>
+  </div>
 </div>
 
-<div class="step purple">
-  <div class="step-num">💰</div>
+<div class="step green">
+  <div class="step-num">8</div>
   <div>
-    <div class="step-title">4-Phase Launch Strategy</div>
+    <div class="step-title">Wire the buy buttons <span class="badge">only if your store link differs</span></div>
+    <div class="step-desc">If you couldn't claim <code>payhip.com/OurLittleMiracle</code>: edit <code>index.html</code> on GitHub (pencil icon), find-and-replace <code>https://payhip.com/OurLittleMiracle</code> with your real listing URL, commit to <code>main</code>.</div>
+  </div>
+</div>
+
+<!-- STEP GROUP 3: MARKETING -->
+<h2>Part 3 — Get Eyes On It (ongoing, ~20 min/day)</h2>
+
+<div class="step">
+  <div class="step-num">9</div>
+  <div>
+    <div class="step-title">Set your bios</div>
+    <div class="step-desc">TikTok / Instagram / Pinterest bio link → your Payhip listing (or the landing page). Do this BEFORE posting day 1.</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">10</div>
+  <div>
+    <div class="step-title">Week 1: follow the day-by-day plan</div>
+    <div class="step-desc"><code>marketing-kit/week1-posting-plan.md</code> — your ad videos are on your PC in <code>etsy_api\marketing\</code>. <strong>Upload that folder to Google Drive</strong> so it's backed up and usable from anywhere.</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">11</div>
+  <div>
+    <div class="step-title">Ongoing: pins + shorts</div>
+    <div class="step-desc">• <code>marketing-kit/pinterest-plan.md</code> — 20 ready pins, post 3–4/week (this compounds for months)<br>• <code>marketing-kit/tiktok-scripts.md</code> — 30 no-face screen-recording scripts, 1/day<br>• <code>marketing-kit/reddit-facebook-posts.md</code> — community posts, 1/week max</div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<h2>Pricing & Phase 2</h2>
+
+<div class="step purple">
+  <div class="step-num">$</div>
+  <div>
+    <div class="step-title">Pricing</div>
     <div class="step-desc">
       <div class="price-row">
-        <span class="price-pill">Week 1 → $4.97</span>
-        <span class="price-pill">Week 2 → $6.97</span>
-        <span class="price-pill">Month 2+ → $8.97</span>
-        <span class="price-pill">50 Reviews → $11.97</span>
+        <span class="price-pill">Now → $14.97</span>
+        <span class="price-pill">Anchor $39.97 (compare-at)</span>
+        <span class="price-pill">Payhip fee: 5% per sale</span>
       </div>
-      <br>Anchor price always shows as $19.97 (crossed out) so buyers see the discount.
+      <br>Your first sale nets ~$14.20. No sales = you owe nothing, ever.
     </div>
   </div>
 </div>
 
 <div class="step purple">
-  <div class="step-num">⭐</div>
+  <div class="step-num">E</div>
   <div>
-    <div class="step-title">Upsell Pack — $3.97</div>
-    <div class="step-desc">Buyers see the <strong>✨ More</strong> tab inside the app. It shows 7 locked bonus pages with an Etsy button. This is your passive upsell — you don't have to do anything extra.</div>
+    <div class="step-title">Phase 2: Etsy <span class="badge orange">after first ~$30 revenue</span></div>
+    <div class="step-desc">Etsy has huge built-in buyer search traffic but charges a one-time setup fee (~$15–29) + $0.20/listing. Once Payhip has earned ~$30, open the Etsy shop using <code>sales-kit/etsy-listing.md</code> (copy is ready) and the same images. The <code>etsy-dashboard.html</code> control panel in this repo can post/manage the listing via the Etsy API.</div>
   </div>
 </div>
 
-<!-- SECTION 4: WHAT BUYERS RECEIVE -->
-<h2>What Buyers Receive</h2>
+<!-- RECORD KEEPING -->
+<h2>Run It Like It's For Sale</h2>
+
+<div class="step">
+  <div class="step-num">L</div>
+  <div>
+    <div class="step-desc">Log every month's numbers in <code>BUSINESS.md</code> (5 minutes). A clean revenue record is what makes the business sellable on Flippa / Acquire.com later.</div>
+  </div>
+</div>
 
 <div class="tip">
-  After purchase on Etsy, you send buyers the app link:<br><br>
-  <strong>perplexity.ai/computer/a/our-little-miracle-baby-book-zpv2YdV9RbKMlCLiQkGQqA</strong><br><br>
-  They open it in any browser on their phone. No download, no account needed. Done.
+  <strong>What buyers receive:</strong> the <code>OurLittleMiracle.html</code> file + <code>welcome-guide.pdf</code>, delivered automatically by Payhip after checkout. You never have to send anything manually.
 </div>
 
 <hr class="divider">
-
-<div class="footer">
-  Our Little Miracle — Baby Book &nbsp;·&nbsp; Built with ❤️
-</div>
+<div class="footer">Our Little Miracle · $0 spent · everything reinvested</div>
 
 </body>
 </html>
