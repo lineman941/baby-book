@@ -198,8 +198,8 @@
     <a onclick="showPage('schedule',this)"><span class="ic">📅</span> Price Schedule</a>
     <a onclick="showPage('auth',this)"><span class="ic">🔑</span> Auth &amp; Settings</a>
     <div class="nav-lbl">Quick Links</div>
-    <a href="index.html" target="_blank"><span class="ic">📖</span> Baby Book App</a>
-    <a href="marketing.html" target="_blank"><span class="ic">🛍️</span> Marketing Page</a>
+    <a href="app.html" target="_blank"><span class="ic">📖</span> Baby Book App</a>
+    <a href="index.html" target="_blank"><span class="ic">🛍️</span> Marketing Page</a>
     <a href="https://www.etsy.com/your/shops/manage/listings" target="_blank"><span class="ic">🧡</span> Etsy Listings</a>
   </nav>
   <div class="sb-foot">
@@ -262,8 +262,8 @@
       <div class="card-title">⚙️ Manual Price Update</div>
       <div class="fg"><label>Listing ID (auto-filled after first post)</label><input type="text" id="manualLid" placeholder="e.g. 1234567890"></div>
       <div class="price-row">
-        <div class="fg"><label>New Sale Price ($)</label><input type="number" id="manualPrice" step="0.01" min="0.01" placeholder="8.97"></div>
-        <div class="fg"><label>Anchor Price ($)</label><input type="number" id="manualAnchor" step="0.01" min="0.01" placeholder="19.97"></div>
+        <div class="fg"><label>New Sale Price ($)</label><input type="number" id="manualPrice" step="0.01" min="0.01" placeholder="14.97"></div>
+        <div class="fg"><label>Anchor Price ($)</label><input type="number" id="manualAnchor" step="0.01" min="0.01" placeholder="39.97"></div>
       </div>
       <button class="btn btn-teal" onclick="manualPriceUpdate()">Update Price on Etsy</button>
     </div>
@@ -317,54 +317,56 @@ const CLIENT_ID = 'YOUR_ETSY_API_KEY';
 const SHOP_ID   = 'YOUR_SHOP_ID';
 const SCOPES    = 'listings_w listings_r';
 
-const DEFAULT_TITLE = 'Our Little Miracle \u2014 Digital Baby Book | No-Download Baby Journal | Milestone Tracker | 5 Themes | Works on Any Phone';
-const DEFAULT_DESC  = `\u2728 THE BABY BOOK FOR REAL MOMS AT 3AM \u2728
+// Copy kept in sync with sales-kit/etsy-listing.md \u2014 only claims the app actually delivers.
+const DEFAULT_TITLE = 'Digital Baby Journal | Editable Baby Book | Phone Friendly | Drag Drop Photos | 5 Color Themes | Instant Download';
+const DEFAULT_DESC  = `\ud83c\udf31 THE BABY BOOK FOR REAL MOMS AT 3AM
 
-No app to download. No Canva. No GoodNotes. Just open it in any browser on your phone \u2014 it works instantly.
+No app. No account. No printing required. Just open it on your phone and start writing.
 
-\ud83d\udcf1 WHAT YOU GET (Base Book \u2014 $4.97):
-\u2022 5 beautiful color themes (Teal Dream, Rose Gold, Sage, Lavender, Classic Cream)
-\u2022 Cover page with your baby\u2019s name + date of birth
-\u2022 Birth Story page with all the details
-\u2022 12 Milestone cards (first smile, first steps, first tooth + more)
-\u2022 4 Love Letter pages (Mom, Dad, Future Message, From the Village)
-\u2022 Monthly Growth Tracker with visual charts
-\u2022 First Year in Photos \u2014 12 monthly photo cards
-\u2022 Family Tree page with photo uploads
-\u2022 First Holidays keepsake page
-\u2022 Your Name Story page
-\u2022 Photo upload for every milestone
-\u2022 Auto-saves as you type \u2014 pick up right where you left off
-\u2022 Works on iPhone, Android, iPad, laptop \u2014 any browser
+This is a beautiful, editable digital baby journal that lives right in your browser \u2014 fill it in from anywhere, add your own photos to the pages, and it saves automatically on your device. When you're ready, print it to a beautiful PDF or keep it digital forever.
 
-\u2b50 UPGRADE: THE COMPLETE STORY PACK (+$3.97):
-Unlock 7 extra bonus pages inside the app:
-\u2022 \ud83e\udd30 Before You Were Born \u2014 the full pregnancy story
-\u2022 \ud83d\udc69\u200d\ud83d\udc66 All About Mom \u2014 who she was the day you changed everything
-\u2022 \ud83d\udc68\u200d\ud83d\udc66 All About Dad \u2014 his favorites, personality & photo
-\u2022 \ud83d\udc9d Things You Love Right Now \u2014 monthly favorites snapshot
-\u2022 \ud83d\udc89 Doctor Visits & Vaccines \u2014 first-year health tracker
-\u2022 \ud83c\udf1f Wishes For You \u2014 family writes one wish each (the most emotional page)
-\u2022 \ud83d\udd90\ufe0f Handprint & Footprint \u2014 upload tiny hands + feet forever
-Find it in the \u2728 More tab inside your book \u2014 just $3.97 (60% off $9.97)!
+\u2728 WHAT'S INCLUDED
+\u2022 Cover Page \u2014 baby's name and birth date in a hand-lettered style
+\u2022 Birth Story \u2014 date, time, weight, length, hospital, your full story + a birth photo
+\u2022 Milestone Firsts \u2014 first smile, first crawl, first tooth, first steps, first word, first solid food, sleeping through the night, favorite toy \u2014 each with date, notes, and a photo
+\u2022 Letters & Notes \u2014 Letter to Baby, First Impressions, Dreams & Wishes, Funny Moments
+\u2022 Growth Tracker \u2014 log weight/height by month; a chart draws itself as you add entries
+\u2022 First Year Photo Grid \u2014 one photo + memory note for every month
+\u2022 Family Tree \u2014 parents, grandparents, siblings
+\u2022 Memories \u2014 add unlimited memory cards for anything you never want to forget
+\u2022 5 Color Themes + 4 Font Styles
+\u2022 One-tap Backup & Restore \u2014 your whole book (photos included) in a single file
+\u2022 Print to PDF \u2014 beautiful on any home printer
 
-\ud83d\udca1 WHY MOMS LOVE IT:
-\u2022 Open it at 3AM when baby just fell asleep and your heart is full
-\u2022 No subscription, no account needed
-\u2022 One-time purchase, use forever
-\u2022 Perfect baby shower gift
+\ud83d\udcf1 WORKS ON EVERY DEVICE
+iPhone \u2713 Android \u2713 iPad \u2713 Laptop \u2713 Desktop \u2713 \u2014 works fully offline, too.
 
-\ud83d\udce6 INSTANT DIGITAL DOWNLOAD \u2014 you\u2019ll receive access immediately after purchase.
+\ud83d\udd12 100% PRIVATE \u2014 everything stays on your own device. Nothing is uploaded anywhere, ever.
 
-\u2764\ufe0f Every moment with your little one is worth remembering. Don\u2019t let a single one slip away.`;
+\u2b07\ufe0f HOW IT WORKS
+1. Purchase \u2192 instant download arrives in your email
+2. Open the file in any browser (Chrome, Safari, Firefox)
+3. Start filling in your baby's story \u2014 it saves as you type
+4. Add your favorite photos to any page
+5. Print to PDF or keep it digital forever \u2728
 
-const DEFAULT_TAGS = 'digital baby book,baby journal,milestone tracker,baby memory book,new mom gift,baby shower gift,printable baby book,baby first year,digital download,baby keepsake,new baby gift,mom gift,baby milestone';
+\ud83d\udc9d PERFECT GIFT FOR
+New moms & dads \u2022 baby showers \u2022 first-time grandparents \u2022 anyone who's been meaning to start a baby book for months
+
+\ud83d\udce6 WHAT YOU'LL RECEIVE
+\u2022 1 \u00d7 HTML file (opens in any browser, works fully offline)
+\u2022 Quick-Start Guide (1 page PDF)
+\u2022 Support via messages if you need help
+
+One-time purchase. No subscription, ever. Questions? Message me anytime \u2014 I respond within a few hours. \ud83d\udc9b`;
+
+const DEFAULT_TAGS = 'digital baby journal,baby book download,editable baby book,printable baby journal,baby shower gift,new mom gift,digital download baby,baby milestone tracker,baby memory book,phone baby book,instant download baby,baby book template,first year baby book';
 
 const PHASES = [
-  { label:'Week 1 Launch', timing:'Days 1\u20137', sale:4.97, anchor:19.97, off:'75% off' },
-  { label:'Week 2',        timing:'Days 8\u201314', sale:6.97, anchor:19.97, off:'65% off' },
-  { label:'Month 2+',      timing:'Day 15+',        sale:8.97, anchor:19.97, off:'55% off' },
-  { label:'50+ Reviews',   timing:'Milestone price', sale:11.97, anchor:19.97, off:'40% off' }
+  { label:'Week 1 Launch', timing:'Days 1\u20137', sale:9.97,  anchor:39.97, off:'75% off' },
+  { label:'Week 2',        timing:'Days 8\u201314', sale:11.97, anchor:39.97, off:'70% off' },
+  { label:'Month 2+',      timing:'Day 15+',        sale:14.97, anchor:39.97, off:'62% off' },
+  { label:'50+ Reviews',   timing:'Milestone price', sale:16.97, anchor:39.97, off:'58% off' }
 ];
 
 // ── STATE ──
@@ -475,7 +477,7 @@ async function applyPhase(i) {
 async function manualPriceUpdate() {
   const lid = document.getElementById('manualLid').value || savedListingId;
   const price = parseFloat(document.getElementById('manualPrice').value);
-  const anchor = parseFloat(document.getElementById('manualAnchor').value) || 19.97;
+  const anchor = parseFloat(document.getElementById('manualAnchor').value) || 39.97;
   if (!lid || !price) { alert('Enter a listing ID and price.'); return; }
   if (!accessToken) { alert('Not authenticated. Go to Auth & Settings first.'); return; }
   log('Updating price to $' + price + ' for listing ' + lid + '…', 'info');
@@ -592,7 +594,7 @@ async function approveListing() {
 
   const title   = document.getElementById('editTitle').value.trim();
   const price   = parseFloat(document.getElementById('editSale').value);
-  const anchor  = parseFloat(document.getElementById('editAnchor').value) || 19.97;
+  const anchor  = parseFloat(document.getElementById('editAnchor').value) || 39.97;
   const tagsRaw = document.getElementById('editTags').value;
   const desc    = document.getElementById('editDesc').value.trim();
 
@@ -653,8 +655,8 @@ async function approveListing() {
 window.addEventListener('DOMContentLoaded', () => {
   // Prefill edit fields
   document.getElementById('editTitle').value   = DEFAULT_TITLE;
-  document.getElementById('editSale').value    = '4.97';
-  document.getElementById('editAnchor').value  = '19.97';
+  document.getElementById('editSale').value    = '9.97';
+  document.getElementById('editAnchor').value  = '39.97';
   document.getElementById('editTags').value    = DEFAULT_TAGS;
   document.getElementById('editDesc').value    = DEFAULT_DESC;
   syncPreview();

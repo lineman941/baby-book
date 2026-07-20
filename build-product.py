@@ -5,6 +5,7 @@ Inlines style.css, app.js, Chart.js, fonts (base64 woff2), and all images
 (recompressed JPEG, base64, deduplicated via a JS asset map). Strips
 demo-only markup. The result works offline from a file:// URL on any device.
 
+Requires: pip install -r requirements.txt  (Pillow, for image compression)
 Usage: python3 build-product.py
 """
 import base64
