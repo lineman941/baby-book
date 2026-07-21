@@ -321,7 +321,7 @@ function buildPhotoYearGrid() {
     card.className = 'milestone-card';
     card.innerHTML = '<div class="milestone-label">' + month + '</div>' +
       '<div class="milestone-photo-upload" id="yr-photo-' + idx + '">' +
-      '<div class="ms-placeholder"><img src="' + assetUrl('icon-camera.jpg') + '" alt=""></div>' +
+      '<div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#bfae9e" stroke-width="1.6" width="30" height="30"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div>' +
       '<img alt="Month ' + (idx+1) + ' photo">' +
       '<input type="file" accept="image/*" capture="environment">' +
       '</div>' +
