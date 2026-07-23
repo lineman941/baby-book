@@ -1,0 +1,36 @@
+{
+  "defaultShell": "/bin/bash",
+  "allowedDirectories": [
+    "/root",
+    "/home/user",
+    "/tmp"
+  ],
+  "blockedCommands": [
+    "mkfs",
+    "mkfs.ext2",
+    "mkfs.ext3",
+    "mkfs.ext4",
+    "mkfs.xfs",
+    "mkfs.btrfs",
+    "mkfs.vfat",
+    "dd",
+    "fdisk",
+    "parted",
+    "sgdisk",
+    "wipefs",
+    "shred",
+    "blkdiscard",
+    "mount",
+    "umount",
+    "shutdown",
+    "reboot",
+    "poweroff",
+    "halt",
+    "init",
+    "userdel",
+    "deluser"
+  ],
+  "fileReadLineLimit": 1000,
+  "fileWriteLineLimit": 200,
+  "telemetryEnabled": false
+}
