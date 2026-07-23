@@ -6,13 +6,8 @@
     "/tmp"
   ],
   "blockedCommands": [
+    "rm",
     "mkfs",
-    "mkfs.ext2",
-    "mkfs.ext3",
-    "mkfs.ext4",
-    "mkfs.xfs",
-    "mkfs.btrfs",
-    "mkfs.vfat",
     "dd",
     "fdisk",
     "parted",
@@ -27,8 +22,15 @@
     "poweroff",
     "halt",
     "init",
+    "systemctl",
+    "chown",
+    "chmod",
+    "passwd",
     "userdel",
-    "deluser"
+    "deluser",
+    "iptables",
+    "ufw",
+    "sudo"
   ],
   "fileReadLineLimit": 1000,
   "fileWriteLineLimit": 200,
