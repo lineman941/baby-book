@@ -16,7 +16,7 @@ to block all depend on the OS and layout of the actual machine. That's what's tu
 | OS              | Ubuntu 24.04.4 LTS (Linux, x86_64, kernel 6.18.5) |
 | User / home     | `root` → `/root`                                  |
 | Login shell     | `/bin/bash` (only bash/sh/dash present — no zsh)  |
-| Project area    | `/home/user` (e.g. `/home/user/baby-book`)        |
+| Project area    | `/workspace` (e.g. `/workspace/baby-book`)        |
 | Toolchain found | git, python3, node 22, npm, go, rust/cargo, docker, gcc, make, jq, curl |
 
 ## The settings, and why each is what it is
@@ -24,7 +24,7 @@ to block all depend on the OS and layout of the actual machine. That's what's tu
 | Key                 | Value                          | Reasoning |
 | ------------------- | ------------------------------ | --------- |
 | `defaultShell`      | `/bin/bash`                    | The detected login shell. This box has no zsh, so bash is correct (not the macOS default `/bin/zsh`). |
-| `allowedDirectories`| `/root`, `/home/user`, `/tmp`  | Scopes **file** operations to the real working areas: the home dir, the folder holding projects like `baby-book`, and scratch space. Leaves `allowedDirectories` narrow so file access can't roam the whole filesystem. |
+| `allowedDirectories`| `/root`, `/workspace`, `/tmp`  | Scopes **file** operations to the real working areas: the home dir, the folder holding projects like `baby-book`, and scratch space. Leaves `allowedDirectories` narrow so file access can't roam the whole filesystem. |
 | `blockedCommands`   | destructive footguns           | Executable names only: `rm`, `mkfs`, `dd`, `fdisk`, `parted`, `sgdisk`, `wipefs`, `shred`, `blkdiscard`, `mount`, `umount`, `shutdown`, `reboot`, `poweroff`, `halt`, `init`, `systemctl`, `chown`, `chmod`, `passwd`, `userdel`, `deluser`, `iptables`, `ufw`, `sudo`. Desktop Commander validates these against the base command name extracted from user input, so argument-specific strings (like `"rm -rf /"`) are not checked—only the executable name matters. |
 | `fileReadLineLimit` | `1000`                         | Desktop Commander default; fine for reading source files here. |
 | `fileWriteLineLimit`| `200`                          | Raised from the default `50` so routine code edits on this dev box aren't split into many small writes. |
@@ -49,7 +49,7 @@ Ask Claude to run these against the Desktop Commander tools:
 
 ```
 set_config_value({ "key": "defaultShell",       "value": "/bin/bash" })
-set_config_value({ "key": "allowedDirectories",  "value": ["/root", "/home/user", "/tmp"] })
+set_config_value({ "key": "allowedDirectories",  "value": ["/root", "/workspace", "/tmp"] })
 set_config_value({ "key": "fileWriteLineLimit",  "value": 200 })
 set_config_value({ "key": "telemetryEnabled",    "value": false })
 ```
@@ -58,7 +58,7 @@ Verify with `get_config({})`.
 
 ## Adjusting for a different machine
 
-These values match the cloud sandbox this was generated in. On your own laptop/desktop,
+These values match the environment this was generated in. On your own laptop/desktop,
 update:
 
 - **macOS** → `defaultShell` `/bin/zsh`, and `allowedDirectories` like
@@ -66,7 +66,7 @@ update:
 - **Windows** → `defaultShell` `powershell`, and `allowedDirectories` like
   `["C:\\Users\\<you>", "C:\\Users\\<you>\\Projects"]`.
 - **Tighter scope** → point `allowedDirectories` at a single code folder instead of the
-  whole home directory.
+  whole workspace directory.
 
 ## A note on security
 
