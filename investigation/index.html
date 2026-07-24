@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Taylor County &amp; the Foley Cellulose Mill — Evidence File</title>
+<style>
+  :root{
+    --bg:#f7f4ee; --panel:#fffdf9; --ink:#1c1917; --muted:#57534e; --line:#e7e1d6;
+    --accent:#9a3412; --accent-soft:#fdf0e7;
+    --v:#15803d; --v-bg:#e7f4ea; --u:#b45309; --u-bg:#fbf1e0;
+    --d:#c2410c; --d-bg:#fbece2; --n:#9f1239; --n-bg:#fbe9ee;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --serif:Georgia,"Times New Roman",serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#17140f; --panel:#211d17; --ink:#f5f0e6; --muted:#a8a29e; --line:#302a22;
+      --accent:#fb923c; --accent-soft:#2a1c11;
+      --v:#4ade80; --v-bg:#122017; --u:#fbbf24; --u-bg:#241a0c;
+      --d:#fb923c; --d-bg:#25160d; --n:#fb7185; --n-bg:#260f16;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#f7f4ee; --panel:#fffdf9; --ink:#1c1917; --muted:#57534e; --line:#e7e1d6;
+    --accent:#9a3412; --accent-soft:#fdf0e7;
+    --v:#15803d; --v-bg:#e7f4ea; --u:#b45309; --u-bg:#fbf1e0;
+    --d:#c2410c; --d-bg:#fbece2; --n:#9f1239; --n-bg:#fbe9ee;
+  }
+  :root[data-theme="dark"]{
+    --bg:#17140f; --panel:#211d17; --ink:#f5f0e6; --muted:#a8a29e; --line:#302a22;
+    --accent:#fb923c; --accent-soft:#2a1c11;
+    --v:#4ade80; --v-bg:#122017; --u:#fbbf24; --u-bg:#241a0c;
+    --d:#fb923c; --d-bg:#25160d; --n:#fb7185; --n-bg:#260f16;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+  a:hover{border-bottom-color:var(--accent)}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+  header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 20px;max-width:1000px;margin:0 auto}
+  .brand{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+  .brand b{color:var(--accent)}
+  .toggle{font-family:var(--mono);font-size:12px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 10px;cursor:pointer}
+  .hero{padding:44px 0 20px}
+  .eyebrow{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line));padding:5px 10px;border-radius:999px;margin-bottom:16px}
+  h1{font-family:var(--serif);font-weight:700;font-size:clamp(28px,5vw,44px);line-height:1.1;margin:0 0 12px}
+  .sub{font-size:18px;color:var(--muted);max-width:66ch;margin:0 0 16px}
+  .meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .callout{border-left:3px solid var(--accent);background:var(--panel);border:1px solid var(--line);border-left-width:3px;border-radius:0 10px 10px 0;padding:14px 16px;margin:18px 0;font-size:14.5px}
+  .callout.warn{border-left-color:var(--d)}
+  .note{font-size:13px;color:var(--muted)}
+  section{padding:26px 0;border-top:1px solid var(--line)}
+  h2{font-family:var(--serif);font-size:24px;margin:0 0 4px}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+  .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+  .legend .cell{border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:var(--panel)}
+  .chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:999px;border:1px solid}
+  .chip.v{color:var(--v);background:var(--v-bg);border-color:color-mix(in srgb,var(--v) 40%,transparent)}
+  .chip.u{color:var(--u);background:var(--u-bg);border-color:color-mix(in srgb,var(--u) 40%,transparent)}
+  .chip.d{color:var(--d);background:var(--d-bg);border-color:color-mix(in srgb,var(--d) 40%,transparent)}
+  .chip.n{color:var(--n);background:var(--n-bg);border-color:color-mix(in srgb,var(--n) 40%,transparent)}
+  .tier{display:inline-block;font-family:var(--mono);font-size:10px;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin-left:6px}
+  .bluf{display:grid;gap:12px}
+  .bluf .row{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .bluf .n{font-family:var(--serif);font-size:22px;color:var(--accent);line-height:1}
+  .bluf .row.v{border-left:4px solid var(--v)} .bluf .row.d{border-left:4px solid var(--d)} .bluf .row.n{border-left:4px solid var(--n)}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 16px}
+  .filterbtn{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.04em;background:var(--panel);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 11px;cursor:pointer}
+  .filterbtn[aria-pressed="true"]{color:var(--ink);border-color:var(--accent);background:var(--accent-soft)}
+  #search{flex:1;min-width:180px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 11px;color:var(--ink);font-size:14px}
+  .ledger{display:grid;gap:10px}
+  .track{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:14px 0 2px}
+  .item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+  .item .head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:5px}
+  .item .id{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .item .claim{font-weight:650;font-size:15.5px;margin:2px 0 3px}
+  .item .stat{font-family:var(--mono);font-size:12.5px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:6px 9px;display:inline-block;margin:3px 0}
+  .item .desc{font-size:13.5px;color:var(--muted);margin:5px 0 0}
+  .item .src{font-size:12.5px;margin-top:7px}
+  .hidden{display:none!important}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--panel)}
+  tr:last-child td{border-bottom:none}
+  .tl{position:relative;margin-left:8px;padding-left:22px;border-left:2px solid var(--line)}
+  .tl .ev{position:relative;padding:0 0 20px}
+  .tl .ev:before{content:"";position:absolute;left:-29px;top:3px;width:12px;height:12px;border-radius:50%;background:var(--accent);border:3px solid var(--bg)}
+  .tl .yr{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600}
+  .tl .ti{font-weight:650;margin:1px 0 3px}
+  .tl .de{font-size:13.5px;color:var(--muted)}
+  .verdict{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .verdict .box{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--panel)}
+  .verdict h3{margin:0 0 8px;font-family:var(--serif);font-size:17px}
+  .verdict ul{margin:0;padding-left:18px} .verdict li{margin:6px 0;font-size:13.5px}
+  .verdict .proven h3{color:var(--v)} .verdict .unproven h3{color:var(--n)}
+  .sourcegrp{margin:10px 0} .sourcegrp h3{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+  .sourcegrp ul{margin:0;padding-left:18px} .sourcegrp li{margin:4px 0;font-size:13.5px}
+  ol.steps{padding-left:20px} ol.steps li{margin:8px 0;font-size:14px}
+  footer{padding:28px 0 60px;color:var(--muted);font-size:12.5px}
+  @media(max-width:640px){.verdict{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="topbar">
+    <div class="brand">TAYLOR CO. · FENHOLLOWAY · FOLEY CELLULOSE — <b>EVIDENCE FILE v1</b></div>
+    <button class="toggle" id="themeToggle" type="button">◐ theme</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <span class="eyebrow">Evidence investigation — not a conclusion · not legal advice</span>
+    <h1>Taylor County &amp; the Foley Cellulose Mill</h1>
+    <p class="sub">A factual, source-tagged evidence file on an elevated cancer signal and a documented industrial exposure on the Fenholloway River — Perry, Florida. Assembled to support a possible class action.</p>
+    <div class="meta">Compiled 2026-07-24 · Every claim carries a verification status and a source · Facts only</div>
+
+    <div class="callout warn">
+      <strong>Read this if you are building a case.</strong> The two hardest elements here are the same ones that already sank a prior suit: <strong>causation</strong> and <strong>provable damages</strong>. A federal class action by 100+ residents over fouled well water was <strong>dismissed</strong> for failure to prove sufficient damage. Flags in this file are not doubt about the pollution — they harden the evidence so a filing survives a motion to dismiss and expert challenge. <span class="note">This file is a research organizer, not legal advice. Retain a Florida environmental/toxic-tort attorney and experts; the case-dispositive records come through public-records requests and discovery.</span>
+    </div>
+    <div class="callout">
+      <strong>Reach note.</strong> This session could run web <em>search</em> but could not directly <em>open</em> primary PDFs or JavaScript database tables (State Cancer Profiles, the City of Perry CCR, FDEP Oculus, EPA ECHO). Figures behind those are flagged and linked so an attorney can pull them as authenticable primary records. <strong>Where verification was possible, the prior research held up</strong> — flags mean “confirm against the source document,” not “this is false.”
+    </div>
+  </div>
+
+  <section id="legends">
+    <p class="kicker">How to read the tags</p>
+    <h2>Verification status</h2>
+    <div class="legend" style="margin:12px 0 18px">
+      <div class="cell"><span class="chip v">✓ Verified</span><div class="note" style="margin-top:7px">Corroborated this session by ≥1 independent, credible source.</div></div>
+      <div class="cell"><span class="chip u">~ Unverified</span><div class="note" style="margin-top:7px">Plausible &amp; consistent, but the exact figure/ID was not confirmed here. Pull the named source.</div></div>
+      <div class="cell"><span class="chip d">≠ Disputed</span><div class="note" style="margin-top:7px">Prior framing compares unlike things / is imprecise — needs a like-for-like re-pull. Not “false.”</div></div>
+      <div class="cell"><span class="chip n">✕ Not established</span><div class="note" style="margin-top:7px">Not supported by available data — suppressed, unmeasured, or a causation leap.</div></div>
+    </div>
+    <h2 style="font-size:19px">Source tier <span class="note" style="font-weight:400">— for litigation, the source matters as much as the fact</span></h2>
+    <div class="legend" style="margin-top:12px">
+      <div class="cell"><span class="tier">TIER 1</span> <span class="note">Primary agency record (authenticable / potentially admissible): FDEP, EPA, CCR, cancer registry, court dockets. <strong>Get the document.</strong></span></div>
+      <div class="cell"><span class="tier">TIER 2</span> <span class="note">Secondary reporting (a lead, generally hearsay): news, NGO releases, Wikipedia. Use to find Tier-1 records.</span></div>
+      <div class="cell"><span class="tier">TIER 3</span> <span class="note">Prior AI-thread assertion — verify against Tier 1 before any filing.</span></div>
+    </div>
+  </section>
+
+  <section id="bluf">
+    <p class="kicker">Bottom line up front</p>
+    <h2>What the evidence does and does not show</h2>
+    <div class="bluf" style="margin-top:14px">
+      <div class="row v"><div class="n">1</div><div>The environmental history is real and heavily documented: ~50 million gallons/day of dioxin-bearing pulp waste into the Fenholloway for decades; a 1990 EPA study found river dioxin ~1,900× the standard; the river is a textbook intersex-fish endocrine case; a 1947 Florida law legally made the Fenholloway a Class-V “industrial river”; and an official <strong>“DO NOT EAT” fish advisory</strong> documents a real exposure route.</div></div>
+      <div class="row v"><div class="n">2</div><div>The regulatory matter is current. The mill stopped production in late 2023, but its wastewater-treatment system and groundwater monitoring remain active, and in 2026 FDEP issued a draft permit that would let the owner discharge <strong>up to 12 million gallons/day back into the river</strong> at the original mill-site location after it lost the coastal pipeline.</div></div>
+      <div class="row d"><div class="n">3</div><div>The most load-bearing cancer number needs a like-for-like re-pull. “Taylor County 65.0 per 100,000, 2nd in Florida, 2018–2022” surfaced as <strong>LATE-STAGE</strong> incidence, while the Florida/national comparators (53.3) are <strong>ALL-STAGES</strong>. That mismatch overstates the excess — pull the all-stages table first. Also: rural lung cancer is heavily driven by <strong>smoking</strong>, which must be adjusted for.</div></div>
+      <div class="row d"><div class="n">4</div><div>The water violation is real but does not point at the mill. Perry had a documented Q1-2024 trihalomethanes (TTHM) violation — but TTHMs are <strong>disinfection byproducts of chlorination</strong>, not pulp-mill effluent. It is a water-treatment issue, not evidence of a mill-to-well pathway.</div></div>
+      <div class="row n"><div class="n">5</div><div>The “young girls getting breast cancer” claim cannot be tested from public data yet. With only <strong>~21,796 residents</strong>, narrow-age-band counts are suppressed (1–9 cases unpublished). A cluster needs case-level data with a defined age range — not anecdote.</div></div>
+      <div class="row n"><div class="n">6</div><div><strong>No verified evidence connects the mill to the cancer burden or the water violation.</strong> The exposure chain — source → chemical → release → transport → human exposure → dose → biological plausibility → observed cancer — is not demonstrated here. This is the gap expert work must close.</div></div>
+    </div>
+  </section>
+
+  <section id="ledger">
+    <p class="kicker">The evidence, itemized</p>
+    <h2>Evidence ledger</h2>
+    <div class="controls">
+      <button class="filterbtn" data-f="all" aria-pressed="true">All</button>
+      <button class="filterbtn" data-f="v" aria-pressed="false">✓ Verified</button>
+      <button class="filterbtn" data-f="u" aria-pressed="false">~ Unverified</button>
+      <button class="filterbtn" data-f="d" aria-pressed="false">≠ Disputed</button>
+      <button class="filterbtn" data-f="n" aria-pressed="false">✕ Not established</button>
+      <input id="search" type="search" placeholder="search claims, chemicals, dates…" />
+    </div>
+    <div class="ledger" id="ledgerBody"><!-- items injected --></div>
+  </section>
+
+  <section id="env-timeline">
+    <p class="kicker">Track C — industrial / environmental</p>
+    <h2>Fenholloway River discharge timeline</h2>
+    <div class="tl" style="margin-top:16px" id="envTL"></div>
+  </section>
+
+  <section id="chem">
+    <p class="kicker">Section 7</p>
+    <h2>Chemical evidence matrix</h2>
+    <div class="scroll" style="margin-top:14px">
+      <table>
+        <thead><tr><th>Chemical</th><th>At facility?</th><th>In environment?</th><th>Cancer association</th><th>Human exposure proven?</th></tr></thead>
+        <tbody id="chemBody"></tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:10px">Dioxin is a documented river contaminant with an established cancer association, but no dose/pathway-to-population has been shown. TTHMs are a documented municipal exposure that is <em>not</em> mill-related. PFAS and metals are untested leads.</p>
+  </section>
+
+  <section id="verdict">
+    <p class="kicker">Sections 10–11</p>
+    <h2>Proven vs. unproven</h2>
+    <div class="verdict" style="margin-top:14px">
+      <div class="box proven"><h3>What the evidence proves</h3><ul id="provenList"></ul></div>
+      <div class="box unproven"><h3>What remains unproven</h3><ul id="unprovenList"></ul></div>
+    </div>
+    <div class="callout warn" style="margin-top:16px">
+      <strong>Causation is the weak link.</strong> The chain source → chemical → release → transport → human exposure → dose → biological plausibility → observed cancer is <strong>NOT</strong> demonstrated by anything in this file. Liability framing against named companies (Procter &amp; Gamble / Buckeye Florida, L.P. / Georgia-Pacific) is premature until the chemical, transport, and exposure links are supported by Tier-1 records and expert opinion.
+    </div>
+  </section>
+
+  <section id="legal">
+    <p class="kicker">Section 12 — for the legal workstream</p>
+    <h2>Accountability &amp; litigation</h2>
+    <div class="callout"><strong>The precedent you must beat.</strong> A federal class action by 100+ residents over contaminated well water was <strong>dismissed</strong> — reportedly for failure to prove sufficient financial damage <span class="tier">TIER 2</span>. Pull the docket and opinion; the last case failed on <strong>damages/causation</strong>, not on the existence of pollution. Solve those two first.</div>
+    <p style="font-size:14.5px"><strong>Ownership by period (successor liability — for counsel):</strong> Procter &amp; Gamble (built 1954 → early 1990s) → Buckeye Florida, L.P. / Buckeye Technologies (→ 2013; incl. the 2003 choice to pipe to the Gulf over process cleanup) → Georgia-Pacific / Foley Cellulose (2013 → closure 2023; built the 2020 pipeline; holds the 2026 permit and groundwater obligations).</p>
+    <p class="kicker" style="margin-top:18px">Practical next actions</p>
+    <ol class="steps">
+      <li><strong>Retain counsel + experts</strong> — environmental/toxic-tort attorney; epidemiologist; toxicologist; hydrogeologist (for the groundwater pathway).</li>
+      <li><strong>File a Florida DOH “Cancer Concerns” request</strong> to create an official investigation record and potentially compel a state statistical review.</li>
+      <li><strong>Public-records requests</strong> to FDEP (full permit file, DMRs, effluent &amp; groundwater data, the 1995 agreement, outfall drawings) and EPA (ECHO history, the 1989 dioxin study, decisions).</li>
+      <li><strong>Pull the prior class-action docket</strong> to see exactly why it was dismissed and what to cure.</li>
+      <li><strong>Statute of limitations / repose — ask counsel immediately.</strong> Timing (and the mill's closure) can bar claims; this needs early legal assessment.</li>
+    </ol>
+  </section>
+
+  <section id="sources">
+    <p class="kicker">Provenance</p>
+    <h2>Sources &amp; primary documents to pull</h2>
+    <div id="sourcesBody" style="margin-top:12px"></div>
+  </section>
+
+  <footer>
+    Evidence investigation — not a conclusion, and not legal advice. Newspaper and NGO citations are leads (Tier 2), not admissible proof; authenticate the underlying agency records (Tier 1) before any filing. Nothing here asserts that the mill caused any cancer.
+  </footer>
+</div>
+
+<script>
+const EV = [
+  {id:"E01",track:"Fenholloway / Environment",s:"v",tier:"2",claim:"Florida legally made the Fenholloway an industrial (Class V) river.",stat:"1947 statute · Class V = least-stringent standard",note:"Enacted to attract the mill; restoration fight sought reclassification back toward Class III.",src:{t:"Florida Phoenix",u:"https://floridaphoenix.com/2021/01/07/fl-sacrificed-a-river-to-get-paper-mill-jobs-the-deal-really-stunk/"}},
+  {id:"E03",track:"Fenholloway / Environment",s:"v",tier:"2",claim:"Discharge volume into the Fenholloway.",stat:"Up to ~50 million gallons/day",note:"From 1954. Authenticate DMRs as Tier-1.",src:{t:"EJAtlas",u:"https://ejatlas.org/conflict/procter-and-gambles-buckeye-paper-mill-pollutes-the-fenholloway-river-in-taylor-county-florida"}},
+  {id:"E04",track:"Fenholloway / Environment",s:"v",tier:"2",claim:"Waste contained dioxins (chlorine-bleaching byproduct).",stat:"Dioxins present — a known human carcinogen",note:"Get the EPA study as Tier-1.",src:{t:"Florida Phoenix",u:"https://floridaphoenix.com/2021/01/07/fl-sacrificed-a-river-to-get-paper-mill-jobs-the-deal-really-stunk/"}},
+  {id:"E05",track:"Fenholloway / Environment",s:"v",tier:"2",claim:"EPA study found river dioxin far above standard.",stat:"~1,900× the agency standard (1990)",note:"Obtain the actual 1990 EPA study.",src:{t:"Florida Phoenix",u:"https://floridaphoenix.com/2021/01/07/fl-sacrificed-a-river-to-get-paper-mill-jobs-the-deal-really-stunk/"}},
+  {id:"E06",track:"Fenholloway / Environment",s:"v",tier:"2",claim:"Endocrine disruption in river fish.",stat:"Female fish developing male sex characteristics",note:"The well-known Fenholloway intersex-fish case.",src:{t:"Wikipedia",u:"https://en.wikipedia.org/wiki/Fenholloway_River"}},
+  {id:"E07",track:"Fenholloway / Environment",s:"v",tier:"2",claim:"Documented human-exposure pathway: fish-consumption advisory.",stat:"Largemouth bass advisory = “DO NOT EAT” (dioxin)",note:"EPA had data Feb 1989; state delayed ~18 mo; Sept 1990 EPA urged a warning. The most concrete exposure route — authenticate the FDOH advisory.",src:{t:"Facing South, “The Forgotten River”",u:"https://www.facingsouth.org/1991/12/forgotten-river"}},
+  {id:"E08",track:"Fenholloway / Environment",s:"v",tier:"2",claim:"Private drinking-water wells fouled.",stat:"Wells ran “brown and smelly for years”",note:"Residents blamed the mill. Alleged, not court-proven (see X03).",src:{t:"Tampa Bay Times (1997)",u:"https://www.tampabay.com/archive/1997/01/12/gulf-may-get-river-s-waste/"}},
+  {id:"E09",track:"Fenholloway / Environment",s:"v",tier:"2",claim:"Federal NPDES discharge permit base number.",stat:"FL0000876 (current suffix unconfirmed)",note:"Base number confirmed; verify the current application suffix via EPA/FDEP.",src:{t:"EPA ECHO",u:"https://echo.epa.gov"}},
+  {id:"E10",track:"Fenholloway / Environment",s:"v",tier:"2",claim:"1995 FDEP agreement required relocating the discharge.",stat:"Process changes + relocate the discharge point",note:"Documented origin of the “the discharge was moved” observation. Obtain the agreement.",src:{t:"Tampa Bay Times (1995)",u:"https://www.tampabay.com/archive/1995/11/26/state-s-paper-mills-clean-up-environmentalists-want-more/"}},
+  {id:"E11",track:"Fenholloway / Environment",s:"v",tier:"2",claim:"2003 — company chose the pipeline over process cleanup.",stat:"Dec 2003: rejected cleanup; insisted on Gulf pipeline",note:"Rejected oxygen-delignification/wetlands cleanup (NRDC/EPA/FDEP-backed). Relevant to notice/intent.",src:{t:"NRDC",u:"https://www.nrdc.org/press-releases/buckeye-technologies-fenholloway-river-drop-dead"}},
+  {id:"E12",track:"Fenholloway / Environment",s:"v",tier:"2",claim:"Coastal pipeline (Georgia-Pacific, 2013→2020).",stat:"Bought 2013; $300M+; ~15-mi pipeline done Sept 2020",note:"“Fenholloway Water Quality Project.” River later reported substantially cleaned up.",src:{t:"Florida Trib",u:"https://floridatrib.org/2026/06/23/floridas-most-polluted-river-cleaned-up-a-company-could-dump-wastewater-into-it-again/"}},
+  {id:"E13",track:"Fenholloway / Environment",s:"u",tier:"3",claim:"Outfall IDs / identity of the “newer drain duct.”",stat:"D-001 / D-002 (type unconfirmed)",note:"Industrial vs stormwater vs remediation? Read the permit engineering drawings. Essential, unresolved.",src:{t:"Perry Newspapers",u:"https://perrynewspapers.com/?p=50856"}},
+  {id:"M01",track:"The Mill",s:"v",tier:"2",claim:"Georgia-Pacific announced the closure.",stat:"Announced Sept 18–20, 2023",note:"Weeks after Hurricane Idalia (Aug 30, 2023).",src:{t:"PaperAge",u:"https://www.paperage.com/2023news/09-20-2023georgia-pacific-closing-foley-mill.html"}},
+  {id:"M02",track:"The Mill",s:"v",tier:"2",claim:"Mill ceased production.",stat:"~Nov 17, 2023 (after 69 years)",note:"Prior thread’s “ceased 2024” is imprecise — production stopped late 2023.",src:{t:"WTSP",u:"https://www.wtsp.com/article/news/regional/florida/foley-cellulose-mill-closing/67-c41b1d54-50e9-4d92-957d-fc833c298d71"}},
+  {id:"M03",track:"The Mill",s:"v",tier:"2",claim:"Equipment air-gapped / decommissioned.",stat:"By Dec 31, 2024",note:"Reconciles the “2024” wording in the FDEP notice with the Nov-2023 stop.",src:{t:"Georgia-Pacific",u:"https://news.gp.com/2023/09/georgia-pacific-to-close-foley-cellulose-facility"}},
+  {id:"M04",track:"The Mill",s:"u",tier:"3",claim:"Title V air permit revoked.",stat:"April 2025 (unconfirmed); permit 1230001-127-AV issued Apr 10, 2024",note:"Revocation date not confirmed; pull FDEP air permit record 1230001.",src:{t:"FDEP",u:"https://floridadep.gov/"}},
+  {id:"C01",track:"Current 2026 status",s:"v",tier:"2",claim:"Wastewater treatment + groundwater monitoring remain active after closure.",stat:"1°/2°/3° treatment, reuse, stormwater, GW monitoring",note:"Open question: why does a non-manufacturing site still need this? Read the permit, don’t assume.",src:{t:"Florida Trib",u:"https://floridatrib.org/2026/06/23/floridas-most-polluted-river-cleaned-up-a-company-could-dump-wastewater-into-it-again/"}},
+  {id:"C02",track:"Current 2026 status",s:"v",tier:"2",claim:"GP prohibited from using the coastal pipeline.",stat:"Lost pipeline use after a legal/easement dispute",note:"Drives the request to discharge back upstream.",src:{t:"Perry Newspapers",u:"https://perrynewspapers.com/?p=50299"}},
+  {id:"C03",track:"Current 2026 status",s:"v",tier:"2",claim:"FDEP draft permit to resume up-river discharge.",stat:"Up to 12 million gallons/day at the original mill-site location",note:"Treated wastewater/stormwater back into the Fenholloway.",src:{t:"Yahoo / AP",u:"https://www.yahoo.com/news/us/articles/florida-draft-permit-let-mill-164700302.html"}},
+  {id:"C04",track:"Current 2026 status",s:"v",tier:"2",claim:"FDEP added monitoring after public comment.",stat:"More frequent discharge monitoring; additional GW wells",note:"FDEP response to comments; public meeting held.",src:{t:"Perry Newspapers",u:"https://perrynewspapers.com/?p=52637"}},
+  {id:"K01",track:"Cancer data",s:"v",tier:"2",claim:"Union County ranks #1 in Florida for lung incidence.",stat:"Highest FL county rate — prison-population confounder",note:"Taylor is NOT the U.S. high; the prior thread retracted that.",src:{t:"American Lung Assn.",u:"https://www.lung.org/research/state-of-lung-cancer/states/florida"}},
+  {id:"K02",track:"Cancer data",s:"d",tier:"3",claim:"Taylor County lung & bronchus incidence, rank 2 in Florida.",stat:"65.0 / 100k — appears as LATE-STAGE, not all-stages",note:"Comparators FL/US 53.3 are all-stages. Late-vs-all-stages mismatch overstates the excess. Re-pull all-stages.",src:{t:"State Cancer Profiles (all-stages)",u:"https://statecancerprofiles.cancer.gov/incidencerates/index.php?stateFIPS=12&areatype=county&cancer=047&stage=999&race=00&sex=0&age=001&year=0&type=incd&sortVariableName=rate&sortOrder=desc"}},
+  {id:"K03",track:"Cancer data",s:"u",tier:"3",claim:"Female lung & bronchus incidence elevated.",stat:"49.0 / 100k vs ~30 FL / ~30 U.S.",note:"Also surfaced with a late-stage context — re-pull sex-specific, all-stages.",src:{t:"State Cancer Profiles",u:"https://statecancerprofiles.cancer.gov/"}},
+  {id:"K04",track:"Cancer data",s:"v",tier:"2",claim:"Cancer registry has a built-in reporting lag.",stat:"Complete file ~2 yrs after year-end; reporting within ~6 mo",note:"Do not fabricate a “2026 rate.” Use the newest complete year and label coverage.",src:{t:"FL Health CHARTS",u:"https://www.flhealthcharts.gov/ChartsDashboards/rdPage.aspx?rdReport=NonVitalInd.Dataviewer&cid=446"}},
+  {id:"K05",track:"Cancer data",s:"n",tier:"—",claim:"“Young girls getting breast cancer” cluster.",stat:"Not measurable from public county rates",note:"Small-county suppression (1–9 unpublished). Needs an FCDS case-level request with defined age bands (20–29/30–39/40–49).",src:{t:"FL Health CHARTS: Breast",u:"https://www.flhealthcharts.gov/ChartsDashboards/rdPage.aspx?rdReport=NonVitalInd.Dataviewer&cid=0448"}},
+  {id:"K06",track:"Cancer data",s:"v",tier:"1",claim:"Confounder — the county is very small.",stat:"Population ~21,796 (2020 Census)",note:"Drives rate instability and subgroup suppression. Cuts both ways: no “significant cluster” ≠ no harm, but anecdote ≠ cluster.",src:{t:"Census / Wikipedia",u:"https://en.wikipedia.org/wiki/Taylor_County,_Florida"}},
+  {id:"K07",track:"Cancer data",s:"u",tier:"2",claim:"Confounder — smoking drives lung cancer.",stat:"Florida adult smoking ~11.3% (2022); Taylor rate TBP",note:"Rural lung excess is often smoking-driven; must adjust before any environmental attribution.",src:{t:"County Health Rankings (FL)",u:"https://www.countyhealthrankings.org/health-data/florida"}},
+  {id:"K08",track:"Cancer data",s:"u",tier:"2",claim:"No known formal cancer-cluster investigation for Taylor County.",stat:"None found; FDOH “Cancer Concerns” process exists",note:"Filing a request creates an official record and can compel a state review.",src:{t:"FDOH Cancer Concerns",u:"https://www.floridahealth.gov/statistics-data/cancer-research/cancer-concerns/"}},
+  {id:"W01",track:"Perry drinking water",s:"v",tier:"2",claim:"Perry water source.",stat:"Three wells, Floridan Aquifer",note:"Reported in the CCR. Obtain the CCR + source-well data as Tier-1.",src:{t:"City of Perry 2024 CCR",u:"https://www.cityofperry.net/media/866"}},
+  {id:"W02",track:"Perry drinking water",s:"v",tier:"2",claim:"Perry TTHM drinking-water violation.",stat:"In violation Q1 2024 at 700 Charles Hendry Road",note:"EPA/EWG flag a “serious violation” for the period.",src:{t:"EWG Tap Water (FL2620208)",u:"https://www.ewg.org/tapwater/system.php?pws=FL2620208"}},
+  {id:"W03",track:"Perry drinking water",s:"u",tier:"3",claim:"Perry exact contaminant levels.",stat:"TTHM 83.01 ppb (MCL 80) · HAA5 49.64 · Mn 0.35 ppm (MCL 0.05) · As 0.63 · Cr 0.59",note:"Consistent with a real CCR, but exact decimals not fetched here. Pull the CCR PDF.",src:{t:"City of Perry 2024 CCR",u:"https://www.cityofperry.net/media/866"}},
+  {id:"W04",track:"Perry drinking water",s:"d",tier:"2",claim:"Do the TTHMs implicate the mill?",stat:"No — TTHMs are chlorination disinfection byproducts",note:"A water-treatment issue, not pulp-mill effluent. No mill-to-well pathway shown. Manganese is also natural in the aquifer.",src:{t:"EWG Tap Water (FL2620208)",u:"https://www.ewg.org/tapwater/system.php?pws=FL2620208"}},
+  {id:"X01",track:"Causation",s:"n",tier:"—",claim:"Did the mill cause Taylor County’s cancer burden?",stat:"Not demonstrated",note:"The exposure chain source → pathway → dose → cancer is not shown. Needs expert opinion.",src:null},
+  {id:"X02",track:"Causation",s:"n",tier:"—",claim:"Did mill contaminants reach Perry’s drinking water?",stat:"Not demonstrated",note:"The mill → groundwater → well → population pathway is unproven; a research target, not a finding.",src:null},
+  {id:"X03",track:"Litigation",s:"u",tier:"2",claim:"Prior federal class action over well water was DISMISSED.",stat:"100+ residents; dismissed for failure to prove damages",note:"The single most important strategic fact. Pull the docket/opinion/citation; cure damages + causation.",src:{t:"Tampa Bay Times (1997)",u:"https://www.tampabay.com/archive/1997/01/12/gulf-may-get-river-s-waste/"}},
+  {id:"X04",track:"Litigation",s:"u",tier:"2",claim:"Operator reportedly resisted EPA testing (2000).",stat:"“Pulp mill polluter blocks EPA test results”",note:"Potential spoliation/concealment theme. Authenticate.",src:{t:"Tampa Bay Times (2000)",u:"https://www.tampabay.com/archive/2000/10/19/pulp-mill-polluter-blocks-epa-test-results/"}}
+];
+const ENVTL=[
+  {yr:"1947",ti:"Fenholloway legally sacrificed",de:"Florida designates the river Class V (industrial use) — the least-stringent standard — granting the right to discharge industrial waste into it and the Gulf."},
+  {yr:"1954",ti:"Mill opens (Procter & Gamble)",de:"Pulp mill begins operating; up to ~50 million gallons/day of waste discharged into the river."},
+  {yr:"1989–1990",ti:"Dioxin & the fish advisory",de:"EPA sends dioxin-in-fish data to Florida (Feb 1989); the state delays ~18 months; Sept 1990 EPA urges a public warning. Largemouth-bass advisory: DO NOT EAT. A 1990 EPA study finds river dioxin ~1,900× standard."},
+  {yr:"1995",ti:"FDEP agreement → relocate discharge",de:"Company agrees to process changes to cut effluent color and to relocate the wastewater discharge point in the river."},
+  {yr:"2003",ti:"Pipeline chosen over process cleanup",de:"Buckeye rejects government/NGO-backed cleanup (oxygen delignification, wetlands treatment) and insists on a pipeline discharging to the Gulf."},
+  {yr:"2013–2020",ti:"Georgia-Pacific builds the pipeline",de:"GP buys the mill (2013), invests $300M+, and completes the ~15-mile Fenholloway Water Quality Project pipeline in Sept 2020, bypassing most of the river."},
+  {yr:"2023",ti:"Mill closes",de:"Closure announced Sept 2023 (weeks after Hurricane Idalia); production ceases ~Nov 17, 2023 after 69 years; equipment air-gapped by Dec 31, 2024."},
+  {yr:"2025–2026",ti:"Pipeline lost → back to the river",de:"After a legal/easement dispute GP is barred from the pipeline. A Jan 2026 FDEP draft permit would allow up to 12 MGD discharged back at the original mill-site location; wastewater treatment + groundwater monitoring remain active; FDEP adds monitoring after public comment."}
+];
+const CHEM=[
+  {c:"Dioxins / furans",f:"Historic (chlorine bleaching)",e:"River — 1990 EPA ~1,900× std",k:"Established for some cancers",x:"Not established (no dose/pathway-to-population)",xs:"n"},
+  {c:"TTHMs / HAA5",f:"Water system (disinfection)",e:"2024 Perry violation (Q1)",k:"Some risk with long-term exposure",x:"Municipal exposure documented — NOT mill-related",xs:"d"},
+  {c:"PFAS",f:"Investigate",e:"Investigate",k:"Certain PFAS associated",x:"Must test (UCMR / state data)",xs:"n"},
+  {c:"Metals (Mn, As, Cr)",f:"Investigate",e:"Detected in water (levels TBV)",k:"Depends on species / level",x:"Pathway not established",xs:"n"}
+];
+const PROVEN=[
+  "A major pulp mill discharged dioxin-bearing waste into a legally-sacrificed Class-V river for decades.",
+  "An official “DO NOT EAT” fish advisory documents a concrete human-exposure route.",
+  "The site remains under active wastewater/groundwater regulation, with a live 2026 permit fight over resuming up-river discharge (up to 12 MGD).",
+  "Perry had a real, documented TTHM drinking-water violation in Q1 2024 (a disinfection-byproduct issue).",
+  "An elevated lung-cancer signal for Taylor County is plausible and worth rigorous, confounder-adjusted testing."
+];
+const UNPROVEN=[
+  "That the mill caused any cancer.",
+  "That mill contaminants reached Perry’s drinking water (the TTHM violation is a chlorination issue).",
+  "That there is a statistically defined “young breast-cancer cluster” (small-population power limits).",
+  "The exact all-stages Taylor lung rate, the exact Perry CCR figures, the current permit ID, the Title V revocation date, and the identity/type of the “newer drain duct.”"
+];
+const SRC=[
+  {g:"Environmental history",items:[
+    {t:"Florida Phoenix — “FL sacrificed a river to get paper mill jobs”",u:"https://floridaphoenix.com/2021/01/07/fl-sacrificed-a-river-to-get-paper-mill-jobs-the-deal-really-stunk/"},
+    {t:"Facing South — “The Forgotten River” (fish advisory; EPA 1989/1990 timeline)",u:"https://www.facingsouth.org/1991/12/forgotten-river"},
+    {t:"NRDC — “Buckeye Technologies to Fenholloway River: Drop Dead” (2003)",u:"https://www.nrdc.org/press-releases/buckeye-technologies-fenholloway-river-drop-dead"},
+    {t:"EJAtlas — P&G/Buckeye Fenholloway pollution",u:"https://ejatlas.org/conflict/procter-and-gambles-buckeye-paper-mill-pollutes-the-fenholloway-river-in-taylor-county-florida"},
+    {t:"Tampa Bay Times (1995) — paper mills clean up",u:"https://www.tampabay.com/archive/1995/11/26/state-s-paper-mills-clean-up-environmentalists-want-more/"},
+    {t:"Tampa Bay Times (2000) — polluter blocks EPA test results",u:"https://www.tampabay.com/archive/2000/10/19/pulp-mill-polluter-blocks-epa-test-results/"},
+    {t:"Tampa Bay Times (1997) — “Gulf may get river’s waste”",u:"https://www.tampabay.com/archive/1997/01/12/gulf-may-get-river-s-waste/"},
+    {t:"Wikipedia — Fenholloway River",u:"https://en.wikipedia.org/wiki/Fenholloway_River"}
+  ]},
+  {g:"Mill closure & current permit",items:[
+    {t:"Georgia-Pacific — closure announcement",u:"https://news.gp.com/2023/09/georgia-pacific-to-close-foley-cellulose-facility"},
+    {t:"PaperAge — GP closing Foley mill",u:"https://www.paperage.com/2023news/09-20-2023georgia-pacific-closing-foley-mill.html"},
+    {t:"Florida Trib (Jun 2026) — cleaned-up river could be dumped in again",u:"https://floridatrib.org/2026/06/23/floridas-most-polluted-river-cleaned-up-a-company-could-dump-wastewater-into-it-again/"},
+    {t:"Yahoo/AP — draft permit, 12 MGD",u:"https://www.yahoo.com/news/us/articles/florida-draft-permit-let-mill-164700302.html"},
+    {t:"Perry Newspapers — draft permit to move discharge",u:"https://perrynewspapers.com/?p=50856"},
+    {t:"Perry Newspapers — GP prohibited from pipeline",u:"https://perrynewspapers.com/?p=50299"},
+    {t:"Perry Newspapers — FDEP responds to comments",u:"https://perrynewspapers.com/?p=52637"}
+  ]},
+  {g:"Cancer data — pull directly (Tier 1)",items:[
+    {t:"State Cancer Profiles",u:"https://statecancerprofiles.cancer.gov/"},
+    {t:"FL Health CHARTS — Lung Cancer Incidence",u:"https://www.flhealthcharts.gov/ChartsDashboards/rdPage.aspx?rdReport=NonVitalInd.Dataviewer&cid=446"},
+    {t:"FL Health CHARTS — Female Breast Cancer Incidence",u:"https://www.flhealthcharts.gov/ChartsDashboards/rdPage.aspx?rdReport=NonVitalInd.Dataviewer&cid=0448"},
+    {t:"Florida DOH — Cancer Concerns / cluster requests",u:"https://www.floridahealth.gov/statistics-data/cancer-research/cancer-concerns/"},
+    {t:"American Lung Assn. — State of Lung Cancer (Florida)",u:"https://www.lung.org/research/state-of-lung-cancer/states/florida"}
+  ]},
+  {g:"Water & compliance — pull directly (Tier 1)",items:[
+    {t:"City of Perry — 2024 Annual Drinking Water Quality Report",u:"https://www.cityofperry.net/media/866"},
+    {t:"EWG Tap Water Database — Perry (PWSID FL2620208)",u:"https://www.ewg.org/tapwater/system.php?pws=FL2620208"},
+    {t:"EPA ECHO — enforcement & compliance history",u:"https://echo.epa.gov"}
+  ]}
+];
+const SLAB={v:"✓ Verified",u:"~ Unverified",d:"≠ Disputed",n:"✕ Not established"};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+// Ledger
+const body=document.getElementById("ledgerBody");
+let lastTrack=null,html="";
+EV.forEach(e=>{
+  if(e.track!==lastTrack){html+=`<div class="track">${esc(e.track)}</div>`;lastTrack=e.track;}
+  const tier=e.tier&&e.tier!=="—"?`<span class="tier">TIER ${esc(e.tier)}</span>`:"";
+  const src=e.src?`<div class="src">Source: <a href="${esc(e.src.u)}" target="_blank" rel="noopener">${esc(e.src.t)}</a></div>`:"";
+  html+=`<div class="item" data-s="${e.s}" data-text="${esc((e.claim+' '+e.stat+' '+e.note).toLowerCase())}">
+    <div class="head"><span class="chip ${e.s}">${SLAB[e.s]}</span><span class="id">${esc(e.id)}</span>${tier}</div>
+    <div class="claim">${esc(e.claim)}</div>
+    <div class="stat">${esc(e.stat)}</div>
+    <div class="desc">${esc(e.note)}</div>${src}
+  </div>`;
+});
+body.innerHTML=html;
+// Timeline
+document.getElementById("envTL").innerHTML=ENVTL.map(e=>`<div class="ev"><div class="yr">${esc(e.yr)}</div><div class="ti">${esc(e.ti)}</div><div class="de">${esc(e.de)}</div></div>`).join("");
+// Chem
+document.getElementById("chemBody").innerHTML=CHEM.map(r=>`<tr><td><strong>${esc(r.c)}</strong></td><td>${esc(r.f)}</td><td>${esc(r.e)}</td><td>${esc(r.k)}</td><td><span class="chip ${r.xs}" style="margin-right:6px">${SLAB[r.xs].split(" ")[0]}</span>${esc(r.x)}</td></tr>`).join("");
+// Verdict
+document.getElementById("provenList").innerHTML=PROVEN.map(x=>`<li>${esc(x)}</li>`).join("");
+document.getElementById("unprovenList").innerHTML=UNPROVEN.map(x=>`<li>${esc(x)}</li>`).join("");
+// Sources
+document.getElementById("sourcesBody").innerHTML=SRC.map(g=>`<div class="sourcegrp"><h3>${esc(g.g)}</h3><ul>${g.items.map(i=>`<li><a href="${esc(i.u)}" target="_blank" rel="noopener">${esc(i.t)}</a></li>`).join("")}</ul></div>`).join("");
+// Filter + search
+let curF="all";
+const items=[...document.querySelectorAll(".item")];
+function apply(){
+  const q=document.getElementById("search").value.trim().toLowerCase();
+  items.forEach(it=>{
+    const okF=curF==="all"||it.dataset.s===curF;
+    const okQ=!q||it.dataset.text.includes(q);
+    it.classList.toggle("hidden",!(okF&&okQ));
+  });
+  // hide empty track headers
+  const heads=[...document.querySelectorAll(".track")];
+  heads.forEach(h=>{let n=h.nextElementSibling,any=false;while(n&&!n.classList.contains("track")){if(n.classList.contains("item")&&!n.classList.contains("hidden"))any=true;n=n.nextElementSibling;}h.classList.toggle("hidden",!any);});
+}
+document.querySelectorAll(".filterbtn").forEach(b=>b.addEventListener("click",()=>{
+  curF=b.dataset.f;document.querySelectorAll(".filterbtn").forEach(x=>x.setAttribute("aria-pressed",x===b));apply();
+}));
+document.getElementById("search").addEventListener("input",apply);
+// Theme toggle
+const root=document.documentElement;
+document.getElementById("themeToggle").addEventListener("click",()=>{
+  const cur=root.getAttribute("data-theme")|| (window.matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+  root.setAttribute("data-theme",cur==="dark"?"light":"dark");
+});
+</script>
+</body>
+</html>
