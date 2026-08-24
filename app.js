@@ -285,6 +285,11 @@ function resizeImageFile(file, cb) {
   };
   reader.readAsDataURL(file);
 }
+function syncCoverPhoto() {
+  const custom = (store.photos || {})['coverPhotoArea'];
+  const hero = document.getElementById('coverHeroImg');
+  if (hero && custom) hero.src = custom;
+}
 function setAreaPhoto(area, dataUrl, persist) {
   const img = area.querySelector('img');
   if (!img) return;
@@ -293,6 +298,8 @@ function setAreaPhoto(area, dataUrl, persist) {
   if (persist && area.id) {
     store.photos[area.id] = dataUrl;
     saveStore();
+    if (area.id === 'coverPhotoArea') syncCoverPhoto();
+    renderDashboard();
   }
 }
 function handlePhotoFile(area, file) {
@@ -437,7 +444,9 @@ function renderDashboard() {
   const name = store.coverName || '';
   const age = computeAge(store.coverDob);
   const photoKeys = Object.keys(store.photos || {});
-  const lastPhoto = photoKeys.length ? store.photos[photoKeys[photoKeys.length - 1]] : null;
+  const albumCount = (store.album || []).length;
+  const lastAlbum = albumCount ? store.album[albumCount - 1].photo : null;
+  const lastPhoto = lastAlbum || (photoKeys.length ? store.photos[photoKeys[photoKeys.length - 1]] : null);
   const done = MILESTONE_LIST.filter(m => store[m.key]);
   const next = MILESTONE_LIST.find(m => !store[m.key]);
   const g = (store.growthEntries || []).slice(-1)[0];
@@ -500,7 +509,7 @@ function renderDashboard() {
   // Photos count
   html += '<div class="tile" data-goto="photos">';
   html += '<div class="tile-label">Photos</div>';
-  html += '<div class="tile-stat">' + photoKeys.length + '</div>';
+  html += '<div class="tile-stat">' + (photoKeys.length + albumCount) + '</div>';
   html += '<div class="tile-sub">added so far</div>';
   html += '</div>';
 
@@ -573,7 +582,7 @@ function buildPhotoYearGrid() {
     card.className = 'milestone-card';
     card.innerHTML = '<div class="milestone-label">' + month + '</div>' +
       '<div class="milestone-photo-upload" id="yr-photo-' + idx + '">' +
-      '<div class="ms-placeholder"><img src="' + '' + '" alt=""></div>' +
+      '<div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="30" height="30"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div>' +
       '<img alt="Month ' + (idx+1) + ' photo">' +
       '<input type="file" accept="image/*" capture="environment">' +
       '</div>' +
@@ -587,6 +596,72 @@ function buildPhotoYearGrid() {
     }
   });
   bindPhotoUploads();
+}
+
+
+/* ── Extra photo album (unlimited) ── */
+function renderAlbum() {
+  const grid = document.getElementById('albumGrid');
+  if (!grid) return;
+  const list = store.album || [];
+  grid.innerHTML = '';
+  if (!list.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#a9a9b4;' +
+      'font-size:13px;font-weight:600;padding:8px 0 4px;">No extra photos yet — add as many as you like.</div>';
+  }
+  list.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'milestone-card';
+    card.innerHTML =
+      '<div class="milestone-photo-upload has-photo" style="cursor:default;">' +
+        '<img src="' + item.photo + '" alt="">' +
+      '</div>' +
+      '<input type="text" class="album-cap" data-id="' + item.id + '" value="' + escapeHtml(item.caption || '') +
+        '" placeholder="Add a caption…" autocomplete="off" style="margin-top:8px;">' +
+      '<button class="album-del" data-id="' + item.id + '" style="background:none;border:none;color:#c97b8a;' +
+        'font-size:12px;font-weight:700;cursor:pointer;margin-top:8px;padding:0;">Remove</button>';
+    grid.appendChild(card);
+  });
+  grid.querySelectorAll('.album-cap').forEach(inp => {
+    inp.addEventListener('input', () => {
+      const it = (store.album || []).find(a => String(a.id) === inp.dataset.id);
+      if (it) { it.caption = inp.value; saveStore(); }
+    });
+  });
+  grid.querySelectorAll('.album-del').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!confirm('Remove this photo?')) return;
+      store.album = (store.album || []).filter(a => String(a.id) !== btn.dataset.id);
+      saveStore(); renderAlbum(); renderDashboard();
+    });
+  });
+  const count = document.getElementById('albumCount');
+  if (count) count.textContent = list.length ? list.length + (list.length === 1 ? ' photo' : ' photos') : '';
+}
+
+function bindAlbum() {
+  const btn = document.getElementById('albumAddBtn');
+  const input = document.getElementById('albumInput');
+  if (!btn || !input) return;
+  btn.addEventListener('click', () => input.click());
+  input.addEventListener('change', () => {
+    const files = Array.from(input.files || []);
+    if (!files.length) return;
+    if (!store.album) store.album = [];
+    let pending = files.length;
+    files.forEach(f => {
+      if (!f.type || f.type.indexOf('image') !== 0) { if (--pending === 0) finish(); return; }
+      resizeImageFile(f, dataUrl => {
+        store.album.push({ id: Date.now() + Math.random(), photo: dataUrl, caption: '' });
+        if (--pending === 0) finish();
+      });
+    });
+    function finish() {
+      saveStore(); renderAlbum(); renderDashboard();
+      showToast(files.length > 1 ? files.length + ' photos added' : 'Photo added');
+    }
+    input.value = '';
+  });
 }
 
 /* ── Memories ── */
@@ -604,13 +679,19 @@ function renderMemories() {
     card.className = 'memory-card';
     card.style.width = '100%';
     card.innerHTML =
-      '<div class="memory-title">' + escapeHtml(mem.title || 'Memory') +
+      '<div class="memory-photo-upload milestone-photo-upload" id="mem-photo-' + mem.id + '">' +
+        '<div class="ms-placeholder">' + '<svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="30" height="30"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg>' + '</div>' +
+        '<img alt="Memory photo">' +
+        '<input type="file" accept="image/*">' +
+      '</div>' +
+      '<div class="memory-title" style="margin-top:12px;">' + escapeHtml(mem.title || 'Memory') +
         (mem.date ? ' · ' + escapeHtml(formatDateDisplay(mem.date)) : '') + '</div>' +
       '<div style="font-size:14px;line-height:1.6;color:#333;white-space:pre-wrap;">' + escapeHtml(mem.text || '') + '</div>' +
       '<button class="memory-delete" data-mem-id="' + mem.id + '" aria-label="Delete memory" ' +
         'style="background:none;border:none;color:#c97b8a;font-size:12px;font-weight:700;cursor:pointer;margin-top:10px;padding:0;">Remove</button>';
     grid.appendChild(card);
   });
+  bindPhotoUploads();
   grid.querySelectorAll('.memory-delete').forEach(btn => {
     btn.addEventListener('click', () => {
       if (!confirm('Remove this memory?')) return;
@@ -664,9 +745,12 @@ document.addEventListener('DOMContentLoaded', function() {
   bindCoverLock();
   bindGrowthForm();
   buildPhotoYearGrid();
+  renderAlbum();
+  bindAlbum();
   buildGrowthChart();
   bindMemories();
   bindPhotoUploads();
+  syncCoverPhoto();
 
   // Restore last tab
   renderDashboard();

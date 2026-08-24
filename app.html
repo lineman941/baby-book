@@ -325,8 +325,13 @@ img.tab-icon {
 <!-- COVER PAGE -->
 <section class="page-section" id="section-cover">
   <div class="cover-page">
-    <img src="assets/cover-hero.jpg" alt="Our Little Miracle cover" class="cover-hero-img">
+    <img src="assets/cover-hero.jpg" alt="Our Little Miracle cover" class="cover-hero-img" id="coverHeroImg">
     <div class="cover-content">
+      <div class="photo-upload-area" id="coverPhotoArea" style="margin-bottom:16px;padding:14px 12px;">
+        <div class="upload-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="30" height="30" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg><div style="margin-top:6px;">Use your own cover photo</div></div>
+        <img alt="Your cover photo">
+        <input type="file" accept="image/*">
+      </div>
       <div class="cover-zone" id="coverZone">
         <div class="cover-edit-zone">
           <h2 class="cover-headline">Our Little Miracle</h2>
@@ -481,19 +486,33 @@ img.tab-icon {
 <section class="page-section" id="section-photos">
   <div class="section-header"><h1 class="section-title">First Year</h1><p class="section-subtitle">A photo for every month</p></div>
   <div id="photoYearGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 20px;max-width:640px;margin:0 auto;"></div>
+
+  <div class="section-header" style="padding:8px 20px 12px;">
+    <h1 class="section-title" style="font-size:clamp(19px,4.4vw,24px);">More Photos</h1>
+    <p class="section-subtitle">Add as many as you like <span id="albumCount" style="font-weight:800;color:var(--ta);"></span></p>
+  </div>
+  <div style="padding:0 16px 14px;max-width:640px;margin:0 auto;">
+    <button id="albumAddBtn" class="btn-3d btn-3d-primary btn-full">Add Photos</button>
+    <input type="file" id="albumInput" accept="image/*" multiple style="display:none;">
+  </div>
+  <div id="albumGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 24px;max-width:640px;margin:0 auto;"></div>
 </section>
 
 <!-- FAMILY -->
 <section class="page-section" id="section-family">
   <div class="section-header"><h1 class="section-title">Family Tree</h1><p class="section-subtitle">The people who love you</p></div>
   <div class="parents-grid">
-    <div class="field-card"><label>Mother</label><input type="text" id="momName" placeholder="Full name" autocomplete="off"><input type="text" id="momFact" placeholder="Fun fact about Mom" autocomplete="off" style="margin-top:8px;"></div>
-    <div class="field-card"><label>Father</label><input type="text" id="dadName" placeholder="Full name" autocomplete="off"><input type="text" id="dadFact" placeholder="Fun fact about Dad" autocomplete="off" style="margin-top:8px;"></div>
+    <div class="field-card"><label>Mother</label><input type="text" id="momName" placeholder="Full name" autocomplete="off"><input type="text" id="momFact" placeholder="Fun fact about Mom" autocomplete="off" style="margin-top:8px;">
+      <div class="milestone-photo-upload" id="mom-photo" style="margin-top:10px;"><div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="30" height="30" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div><img alt="Photo of Mom"><input type="file" accept="image/*"></div></div>
+    <div class="field-card"><label>Father</label><input type="text" id="dadName" placeholder="Full name" autocomplete="off"><input type="text" id="dadFact" placeholder="Fun fact about Dad" autocomplete="off" style="margin-top:8px;">
+      <div class="milestone-photo-upload" id="dad-photo" style="margin-top:10px;"><div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="30" height="30" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div><img alt="Photo of Dad"><input type="file" accept="image/*"></div></div>
     <div class="field-card"><label>Grandparent 1</label><input type="text" id="gp1Name" placeholder="Full name" autocomplete="off"></div>
     <div class="field-card"><label>Grandparent 2</label><input type="text" id="gp2Name" placeholder="Full name" autocomplete="off"></div>
     <div class="field-card"><label>Grandparent 3</label><input type="text" id="gp3Name" placeholder="Full name" autocomplete="off"></div>
     <div class="field-card"><label>Grandparent 4</label><input type="text" id="gp4Name" placeholder="Full name" autocomplete="off"></div>
   </div>
+  <div class="field-card" style="margin:0 16px 14px;"><label>Family Photo</label>
+    <div class="photo-upload-area" id="familyPhotoArea"><div class="upload-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="30" height="30" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg><div style="margin-top:6px;">Tap to add a family photo</div></div><img alt="Family photo"><input type="file" accept="image/*"></div></div>
   <div class="field-card" style="margin:0 16px 20px;"><label for="siblingsNote">Siblings</label><textarea id="siblingsNote" placeholder="Names and ages of siblings…" rows="3" autocomplete="off"></textarea></div>
 </section>
 

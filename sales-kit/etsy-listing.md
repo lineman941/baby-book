@@ -7,7 +7,7 @@
 
 ## LISTING TITLE (max 140 chars)
 
-Digital Baby Journal | Editable Baby Book | Phone Friendly | Drag Drop Photos | 5 Color Themes | Instant Download
+Digital Baby Journal | Editable Baby Book | Live Age Counter | Phone Friendly | Add Your Photos | 5 Themes | Instant Download
 
 ## PRICE
 
@@ -30,6 +30,12 @@ This is a beautiful, editable digital baby journal that lives right in your brow
 WHAT'S INCLUDED
 ———————————————————————
 
+• Unlimited Photo Album — add as many extra photos as you like, each with its own caption
+• Photos Everywhere — your own cover photo, birth photo, one per milestone, one per month of year one, Mom & Dad, a family photo, and one on every memory
+• Live Age Counter — the home page always shows how old they are today ("3 months, 12 days old")
+• At-a-Glance Home Screen — milestones logged, latest photo, newest growth entry and memory count in one view
+• Real Page-Turn — pages turn like a book, and you can swipe left or right to move through it
+• Soft Watercolor Pages — gentle hand-painted backgrounds (moons, footprints, balloons, ABC blocks)
 • Cover Page — baby's name and birth date in a hand-lettered style
 • Birth Story — date, time, weight, length, hospital, your full story + a birth photo
 • Milestone Pages — first smile, first crawl, first tooth, first steps, first word, first solid food, sleeping through the night, favorite toy — each with date, notes, and a photo
@@ -40,7 +46,6 @@ WHAT'S INCLUDED
 • Memories — add unlimited memory cards for anything you never want to forget
 • 5 Color Themes — Teal Dream, Rose Gold, Sage, Lavender, Classic Cream
 • Font Chooser — 4 font styles to match your vibe
-• Add Photos from Camera Roll — tap or drag & drop; photos are saved with your book
 • Auto-Saves on Your Device — every keystroke is kept, privately, on your own phone
 • Backup & Restore — export your whole book (photos included) to a single file
 • Print to PDF — beautiful on any home printer
