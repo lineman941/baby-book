@@ -458,6 +458,15 @@ textarea { resize:vertical;min-height:90px;line-height:1.6; }
   transition:transform .2s cubic-bezier(.34,1.56,.64,1),filter .2s;
   filter:grayscale(1) opacity(.45);
 }
+svg.tab-icon {
+  width:22px;height:22px;display:block;
+  filter:none;color:#b6b6c0;opacity:.9;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1),color .2s,opacity .2s;
+}
+.tab-btn.active svg.tab-icon {
+  color:var(--ta,#1aafaf);opacity:1;
+  transform:scale(1.16) translateY(-1px);
+}
 .tab-label {
   font-size:8px;font-weight:800;text-transform:uppercase;
   letter-spacing:.01em;color:#bbb;transition:color .2s;

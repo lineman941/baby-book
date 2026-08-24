@@ -25,6 +25,9 @@ IMG_QUALITY = 72
 
 
 def compress_image_b64(path: Path) -> str:
+    if path.suffix.lower() == ".png":
+        # already optimised transparent overlay - embed as-is to keep alpha
+        return "data:image/png;base64," + base64.b64encode(path.read_bytes()).decode()
     img = Image.open(path).convert("RGB")
     if max(img.size) > IMG_MAX_DIM:
         img.thumbnail((IMG_MAX_DIM, IMG_MAX_DIM), Image.LANCZOS)
@@ -55,7 +58,7 @@ def main() -> None:
     html = re.sub(r"<!-- DEMO-ONLY-START -->.*?<!-- DEMO-ONLY-END -->", "", html, flags=re.S)
 
     # Collect every referenced asset image
-    assets = set(re.findall(r"assets/([\w.-]+\.jpg)", html))
+    assets = set(re.findall(r"assets/([\w.-]+\.(?:jpg|png))", html))
     asset_map = {}
     for name in sorted(assets):
         asset_map[name] = compress_image_b64(ROOT / "assets" / name)
@@ -63,6 +66,10 @@ def main() -> None:
 
     # <img src="assets/X"> → <img data-asset="X"> (filled in by bootstrap JS)
     html = re.sub(r'src="assets/([\w.-]+\.jpg)"', r'data-asset="\1"', html)
+    # CSS url('assets/X') -> inline data URI
+    for _name, _uri in asset_map.items():
+        html = html.replace("url('assets/" + _name + "')", "url('" + _uri + "')")
+
     # inline background-image styles → data-asset-bg
     html = re.sub(
         r'style="background-image:url\(\'assets/([\w.-]+\.jpg)\'\);"',
