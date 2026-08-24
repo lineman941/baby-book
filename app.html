@@ -123,6 +123,88 @@ img.tab-icon {
   opacity: .85;
 }
 
+
+/* ===== BENTO DASHBOARD ===== */
+.bento {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  padding: 0 16px 24px; max-width: 640px; margin: 0 auto;
+}
+.tile {
+  background: var(--tcard, rgba(255,255,255,.82));
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--tborder, rgba(94,231,231,.22));
+  border-radius: 22px; padding: 18px 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.05), 0 10px 34px rgba(0,0,0,.04),
+              inset 0 1px 0 rgba(255,255,255,.85);
+  position: relative; overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.tile:active { transform: scale(.98); }
+.tile.wide { grid-column: 1 / -1; }
+.tile-label {
+  font-size: 10px; font-weight: 800; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ta, #1aafaf); margin-bottom: 8px;
+}
+.tile-big {
+  font-size: clamp(26px, 8vw, 38px); font-weight: 900;
+  color: #1a1a2e; line-height: 1.05; letter-spacing: -.02em;
+}
+.tile-sub { font-size: 12.5px; color: #8a8a95; margin-top: 5px; font-weight: 600; }
+.tile-stat { font-size: 30px; font-weight: 900; color: var(--ta, #1aafaf); line-height: 1; }
+.hero-tile {
+  grid-column: 1 / -1; text-align: center; padding: 26px 20px 24px;
+  background: linear-gradient(150deg, var(--tcard, rgba(255,255,255,.9)) 0%, var(--tbg, #e4f8f8) 100%);
+}
+.hero-name {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(34px, 11vw, 52px); color: var(--ta, #1aafaf);
+  line-height: 1.05; text-shadow: 0 2px 14px var(--tglow, rgba(94,231,231,.35));
+}
+.hero-age { font-size: 15px; font-weight: 800; color: #45454f; margin-top: 8px; }
+.hero-dob { font-size: 12px; color: #9a9aa4; margin-top: 3px; font-weight: 600; }
+.tile-photo { padding: 0; min-height: 132px; display: flex; }
+.tile-photo img { width: 100%; height: 100%; min-height: 132px; object-fit: cover; display: block; }
+.tile-photo .empty {
+  width: 100%; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; color: #b9b9c2; font-size: 12px; font-weight: 700; gap: 6px;
+}
+.progress-track {
+  height: 8px; border-radius: 8px; background: rgba(0,0,0,.07);
+  overflow: hidden; margin-top: 10px;
+}
+.progress-fill {
+  height: 100%; border-radius: 8px;
+  background: linear-gradient(90deg, var(--tp, #5ee7e7), var(--ta, #1aafaf));
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+.tile-cta {
+  margin-top: 12px; font-size: 12.5px; font-weight: 800;
+  color: var(--ta, #1aafaf); display: inline-flex; align-items: center; gap: 5px;
+}
+
+/* ===== PAGE FLIP ===== */
+.journal-page { perspective: 1600px; perspective-origin: left center; }
+.page-section.flipping-out {
+  animation: pgOut .34s cubic-bezier(.42,0,.58,1) both;
+  transform-origin: left center; z-index: 40;
+  box-shadow: 12px 0 36px rgba(0,0,0,.18);
+}
+.page-section.flipping-in {
+  animation: pgIn .34s cubic-bezier(.42,0,.58,1) .14s both;
+  transform-origin: left center; z-index: 30;
+}
+@keyframes pgOut {
+  from { transform: rotateY(0deg); opacity: 1; }
+  to   { transform: rotateY(-88deg); opacity: 0; }
+}
+@keyframes pgIn {
+  from { transform: rotateY(70deg); opacity: 0; }
+  to   { transform: rotateY(0deg); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-section.flipping-out, .page-section.flipping-in { animation: none; }
+}
+
 /* Print — flatten fixed sections into one flowing document */
 @media print {
   html, body { overflow: visible !important; height: auto !important; background: #fff !important; }
@@ -213,8 +295,18 @@ img.tab-icon {
 </div>
 <!-- DEMO-ONLY-END -->
 
+
+<!-- HOME DASHBOARD -->
+<section class="page-section active" id="section-home">
+  <div class="section-header" style="padding-bottom:12px;">
+    <h1 class="section-title">Your Little One</h1>
+    <p class="section-subtitle" id="homeGreeting">Every first, in one place</p>
+  </div>
+  <div class="bento" id="bentoGrid"></div>
+</section>
+
 <!-- COVER PAGE -->
-<section class="page-section active" id="section-cover">
+<section class="page-section" id="section-cover">
   <div class="cover-page">
     <img src="assets/cover-hero.jpg" alt="Our Little Miracle cover" class="cover-hero-img">
     <div class="cover-content">
@@ -405,8 +497,8 @@ img.tab-icon {
 
 <!-- BOTTOM NAV -->
 <nav class="tab-nav" role="navigation" aria-label="Main navigation">
-  <button class="tab-btn active" data-tab="cover" aria-label="Cover">
-    <img src="assets/cover-hero.jpg" alt="" class="tab-icon"><span class="tab-label">Cover</span>
+  <button class="tab-btn active" data-tab="home" aria-label="Home">
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;border-radius:0;"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><span class="tab-label">Home</span>
   </button>
   <button class="tab-btn" data-tab="birth" aria-label="Birth">
     <img src="assets/illus-welcome.jpg" alt="" class="tab-icon"><span class="tab-label">Birth</span>
@@ -433,5 +525,24 @@ img.tab-icon {
 
 </div><!-- end journal-page -->
 <script src="app.js"></script>
+<script>
+/* Safety net: app.html is the SOURCE view and needs its sibling files
+   (its stylesheet, script, font and asset folders). If opened alone, say so
+   plainly instead of showing a dead page. The packaged product
+   (OurLittleMiracle.html) inlines everything, so this never fires there. */
+window.addEventListener('load', function () {
+  setTimeout(function () {
+    if (typeof showTab === 'function') return;
+    document.body.innerHTML =
+      '<div style="font-family:-apple-system,Segoe UI,sans-serif;max-width:520px;margin:14vh auto;padding:32px 26px;' +
+      'background:#fff;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.12);text-align:center;color:#1a1a2e;">' +
+      '<div style="font-size:19px;font-weight:800;margin-bottom:10px;">This is not the finished book</div>' +
+      '<div style="font-size:14px;line-height:1.6;color:#555;">You opened <b>app.html</b>, which only works alongside its ' +
+      'other project files.<br><br>Open <b>OurLittleMiracle.html</b> instead — that one is the complete product and works ' +
+      'anywhere on its own.</div></div>';
+    document.body.style.background = '#f5ede6';
+  }, 400);
+});
+</script>
 </body>
 </html>

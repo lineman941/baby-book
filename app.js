@@ -64,15 +64,74 @@ function applyFont(f) {
 }
 
 /* ── Tabs ── */
-function showTab(name) {
-  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+let flipTimer = null;
+const TAB_ORDER = ['home','cover','birth','milestones','letters','growth','photos','family','memories'];
+
+function clearFlip(el) {
+  if (!el) return;
+  el.classList.remove('flipping-out', 'flipping-in');
+}
+
+function showTab(name, opts) {
+  const target = document.getElementById('section-' + name);
+  if (!target) return;
+  const current = document.querySelector('.page-section.active');
+  const animate = !(opts && opts.instant) && current && current !== target;
+
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  const sec = document.getElementById('section-' + name);
-  if (sec) sec.classList.add('active');
   const btn = document.querySelector('.tab-btn[data-tab="' + name + '"]');
   if (btn) btn.classList.add('active');
+
+  if (name === 'home') renderDashboard();
+
+  if (animate) {
+    const out = current;
+    // settle any turn still in flight so rapid taps can't strand a page
+    clearTimeout(flipTimer);
+    document.querySelectorAll('.page-section').forEach(el => {
+      if (el !== out && el !== target) el.classList.remove('active');
+      clearFlip(el);
+    });
+    out.classList.add('flipping-out');
+    target.classList.add('active', 'flipping-in');
+    target.scrollTop = 0;
+    flipTimer = setTimeout(() => {
+      out.classList.remove('active');
+      clearFlip(out); clearFlip(target);
+    }, 500);
+  } else {
+    clearTimeout(flipTimer);
+    document.querySelectorAll('.page-section').forEach(s => { s.classList.remove('active'); clearFlip(s); });
+    target.classList.add('active');
+    target.scrollTop = 0;
+  }
+
   store.lastTab = name;
   saveStore();
+}
+
+/* Swipe left/right to turn pages */
+function bindSwipe() {
+  let x0 = null, y0 = null, t0 = 0;
+  document.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) { x0 = null; return; }
+    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now();
+  }, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - x0, dy = t.clientY - y0;
+    x0 = null;
+    if (Date.now() - t0 > 600) return;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.8) return;
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+    const cur = store.lastTab || 'home';
+    let i = TAB_ORDER.indexOf(cur);
+    if (i < 0) i = 0;
+    const ni = dx < 0 ? Math.min(i + 1, TAB_ORDER.length - 1) : Math.max(i - 1, 0);
+    if (ni !== i) showTab(TAB_ORDER[ni]);
+  }, { passive: true });
 }
 
 /* ── Settings tray ── */
@@ -261,6 +320,199 @@ function bindPhotoUploads() {
   });
 }
 
+
+
+/* ── Liquid touch ripple + sparkle (theme-tinted, respects reduced-motion) ── */
+function initLiquidCanvas() {
+  const canvas = document.getElementById('liquid-canvas');
+  if (!canvas || !canvas.getContext) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ctx = canvas.getContext('2d');
+  let W = 0, H = 0, ripples = [], sparks = [], idle = 0, last = { x: 0, y: 0 };
+
+  function themeRGB() {
+    const v = getComputedStyle(document.documentElement)
+      .getPropertyValue('--tp').trim() || '#5ee7e7';
+    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(v);
+    return m ? [parseInt(m[1],16), parseInt(m[2],16), parseInt(m[3],16)] : [94,231,231];
+  }
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function addRipple(x, y, op, maxR, sp) {
+    if (ripples.length > 22) return;
+    ripples.push({ x, y, r: 0, maxR: maxR || 110 + Math.random() * 70,
+                   opacity: op || 0.16, speed: sp || 1.3 + Math.random() * 0.7 });
+  }
+  function addSparks(x, y, n) {
+    for (let i = 0; i < (n || 6); i++) {
+      const a = Math.random() * Math.PI * 2, d = 12 + Math.random() * 30;
+      sparks.push({ x: x + Math.cos(a) * 6, y: y + Math.sin(a) * 6,
+                    vx: Math.cos(a) * (0.5 + Math.random()), vy: Math.sin(a) * (0.5 + Math.random()) - 0.35,
+                    life: 1, size: 1.2 + Math.random() * 2.2, tw: Math.random() * 6.283 });
+    }
+  }
+  function touchAt(x, y) { addRipple(x, y, 0.22, 150, 2.0); addSparks(x, y, 7); }
+
+  document.addEventListener('pointerdown', e => touchAt(e.clientX, e.clientY), { passive: true });
+  document.addEventListener('pointermove', e => {
+    const dx = e.clientX - last.x, dy = e.clientY - last.y;
+    if (dx * dx + dy * dy > 400) { addRipple(e.clientX, e.clientY); last = { x: e.clientX, y: e.clientY }; }
+  }, { passive: true });
+  document.addEventListener('touchmove', e => {
+    const t = e.touches[0]; if (!t) return;
+    const dx = t.clientX - last.x, dy = t.clientY - last.y;
+    if (dx * dx + dy * dy > 900) { addRipple(t.clientX, t.clientY); last = { x: t.clientX, y: t.clientY }; }
+  }, { passive: true });
+
+  function ambient() { addRipple(W * (0.1 + Math.random() * 0.8), H * (0.1 + Math.random() * 0.8), 0.09, 70 + Math.random() * 50, 0.5); }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const [r, g, bl] = themeRGB();
+    ripples = ripples.filter(p => p.opacity > 0.005 && p.r < p.maxR * 1.4);
+    for (const p of ripples) {
+      p.r += p.speed; p.opacity *= 0.975;
+      const grad = ctx.createRadialGradient(p.x, p.y, p.r * 0.15, p.x, p.y, Math.max(p.r, 1));
+      grad.addColorStop(0, 'rgba(' + r + ',' + g + ',' + bl + ',0)');
+      grad.addColorStop(0.55, 'rgba(' + r + ',' + g + ',' + bl + ',' + (p.opacity * 0.85) + ')');
+      grad.addColorStop(1, 'rgba(' + r + ',' + g + ',' + bl + ',0)');
+      ctx.beginPath(); ctx.arc(p.x, p.y, Math.max(p.r, 1), 0, Math.PI * 2);
+      ctx.fillStyle = grad; ctx.fill();
+    }
+    sparks = sparks.filter(s => s.life > 0.02);
+    for (const s of sparks) {
+      s.x += s.vx; s.y += s.vy; s.vy += 0.012; s.life *= 0.955; s.tw += 0.35;
+      const tw = 0.55 + 0.45 * Math.sin(s.tw);
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.size * s.life * tw, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,' + (s.life * 0.85 * tw) + ')';
+      ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(' + r + ',' + g + ',' + bl + ',' + s.life + ')';
+      ctx.fill(); ctx.shadowBlur = 0;
+    }
+    if (++idle % 150 === 0) ambient();
+    requestAnimationFrame(draw);
+  }
+  for (let i = 0; i < 3; i++) setTimeout(ambient, i * 700);
+  draw();
+}
+
+/* ── Live age ── */
+function computeAge(dob) {
+  if (!dob) return null;
+  const b = new Date(dob + 'T00:00:00'), now = new Date();
+  if (isNaN(b) || b > now) return null;
+  let y = now.getFullYear() - b.getFullYear();
+  let m = now.getMonth() - b.getMonth();
+  let d = now.getDate() - b.getDate();
+  if (d < 0) { m--; const pm = new Date(now.getFullYear(), now.getMonth(), 0).getDate(); d += pm; }
+  if (m < 0) { y--; m += 12; }
+  const months = y * 12 + m;
+  const parts = [];
+  if (y > 0) parts.push(y + (y === 1 ? ' year' : ' years'));
+  if (m > 0) parts.push(m + (m === 1 ? ' month' : ' months'));
+  if (parts.length < 2 && d > 0) parts.push(d + (d === 1 ? ' day' : ' days'));
+  const totalDays = Math.floor((now - b) / 86400000);
+  return { text: parts.length ? parts.join(', ') + ' old' : 'Born today', months, totalDays };
+}
+
+/* ── Dashboard ── */
+const MILESTONE_LIST = [
+  { key: 'ms-smile-date', name: 'First Smile' },
+  { key: 'ms-roll-date',  name: 'First Crawl' },
+  { key: 'ms-tooth-date', name: 'First Tooth' },
+  { key: 'ms-steps-date', name: 'First Steps' },
+  { key: 'ms-sleep-date', name: 'Sleeping Through the Night' },
+  { key: 'ms-food-date',  name: 'First Solid Food' },
+  { key: 'ms-word-date',  name: 'First Word' },
+  { key: 'ms-toy-name',   name: 'Favorite Toy' },
+];
+
+function renderDashboard() {
+  const grid = document.getElementById('bentoGrid');
+  if (!grid) return;
+  const name = store.coverName || '';
+  const age = computeAge(store.coverDob);
+  const photoKeys = Object.keys(store.photos || {});
+  const lastPhoto = photoKeys.length ? store.photos[photoKeys[photoKeys.length - 1]] : null;
+  const done = MILESTONE_LIST.filter(m => store[m.key]);
+  const next = MILESTONE_LIST.find(m => !store[m.key]);
+  const g = (store.growthEntries || []).slice(-1)[0];
+  const memCount = (store.memories || []).length;
+  const pct = Math.round((done.length / MILESTONE_LIST.length) * 100);
+
+  const esc = escapeHtml;
+  let html = '';
+
+  // Hero tile
+  html += '<div class="tile hero-tile" data-goto="cover">';
+  if (name) {
+    html += '<div class="hero-name">' + esc(name) + '</div>';
+    if (age) {
+      html += '<div class="hero-age">' + esc(age.text) + '</div>';
+      html += '<div class="hero-dob">' + esc(formatDateDisplay(store.coverDob)) + ' &middot; day ' + age.totalDays + '</div>';
+      html += '<div class="tile-cta">Open the cover &rarr;</div>';
+    } else {
+      html += '<div class="hero-age">Add a birth date to see their age</div>';
+    }
+  } else {
+    html += '<div class="hero-name">Welcome</div>';
+    html += '<div class="hero-age">Start with your baby\'s name</div>';
+    html += '<div class="tile-cta" data-goto="cover">Open the cover &rarr;</div>';
+  }
+  html += '</div>';
+
+  // Latest photo
+  html += '<div class="tile tile-photo" data-goto="photos">';
+  html += lastPhoto ? '<img src="' + lastPhoto + '" alt="Latest photo">'
+                    : '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="#c8c8d0" stroke-width="1.5" width="30" height="30"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg><span>Add a photo</span></div>';
+  html += '</div>';
+
+  // Milestones progress
+  html += '<div class="tile" data-goto="milestones">';
+  html += '<div class="tile-label">Firsts</div>';
+  html += '<div class="tile-stat">' + done.length + '<span style="font-size:15px;color:#b0b0ba;font-weight:800;">/' + MILESTONE_LIST.length + '</span></div>';
+  html += '<div class="progress-track"><div class="progress-fill" style="width:' + pct + '%"></div></div>';
+  html += '<div class="tile-sub">' + (next ? 'Next: ' + esc(next.name) : 'All captured!') + '</div>';
+  html += '</div>';
+
+  // Growth
+  html += '<div class="tile" data-goto="growth">';
+  html += '<div class="tile-label">Growth</div>';
+  if (g) {
+    html += '<div class="tile-stat">' + esc(String(g.weight || '—')) + '<span style="font-size:14px;color:#b0b0ba;"> lbs</span></div>';
+    html += '<div class="tile-sub">' + esc(String(g.height || '—')) + ' in &middot; month ' + esc(String(g.age)) + '</div>';
+  } else {
+    html += '<div class="tile-stat" style="color:#c8c8d0;">—</div><div class="tile-sub">Log weight &amp; height</div>';
+  }
+  html += '</div>';
+
+  // Memories
+  html += '<div class="tile" data-goto="memories">';
+  html += '<div class="tile-label">Memories</div>';
+  html += '<div class="tile-stat">' + memCount + '</div>';
+  html += '<div class="tile-sub">' + (memCount ? 'moments saved' : 'Write your first') + '</div>';
+  html += '</div>';
+
+  // Photos count
+  html += '<div class="tile" data-goto="photos">';
+  html += '<div class="tile-label">Photos</div>';
+  html += '<div class="tile-stat">' + photoKeys.length + '</div>';
+  html += '<div class="tile-sub">added so far</div>';
+  html += '</div>';
+
+  grid.innerHTML = html;
+  grid.querySelectorAll('[data-goto]').forEach(el => {
+    el.addEventListener('click', () => showTab(el.dataset.goto));
+  });
+
+  const greet = document.getElementById('homeGreeting');
+  if (greet && name) greet.textContent = 'Every first, in one place';
+}
+
 /* ── Growth chart ── */
 function buildGrowthChart() {
   const canvas = document.getElementById('growthChart');
@@ -417,8 +669,10 @@ document.addEventListener('DOMContentLoaded', function() {
   bindPhotoUploads();
 
   // Restore last tab
-  if (store.lastTab) showTab(store.lastTab);
-  else showTab('cover');
+  renderDashboard();
+  bindSwipe();
+  initLiquidCanvas();
+  showTab(store.lastTab && document.getElementById('section-' + store.lastTab) ? store.lastTab : 'home', { instant: true });
 
   // Birth fields
   bindFields([
