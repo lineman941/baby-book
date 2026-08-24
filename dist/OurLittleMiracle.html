@@ -1175,10 +1175,15 @@ function loadStore() {
   if (!store.photos) store.photos = {};
   if (!store.memories) store.memories = [];
 }
+let warnedFull = false;
 function saveStore() {
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify(store));
     flashSave();
+    if (!warnedFull && getStorageInfo().pct >= 85) {
+      warnedFull = true;
+      showToast('Storage is nearly full — tap Back Up My Book');
+    }
   } catch(e) {
     showToast('Storage is full — use Backup, or remove a photo');
   }
@@ -1562,6 +1567,17 @@ function initLiquidCanvas() {
   draw();
 }
 
+
+/* ── Storage usage ── */
+const STORE_LIMIT_CHARS = 5000000; // ~5 million chars: the usual browser cap
+function getStorageInfo() {
+  let chars = 0;
+  try { chars = (localStorage.getItem(STORE_KEY) || '').length; } catch (e) {}
+  const pct = Math.max(0, Math.min(100, Math.round((chars / STORE_LIMIT_CHARS) * 1000) / 10));
+  const photoCount = Object.keys(store.photos || {}).length + (store.album || []).length;
+  return { chars, pct, mb: (chars / 1048576).toFixed(1), photoCount };
+}
+
 /* ── Live age ── */
 function computeAge(dob) {
   if (!dob) return null;
@@ -1668,7 +1684,28 @@ function renderDashboard() {
   html += '<div class="tile-sub">added so far</div>';
   html += '</div>';
 
+
+  // Storage + backup (wide tile) — keeps the safety net visible
+  const si = getStorageInfo();
+  const barColor = si.pct >= 85 ? '#e05252' : (si.pct >= 60 ? '#e8a33d' : '');
+  html += '<div class="tile wide">';
+  html += '<div class="tile-label">Storage &amp; Backup</div>';
+  html += '<div style="display:flex;align-items:baseline;gap:8px;">';
+  html += '<div class="tile-stat" style="font-size:24px;' + (barColor ? 'color:' + barColor + ';' : '') + '">' + si.pct + '%</div>';
+  html += '<div class="tile-sub" style="margin-top:0;">' + si.mb + ' MB used &middot; ' + si.photoCount + (si.photoCount === 1 ? ' photo' : ' photos') + '</div>';
+  html += '</div>';
+  html += '<div class="progress-track"><div class="progress-fill" style="width:' + Math.max(si.pct, 1) + '%;' +
+          (barColor ? 'background:' + barColor + ';' : '') + '"></div></div>';
+  html += '<div class="tile-sub" style="margin-bottom:10px;">' +
+          (si.pct >= 85 ? 'Almost full — back up, then remove a few photos.'
+           : si.pct >= 60 ? 'Filling up. Back up your book to be safe.'
+           : 'Your book is saved on this device only. Back it up now and then.') + '</div>';
+  html += '<button id="dashBackupBtn" class="btn-3d btn-3d-primary btn-full" style="font-size:14px;padding:11px 16px;">Back Up My Book</button>';
+  html += '</div>';
+
   grid.innerHTML = html;
+  const dashBk = document.getElementById('dashBackupBtn');
+  if (dashBk) dashBk.addEventListener('click', e => { e.stopPropagation(); exportBackup(); });
   grid.querySelectorAll('[data-goto]').forEach(el => {
     el.addEventListener('click', () => showTab(el.dataset.goto));
   });

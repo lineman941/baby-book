@@ -42,6 +42,7 @@ This is a beautiful, editable digital baby journal that lives right in your brow
 - Family Tree — parents, grandparents, siblings
 - Memories — add unlimited memory cards for anything you never want to forget
 - 5 Color Themes + 4 Font Styles
+- Storage Meter — the home page shows how full your phone storage is, so a backup is never a surprise
 - One-tap Backup & Restore — your whole book (photos included) in a single file
 - Print to PDF — beautiful on any home printer
 

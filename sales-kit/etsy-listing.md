@@ -47,6 +47,7 @@ WHAT'S INCLUDED
 • 5 Color Themes — Teal Dream, Rose Gold, Sage, Lavender, Classic Cream
 • Font Chooser — 4 font styles to match your vibe
 • Auto-Saves on Your Device — every keystroke is kept, privately, on your own phone
+• Storage Meter — the home page shows how full your phone storage is, so a backup is never a surprise
 • Backup & Restore — export your whole book (photos included) to a single file
 • Print to PDF — beautiful on any home printer
 
