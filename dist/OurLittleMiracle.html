@@ -820,6 +820,7 @@ img.tab-icon {
   .save-indicator, .toast, #liquid-canvas,
   .settings-btn, #addMemoryBtn, #memoryForm, .memory-delete,
   #coverSaveBtn, #coverEditBtn, #addGrowthBtn,
+  #dashBackupBtn, #albumAddBtn, .album-del,
   .upload-placeholder, .ms-placeholder,
   .photo-upload-area:not(.has-photo), .milestone-photo-upload:not(.has-photo) { display: none !important; }
   .journal-page { margin-left: 0 !important; }
@@ -1184,8 +1185,10 @@ function saveStore() {
       warnedFull = true;
       showToast('Storage is nearly full — tap Back Up My Book');
     }
+    return true;
   } catch(e) {
     showToast('Storage is full — use Backup, or remove a photo');
+    return false;
   }
 }
 function flashSave() {
@@ -1583,12 +1586,21 @@ function computeAge(dob) {
   if (!dob) return null;
   const b = new Date(dob + 'T00:00:00'), now = new Date();
   if (isNaN(b) || b > now) return null;
-  let y = now.getFullYear() - b.getFullYear();
-  let m = now.getMonth() - b.getMonth();
-  let d = now.getDate() - b.getDate();
-  if (d < 0) { m--; const pm = new Date(now.getFullYear(), now.getMonth(), 0).getDate(); d += pm; }
-  if (m < 0) { y--; m += 12; }
-  const months = y * 12 + m;
+  // Count whole months completed, then measure days from that anniversary.
+  // A plain day-borrow mis-reports births on days the previous month lacks
+  // (Jan 31 seen from Mar 1), so step to the anniversary date itself and
+  // clamp it into short months (Jan 31 + 1 month = Feb 28).
+  const annivAfter = n => {
+    const mo = b.getMonth() + n;
+    const lastDay = new Date(b.getFullYear(), mo + 1, 0).getDate();
+    return new Date(b.getFullYear(), mo, Math.min(b.getDate(), lastDay));
+  };
+  let months = (now.getFullYear() - b.getFullYear()) * 12 + (now.getMonth() - b.getMonth());
+  if (annivAfter(months) > now) months--;
+  if (months < 0) months = 0;
+  const d = Math.max(0, Math.round((now - annivAfter(months)) / 86400000));
+  const y = Math.floor(months / 12);
+  const m = months % 12;
   const parts = [];
   if (y > 0) parts.push(y + (y === 1 ? ' year' : ' years'));
   if (m > 0) parts.push(m + (m === 1 ? ' month' : ' months'));
@@ -1840,6 +1852,7 @@ function bindAlbum() {
     const files = Array.from(input.files || []);
     if (!files.length) return;
     if (!store.album) store.album = [];
+    const albumBefore = store.album.slice();
     let pending = files.length;
     files.forEach(f => {
       if (!f.type || f.type.indexOf('image') !== 0) { if (--pending === 0) finish(); return; }
@@ -1849,8 +1862,17 @@ function bindAlbum() {
       });
     });
     function finish() {
-      saveStore(); renderAlbum(); renderDashboard();
-      showToast(files.length > 1 ? files.length + ' photos added' : 'Photo added');
+      const added = store.album.length - albumBefore.length;
+      // Roll the batch back if it couldn't be persisted, so the grid never
+      // shows photos that would vanish on the next reload. saveStore()
+      // already explains the quota failure — don't talk over it.
+      if (saveStore()) {
+        renderAlbum(); renderDashboard();
+        if (added > 0) showToast(added > 1 ? added + ' photos added' : 'Photo added');
+      } else {
+        store.album = albumBefore;
+        renderAlbum(); renderDashboard();
+      }
     }
     input.value = '';
   });
@@ -1887,9 +1909,14 @@ function renderMemories() {
   grid.querySelectorAll('.memory-delete').forEach(btn => {
     btn.addEventListener('click', () => {
       if (!confirm('Remove this memory?')) return;
-      store.memories = store.memories.filter(m => String(m.id) !== btn.dataset.memId);
+      const memId = btn.dataset.memId;
+      store.memories = store.memories.filter(m => String(m.id) !== memId);
+      // The generic uploader persists under the element id — drop it too,
+      // or the image keeps eating quota and shows up in the photo count.
+      if (store.photos) delete store.photos['mem-photo-' + memId];
       saveStore();
       renderMemories();
+      renderDashboard();
     });
   });
 }
