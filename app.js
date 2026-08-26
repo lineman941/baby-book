@@ -340,7 +340,11 @@ function bindPhotoUploads() {
 function initLiquidCanvas() {
   const canvas = document.getElementById('liquid-canvas');
   if (!canvas || !canvas.getContext) return;
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // Reduce Motion used to disable this outright, which left the book looking
+  // dead for anyone with that iOS setting on. Honour the intent instead:
+  // no ambient drift and no sparks, but keep a brief ripple on touch.
+  const calm = !!(window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const ctx = canvas.getContext('2d');
   let W = 0, H = 0, ripples = [], sparks = [], idle = 0, last = { x: 0, y: 0 };
 
@@ -370,12 +374,15 @@ function initLiquidCanvas() {
                     life: 1, size: 1.2 + Math.random() * 2.2, tw: Math.random() * 6.283 });
     }
   }
-  function touchAt(x, y) { addRipple(x, y, 0.22, 150, 2.0); addSparks(x, y, 7); }
+  function touchAt(x, y) {
+    addRipple(x, y, calm ? 0.20 : 0.34, 150, calm ? 2.6 : 2.0);
+    if (!calm) addSparks(x, y, 7);
+  }
 
   document.addEventListener('pointerdown', e => touchAt(e.clientX, e.clientY), { passive: true });
   document.addEventListener('pointermove', e => {
     const dx = e.clientX - last.x, dy = e.clientY - last.y;
-    if (dx * dx + dy * dy > 400) { addRipple(e.clientX, e.clientY); last = { x: e.clientX, y: e.clientY }; }
+    if (dx * dx + dy * dy > 400) { addRipple(e.clientX, e.clientY, 0.20); last = { x: e.clientX, y: e.clientY }; }
   }, { passive: true });
   document.addEventListener('touchmove', e => {
     const t = e.touches[0]; if (!t) return;
@@ -407,10 +414,10 @@ function initLiquidCanvas() {
       ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(' + r + ',' + g + ',' + bl + ',' + s.life + ')';
       ctx.fill(); ctx.shadowBlur = 0;
     }
-    if (++idle % 150 === 0) ambient();
+    if (!calm && ++idle % 150 === 0) ambient();
     requestAnimationFrame(draw);
   }
-  for (let i = 0; i < 3; i++) setTimeout(ambient, i * 700);
+  if (!calm) for (let i = 0; i < 3; i++) setTimeout(ambient, i * 700);
   draw();
 }
 
@@ -632,7 +639,7 @@ function buildPhotoYearGrid() {
       '<div class="milestone-photo-upload" id="yr-photo-' + idx + '">' +
       '<div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="30" height="30"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div>' +
       '<img alt="Month ' + (idx+1) + ' photo">' +
-      '<input type="file" accept="image/*" capture="environment">' +
+      '<input type="file" accept="image/*">' +
       '</div>' +
       '<input type="text" id="yr-note-' + idx + '" placeholder="Memory from ' + month + '…" autocomplete="off" style="margin-top:8px;">';
     grid.appendChild(card);

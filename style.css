@@ -55,7 +55,9 @@ body {
 /* LIQUID CANVAS */
 #liquid-canvas {
   position:fixed;inset:0;width:100%;height:100%;
-  pointer-events:none;z-index:0;opacity:.6;
+  /* Above .page-section (z-index 40) so taps ripple over the page instead of
+     behind it, but under the top bar and tab nav (z-index 300). */
+  pointer-events:none;z-index:60;opacity:.85;
 }
 
 /* TOP BAR */

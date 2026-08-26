@@ -126,7 +126,9 @@ body {
 /* LIQUID CANVAS */
 #liquid-canvas {
   position:fixed;inset:0;width:100%;height:100%;
-  pointer-events:none;z-index:0;opacity:.6;
+  /* Above .page-section (z-index 40) so taps ripple over the page instead of
+     behind it, but under the top bar and tab nav (z-index 300). */
+  pointer-events:none;z-index:60;opacity:.85;
 }
 
 /* TOP BAR */
@@ -951,7 +953,7 @@ img.tab-icon {
     <div class="field-card"><label for="birthLength">Length</label><input type="text" id="birthLength" placeholder="e.g. 20 inches" autocomplete="off"></div>
     <div class="field-card full-width"><label for="birthHospital">Hospital / Location</label><input type="text" id="birthHospital" placeholder="Where were you born?" autocomplete="off"></div>
     <div class="field-card full-width"><label for="birthStoryText">Birth Story</label><textarea id="birthStoryText" placeholder="Tell the story of this magical day — the moments, the feelings, the joy…" rows="6" autocomplete="off"></textarea></div>
-    <div class="field-card full-width"><label>Birth Photo</label><div class="photo-upload-area" id="birthPhotoArea"><div class="upload-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="34" height="34" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg><div style="margin-top:6px;">Tap to add a birth photo</div></div><img id="birthPhotoImg" alt="Birth photo"><input type="file" id="birthPhotoInput" accept="image/*" capture="environment"></div></div>
+    <div class="field-card full-width"><label>Birth Photo</label><div class="photo-upload-area" id="birthPhotoArea"><div class="upload-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="34" height="34" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg><div style="margin-top:6px;">Tap to add a birth photo</div></div><img id="birthPhotoImg" alt="Birth photo"><input type="file" id="birthPhotoInput" accept="image/*"></div></div>
   </div>
 </section>
 
@@ -1496,7 +1498,11 @@ function bindPhotoUploads() {
 function initLiquidCanvas() {
   const canvas = document.getElementById('liquid-canvas');
   if (!canvas || !canvas.getContext) return;
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // Reduce Motion used to disable this outright, which left the book looking
+  // dead for anyone with that iOS setting on. Honour the intent instead:
+  // no ambient drift and no sparks, but keep a brief ripple on touch.
+  const calm = !!(window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const ctx = canvas.getContext('2d');
   let W = 0, H = 0, ripples = [], sparks = [], idle = 0, last = { x: 0, y: 0 };
 
@@ -1526,12 +1532,15 @@ function initLiquidCanvas() {
                     life: 1, size: 1.2 + Math.random() * 2.2, tw: Math.random() * 6.283 });
     }
   }
-  function touchAt(x, y) { addRipple(x, y, 0.22, 150, 2.0); addSparks(x, y, 7); }
+  function touchAt(x, y) {
+    addRipple(x, y, calm ? 0.20 : 0.34, 150, calm ? 2.6 : 2.0);
+    if (!calm) addSparks(x, y, 7);
+  }
 
   document.addEventListener('pointerdown', e => touchAt(e.clientX, e.clientY), { passive: true });
   document.addEventListener('pointermove', e => {
     const dx = e.clientX - last.x, dy = e.clientY - last.y;
-    if (dx * dx + dy * dy > 400) { addRipple(e.clientX, e.clientY); last = { x: e.clientX, y: e.clientY }; }
+    if (dx * dx + dy * dy > 400) { addRipple(e.clientX, e.clientY, 0.20); last = { x: e.clientX, y: e.clientY }; }
   }, { passive: true });
   document.addEventListener('touchmove', e => {
     const t = e.touches[0]; if (!t) return;
@@ -1563,10 +1572,10 @@ function initLiquidCanvas() {
       ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(' + r + ',' + g + ',' + bl + ',' + s.life + ')';
       ctx.fill(); ctx.shadowBlur = 0;
     }
-    if (++idle % 150 === 0) ambient();
+    if (!calm && ++idle % 150 === 0) ambient();
     requestAnimationFrame(draw);
   }
-  for (let i = 0; i < 3; i++) setTimeout(ambient, i * 700);
+  if (!calm) for (let i = 0; i < 3; i++) setTimeout(ambient, i * 700);
   draw();
 }
 
@@ -1788,7 +1797,7 @@ function buildPhotoYearGrid() {
       '<div class="milestone-photo-upload" id="yr-photo-' + idx + '">' +
       '<div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="30" height="30"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div>' +
       '<img alt="Month ' + (idx+1) + ' photo">' +
-      '<input type="file" accept="image/*" capture="environment">' +
+      '<input type="file" accept="image/*">' +
       '</div>' +
       '<input type="text" id="yr-note-' + idx + '" placeholder="Memory from ' + month + '…" autocomplete="off" style="margin-top:8px;">';
     grid.appendChild(card);
