@@ -1,0 +1,36 @@
+HOW TO DO THIS ON YOUR iPAD
+============================
+
+PART 1 - GET THE FILES OUT OF THE ZIP
+--------------------------------------
+1. Tap the BABYBOOK.zip I sent. It saves to Files.
+2. Open the FILES app (blue folder icon).
+3. Tap "Downloads" (or "On My iPad").
+4. TAP THE ZIP ONCE. It unzips into a folder called BABYBOOK.
+5. Tap that folder. You'll see the 4 numbered folders.
+
+PART 2 - TEST YOUR PRODUCT (30 seconds)
+----------------------------------------
+1. In folder "1 SELL THIS (upload to store)", tap OurLittleMiracle.html
+2. It opens and shows the baby book.
+   (If it only previews, tap the Share icon > "Open in Safari".)
+3. Type a name on the cover. That's your product working.
+
+PART 3 - CREATE THE ETSY LISTING
+---------------------------------
+1. Open SAFARI (not the Etsy app - the app can't do
+   digital downloads properly).
+2. Go to etsy.com and sign in.
+3. IMPORTANT: tap the "aA" in the address bar and choose
+   "Request Desktop Website". Etsy's listing form needs this.
+4. Go to: Shop Manager > Listings > Add a listing
+5. Open ETSY-PASTE-THIS.txt and follow steps 1-7 in it.
+
+UPLOADING FILES ON iPAD
+------------------------
+When Etsy asks for photos or files, tap "Choose File" then
+"Browse", then go to Downloads > BABYBOOK > the right folder.
+
+STUCK?
+------
+Tell me exactly what the screen says and I'll walk you through it.
