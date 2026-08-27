@@ -1,0 +1,100 @@
+LISTING ON ETSY FROM YOUR ANDROID PHONE
+========================================
+
+Do these in order. Don't skip PART 1.
+
+
+PART 1 - GET THE FILES OUT OF THE ZIP
+--------------------------------------
+1. Tap BABYBOOK.zip in this chat. It downloads.
+2. Open your "Files" app (some phones call it "My Files").
+3. Tap "Downloads".
+4. Tap BABYBOOK.zip. Choose EXTRACT (or "Extract to").
+5. You now have a BABYBOOK folder with 4 numbered folders inside.
+
+
+PART 2 - TEST IT (30 seconds, do not skip)
+-------------------------------------------
+1. Open folder "1 SELL THIS (upload to store)"
+2. Tap OurLittleMiracle.html
+3. If it asks which app, choose CHROME.
+4. Type a name on the cover, tap Save Cover.
+5. Tap "Go to My Book" - you should land on the dashboard.
+
+That is exactly what your buyer gets. If anything looks
+wrong, stop and tell me before listing.
+
+
+PART 3 - OPEN ETSY THE RIGHT WAY
+---------------------------------
+Use CHROME, not the Etsy app. The Etsy app cannot set up
+digital downloads properly.
+
+1. Open Chrome. Go to etsy.com. Sign in.
+2. Tap the three dots (top right).
+3. Tick "Desktop site".
+   The page will look small - pinch to zoom. That is normal
+   and it is the only way the listing form works right.
+
+
+PART 4 - START THE LISTING
+---------------------------
+1. Tap the shop icon / menu -> "Shop Manager"
+2. Tap "Listings"
+3. Tap "Add a listing"
+
+If Etsy asks you to open a shop first, it will walk you
+through shop name, country and currency. Pick anything
+sensible; you can change the shop name later.
+
+
+PART 5 - FILL IT IN
+--------------------
+Open ETSY-PASTE-THIS.txt (in folder "3 WHAT TO PASTE")
+in a second Chrome tab so you can copy from it.
+
+  PHOTOS    Upload all 5 from "2 LISTING PHOTOS".
+            photo-1-MAIN.jpg goes FIRST.
+
+  TITLE     Copy STEP 1 from the paste file.
+
+  ABOUT     Who made it:  I did
+            What is it:   A finished product
+            When:         Made to order
+
+  CATEGORY  Search "baby book" and pick a digital /
+            template category.
+
+  TYPE      *** DIGITAL ***  (this is the important one)
+
+  PRICE     14.97
+  QUANTITY  999
+
+  DESCRIPTION  Copy STEP 4 from the paste file.
+               It is long. Copy the whole thing.
+
+  TAGS      13 of them, in STEP 5. Add one at a time.
+
+  FILES     Upload BOTH from "1 SELL THIS":
+              OurLittleMiracle.html
+              welcome-guide.pdf
+
+
+PART 6 - PUBLISH
+-----------------
+Tap "Publish". Etsy charges $0.20 per listing.
+
+You are live.
+
+
+AFTER YOU PUBLISH
+------------------
+Send me the listing link. Next steps are the Pinterest
+pins in folder "4 MARKETING PINS" - that is where your
+first traffic comes from.
+
+
+IF YOU GET STUCK
+-----------------
+Tell me the exact words on the screen and I will tell you
+what to tap. Do not guess and do not start over.
