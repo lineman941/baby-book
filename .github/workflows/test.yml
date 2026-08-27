@@ -1,0 +1,63 @@
+name: Test the product
+
+# Every bug this catches shipped to a real phone once. Runs on every change
+# so the next one gets caught here instead of by the shop owner.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install build deps
+        run: pip install -r requirements.txt
+
+      - name: Rebuild the product from source
+        run: python3 build-product.py
+
+      - name: Fail if the committed build is stale
+        # The single-file product is committed. If rebuilding changes it,
+        # someone edited app.html/app.js/style.css without running
+        # build-product.py, and buyers would get the older build.
+        run: |
+          if ! git diff --quiet -- dist/OurLittleMiracle.html; then
+            echo "::error::dist/OurLittleMiracle.html is out of date."
+            echo "Run: python3 build-product.py  — then commit the result."
+            git diff --stat -- dist/OurLittleMiracle.html
+            exit 1
+          fi
+          echo "Committed build matches source."
+
+      - name: Install Playwright
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install --no-save playwright-core@1.55.0
+          npx --yes playwright@1.55.0 install --with-deps chromium
+
+      - name: Run the regression suite
+        env:
+          PW_MODULES: ${{ github.workspace }}/node_modules
+        run: |
+          CHROME_PATH="$(node -e "
+            const fs=require('fs'),path=require('path'),os=require('os');
+            const root=path.join(os.homedir(),'.cache','ms-playwright');
+            const dir=fs.readdirSync(root).find(d=>d.startsWith('chromium-'));
+            const p=[path.join(root,dir,'chrome-linux','chrome'),
+                     path.join(root,dir,'chrome-linux','headless_shell')].find(fs.existsSync);
+            process.stdout.write(p||'');
+          ")"
+          echo "chromium: $CHROME_PATH"
+          CHROME_PATH="$CHROME_PATH" node tests/smoke.js
