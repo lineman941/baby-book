@@ -20,12 +20,19 @@ function loadStore() {
   if (!store.photos) store.photos = {};
   if (!store.memories) store.memories = [];
 }
+let warnedFull = false;
 function saveStore() {
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify(store));
     flashSave();
+    if (!warnedFull && getStorageInfo().pct >= 85) {
+      warnedFull = true;
+      showToast('Storage is nearly full — tap Back Up My Book');
+    }
+    return true;
   } catch(e) {
     showToast('Storage is full — use Backup, or remove a photo');
+    return false;
   }
 }
 function flashSave() {
@@ -64,15 +71,74 @@ function applyFont(f) {
 }
 
 /* ── Tabs ── */
-function showTab(name) {
-  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+let flipTimer = null;
+const TAB_ORDER = ['home','cover','birth','milestones','letters','growth','photos','family','memories'];
+
+function clearFlip(el) {
+  if (!el) return;
+  el.classList.remove('flipping-out', 'flipping-in');
+}
+
+function showTab(name, opts) {
+  const target = document.getElementById('section-' + name);
+  if (!target) return;
+  const current = document.querySelector('.page-section.active');
+  const animate = !(opts && opts.instant) && current && current !== target;
+
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  const sec = document.getElementById('section-' + name);
-  if (sec) sec.classList.add('active');
   const btn = document.querySelector('.tab-btn[data-tab="' + name + '"]');
   if (btn) btn.classList.add('active');
+
+  if (name === 'home') renderDashboard();
+
+  if (animate) {
+    const out = current;
+    // settle any turn still in flight so rapid taps can't strand a page
+    clearTimeout(flipTimer);
+    document.querySelectorAll('.page-section').forEach(el => {
+      if (el !== out && el !== target) el.classList.remove('active');
+      clearFlip(el);
+    });
+    out.classList.add('flipping-out');
+    target.classList.add('active', 'flipping-in');
+    target.scrollTop = 0;
+    flipTimer = setTimeout(() => {
+      out.classList.remove('active');
+      clearFlip(out); clearFlip(target);
+    }, 500);
+  } else {
+    clearTimeout(flipTimer);
+    document.querySelectorAll('.page-section').forEach(s => { s.classList.remove('active'); clearFlip(s); });
+    target.classList.add('active');
+    target.scrollTop = 0;
+  }
+
   store.lastTab = name;
   saveStore();
+}
+
+/* Swipe left/right to turn pages */
+function bindSwipe() {
+  let x0 = null, y0 = null, t0 = 0;
+  document.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) { x0 = null; return; }
+    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now();
+  }, { passive: true });
+  document.addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - x0, dy = t.clientY - y0;
+    x0 = null;
+    if (Date.now() - t0 > 600) return;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.8) return;
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+    const cur = store.lastTab || 'home';
+    let i = TAB_ORDER.indexOf(cur);
+    if (i < 0) i = 0;
+    const ni = dx < 0 ? Math.min(i + 1, TAB_ORDER.length - 1) : Math.max(i - 1, 0);
+    if (ni !== i) showTab(TAB_ORDER[ni]);
+  }, { passive: true });
 }
 
 /* ── Settings tray ── */
@@ -226,6 +292,11 @@ function resizeImageFile(file, cb) {
   };
   reader.readAsDataURL(file);
 }
+function syncCoverPhoto() {
+  const custom = (store.photos || {})['coverPhotoArea'];
+  const hero = document.getElementById('coverHeroImg');
+  if (hero && custom) hero.src = custom;
+}
 function setAreaPhoto(area, dataUrl, persist) {
   const img = area.querySelector('img');
   if (!img) return;
@@ -234,6 +305,8 @@ function setAreaPhoto(area, dataUrl, persist) {
   if (persist && area.id) {
     store.photos[area.id] = dataUrl;
     saveStore();
+    if (area.id === 'coverPhotoArea') syncCoverPhoto();
+    renderDashboard();
   }
 }
 function handlePhotoFile(area, file) {
@@ -259,6 +332,249 @@ function bindPhotoUploads() {
     });
     input.addEventListener('change', () => handlePhotoFile(area, input.files[0]));
   });
+}
+
+
+
+/* ── Liquid touch ripple + sparkle (theme-tinted, respects reduced-motion) ── */
+function initLiquidCanvas() {
+  const canvas = document.getElementById('liquid-canvas');
+  if (!canvas || !canvas.getContext) return;
+  // Reduce Motion used to disable this outright, which left the book looking
+  // dead for anyone with that iOS setting on. Honour the intent instead:
+  // no ambient drift and no sparks, but keep a brief ripple on touch.
+  const calm = !!(window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const ctx = canvas.getContext('2d');
+  let W = 0, H = 0, ripples = [], sparks = [], idle = 0, last = { x: 0, y: 0 };
+
+  function themeRGB() {
+    const v = getComputedStyle(document.documentElement)
+      .getPropertyValue('--tp').trim() || '#5ee7e7';
+    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(v);
+    return m ? [parseInt(m[1],16), parseInt(m[2],16), parseInt(m[3],16)] : [94,231,231];
+  }
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function addRipple(x, y, op, maxR, sp) {
+    if (ripples.length > 22) return;
+    ripples.push({ x, y, r: 0, maxR: maxR || 110 + Math.random() * 70,
+                   opacity: op || 0.16, speed: sp || 1.3 + Math.random() * 0.7 });
+  }
+  function addSparks(x, y, n) {
+    for (let i = 0; i < (n || 6); i++) {
+      const a = Math.random() * Math.PI * 2, d = 12 + Math.random() * 30;
+      sparks.push({ x: x + Math.cos(a) * 6, y: y + Math.sin(a) * 6,
+                    vx: Math.cos(a) * (0.5 + Math.random()), vy: Math.sin(a) * (0.5 + Math.random()) - 0.35,
+                    life: 1, size: 1.2 + Math.random() * 2.2, tw: Math.random() * 6.283 });
+    }
+  }
+  function touchAt(x, y) {
+    addRipple(x, y, calm ? 0.20 : 0.34, 150, calm ? 2.6 : 2.0);
+    if (!calm) addSparks(x, y, 7);
+  }
+
+  document.addEventListener('pointerdown', e => touchAt(e.clientX, e.clientY), { passive: true });
+  document.addEventListener('pointermove', e => {
+    const dx = e.clientX - last.x, dy = e.clientY - last.y;
+    if (dx * dx + dy * dy > 400) { addRipple(e.clientX, e.clientY, 0.20); last = { x: e.clientX, y: e.clientY }; }
+  }, { passive: true });
+  document.addEventListener('touchmove', e => {
+    const t = e.touches[0]; if (!t) return;
+    const dx = t.clientX - last.x, dy = t.clientY - last.y;
+    if (dx * dx + dy * dy > 900) { addRipple(t.clientX, t.clientY); last = { x: t.clientX, y: t.clientY }; }
+  }, { passive: true });
+
+  function ambient() { addRipple(W * (0.1 + Math.random() * 0.8), H * (0.1 + Math.random() * 0.8), 0.09, 70 + Math.random() * 50, 0.5); }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const [r, g, bl] = themeRGB();
+    ripples = ripples.filter(p => p.opacity > 0.005 && p.r < p.maxR * 1.4);
+    for (const p of ripples) {
+      p.r += p.speed; p.opacity *= 0.975;
+      const grad = ctx.createRadialGradient(p.x, p.y, p.r * 0.15, p.x, p.y, Math.max(p.r, 1));
+      grad.addColorStop(0, 'rgba(' + r + ',' + g + ',' + bl + ',0)');
+      grad.addColorStop(0.55, 'rgba(' + r + ',' + g + ',' + bl + ',' + (p.opacity * 0.85) + ')');
+      grad.addColorStop(1, 'rgba(' + r + ',' + g + ',' + bl + ',0)');
+      ctx.beginPath(); ctx.arc(p.x, p.y, Math.max(p.r, 1), 0, Math.PI * 2);
+      ctx.fillStyle = grad; ctx.fill();
+    }
+    sparks = sparks.filter(s => s.life > 0.02);
+    for (const s of sparks) {
+      s.x += s.vx; s.y += s.vy; s.vy += 0.012; s.life *= 0.955; s.tw += 0.35;
+      const tw = 0.55 + 0.45 * Math.sin(s.tw);
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.size * s.life * tw, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,' + (s.life * 0.85 * tw) + ')';
+      ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(' + r + ',' + g + ',' + bl + ',' + s.life + ')';
+      ctx.fill(); ctx.shadowBlur = 0;
+    }
+    if (!calm && ++idle % 150 === 0) ambient();
+    requestAnimationFrame(draw);
+  }
+  if (!calm) for (let i = 0; i < 3; i++) setTimeout(ambient, i * 700);
+  draw();
+}
+
+
+/* ── Storage usage ── */
+const STORE_LIMIT_CHARS = 5000000; // ~5 million chars: the usual browser cap
+function getStorageInfo() {
+  let chars = 0;
+  try { chars = (localStorage.getItem(STORE_KEY) || '').length; } catch (e) {}
+  const pct = Math.max(0, Math.min(100, Math.round((chars / STORE_LIMIT_CHARS) * 1000) / 10));
+  const photoCount = Object.keys(store.photos || {}).length + (store.album || []).length;
+  return { chars, pct, mb: (chars / 1048576).toFixed(1), photoCount };
+}
+
+/* ── Live age ── */
+function computeAge(dob) {
+  if (!dob) return null;
+  const b = new Date(dob + 'T00:00:00'), now = new Date();
+  if (isNaN(b) || b > now) return null;
+  // Count whole months completed, then measure days from that anniversary.
+  // A plain day-borrow mis-reports births on days the previous month lacks
+  // (Jan 31 seen from Mar 1), so step to the anniversary date itself and
+  // clamp it into short months (Jan 31 + 1 month = Feb 28).
+  const annivAfter = n => {
+    const mo = b.getMonth() + n;
+    const lastDay = new Date(b.getFullYear(), mo + 1, 0).getDate();
+    return new Date(b.getFullYear(), mo, Math.min(b.getDate(), lastDay));
+  };
+  let months = (now.getFullYear() - b.getFullYear()) * 12 + (now.getMonth() - b.getMonth());
+  if (annivAfter(months) > now) months--;
+  if (months < 0) months = 0;
+  const d = Math.max(0, Math.round((now - annivAfter(months)) / 86400000));
+  const y = Math.floor(months / 12);
+  const m = months % 12;
+  const parts = [];
+  if (y > 0) parts.push(y + (y === 1 ? ' year' : ' years'));
+  if (m > 0) parts.push(m + (m === 1 ? ' month' : ' months'));
+  if (parts.length < 2 && d > 0) parts.push(d + (d === 1 ? ' day' : ' days'));
+  const totalDays = Math.floor((now - b) / 86400000);
+  return { text: parts.length ? parts.join(', ') + ' old' : 'Born today', months, totalDays };
+}
+
+/* ── Dashboard ── */
+const MILESTONE_LIST = [
+  { key: 'ms-smile-date', name: 'First Smile' },
+  { key: 'ms-roll-date',  name: 'First Crawl' },
+  { key: 'ms-tooth-date', name: 'First Tooth' },
+  { key: 'ms-steps-date', name: 'First Steps' },
+  { key: 'ms-sleep-date', name: 'Sleeping Through the Night' },
+  { key: 'ms-food-date',  name: 'First Solid Food' },
+  { key: 'ms-word-date',  name: 'First Word' },
+  { key: 'ms-toy-name',   name: 'Favorite Toy' },
+];
+
+function renderDashboard() {
+  const grid = document.getElementById('bentoGrid');
+  if (!grid) return;
+  const name = store.coverName || '';
+  const age = computeAge(store.coverDob);
+  const photoKeys = Object.keys(store.photos || {});
+  const albumCount = (store.album || []).length;
+  const lastAlbum = albumCount ? store.album[albumCount - 1].photo : null;
+  const lastPhoto = lastAlbum || (photoKeys.length ? store.photos[photoKeys[photoKeys.length - 1]] : null);
+  const done = MILESTONE_LIST.filter(m => store[m.key]);
+  const next = MILESTONE_LIST.find(m => !store[m.key]);
+  const g = (store.growthEntries || []).slice(-1)[0];
+  const memCount = (store.memories || []).length;
+  const pct = Math.round((done.length / MILESTONE_LIST.length) * 100);
+
+  const esc = escapeHtml;
+  let html = '';
+
+  // Hero tile
+  html += '<div class="tile hero-tile" data-goto="cover">';
+  if (name) {
+    html += '<div class="hero-name">' + esc(name) + '</div>';
+    if (age) {
+      html += '<div class="hero-age">' + esc(age.text) + '</div>';
+      html += '<div class="hero-dob">' + esc(formatDateDisplay(store.coverDob)) + ' &middot; day ' + age.totalDays + '</div>';
+      html += '<div class="tile-cta">Open the cover &rarr;</div>';
+    } else {
+      html += '<div class="hero-age">Add a birth date to see their age</div>';
+    }
+  } else {
+    html += '<div class="hero-name">Welcome</div>';
+    html += '<div class="hero-age">Start with your baby\'s name</div>';
+    html += '<div class="tile-cta" data-goto="cover">Open the cover &rarr;</div>';
+  }
+  html += '</div>';
+
+  // Latest photo
+  html += '<div class="tile tile-photo" data-goto="photos">';
+  html += lastPhoto ? '<img src="' + lastPhoto + '" alt="Latest photo">'
+                    : '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="#c8c8d0" stroke-width="1.5" width="30" height="30"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg><span>Add a photo</span></div>';
+  html += '</div>';
+
+  // Milestones progress
+  html += '<div class="tile" data-goto="milestones">';
+  html += '<div class="tile-label">Firsts</div>';
+  html += '<div class="tile-stat">' + done.length + '<span style="font-size:15px;color:#b0b0ba;font-weight:800;">/' + MILESTONE_LIST.length + '</span></div>';
+  html += '<div class="progress-track"><div class="progress-fill" style="width:' + pct + '%"></div></div>';
+  html += '<div class="tile-sub">' + (next ? 'Next: ' + esc(next.name) : 'All captured!') + '</div>';
+  html += '</div>';
+
+  // Growth
+  html += '<div class="tile" data-goto="growth">';
+  html += '<div class="tile-label">Growth</div>';
+  if (g) {
+    html += '<div class="tile-stat">' + esc(String(g.weight || '—')) + '<span style="font-size:14px;color:#b0b0ba;"> lbs</span></div>';
+    html += '<div class="tile-sub">' + esc(String(g.height || '—')) + ' in &middot; month ' + esc(String(g.age)) + '</div>';
+  } else {
+    html += '<div class="tile-stat" style="color:#c8c8d0;">—</div><div class="tile-sub">Log weight &amp; height</div>';
+  }
+  html += '</div>';
+
+  // Memories
+  html += '<div class="tile" data-goto="memories">';
+  html += '<div class="tile-label">Memories</div>';
+  html += '<div class="tile-stat">' + memCount + '</div>';
+  html += '<div class="tile-sub">' + (memCount ? 'moments saved' : 'Write your first') + '</div>';
+  html += '</div>';
+
+  // Photos count
+  html += '<div class="tile" data-goto="photos">';
+  html += '<div class="tile-label">Photos</div>';
+  html += '<div class="tile-stat">' + (photoKeys.length + albumCount) + '</div>';
+  html += '<div class="tile-sub">added so far</div>';
+  html += '</div>';
+
+
+  // Storage + backup (wide tile) — keeps the safety net visible
+  const si = getStorageInfo();
+  const barColor = si.pct >= 85 ? '#e05252' : (si.pct >= 60 ? '#e8a33d' : '');
+  html += '<div class="tile wide">';
+  html += '<div class="tile-label">Storage &amp; Backup</div>';
+  html += '<div style="display:flex;align-items:baseline;gap:8px;">';
+  html += '<div class="tile-stat" style="font-size:24px;' + (barColor ? 'color:' + barColor + ';' : '') + '">' + si.pct + '%</div>';
+  html += '<div class="tile-sub" style="margin-top:0;">' + si.mb + ' MB used &middot; ' + si.photoCount + (si.photoCount === 1 ? ' photo' : ' photos') + '</div>';
+  html += '</div>';
+  html += '<div class="progress-track"><div class="progress-fill" style="width:' + Math.max(si.pct, 1) + '%;' +
+          (barColor ? 'background:' + barColor + ';' : '') + '"></div></div>';
+  html += '<div class="tile-sub" style="margin-bottom:10px;">' +
+          (si.pct >= 85 ? 'Almost full — back up, then remove a few photos.'
+           : si.pct >= 60 ? 'Filling up. Back up your book to be safe.'
+           : 'Your book is saved on this device only. Back it up now and then.') + '</div>';
+  html += '<button id="dashBackupBtn" class="btn-3d btn-3d-primary btn-full" style="font-size:14px;padding:11px 16px;">Back Up My Book</button>';
+  html += '</div>';
+
+  grid.innerHTML = html;
+  const dashBk = document.getElementById('dashBackupBtn');
+  if (dashBk) dashBk.addEventListener('click', e => { e.stopPropagation(); exportBackup(); });
+  grid.querySelectorAll('[data-goto]').forEach(el => {
+    el.addEventListener('click', () => showTab(el.dataset.goto));
+  });
+
+  const greet = document.getElementById('homeGreeting');
+  if (greet && name) greet.textContent = 'Every first, in one place';
 }
 
 /* ── Growth chart ── */
@@ -321,9 +637,9 @@ function buildPhotoYearGrid() {
     card.className = 'milestone-card';
     card.innerHTML = '<div class="milestone-label">' + month + '</div>' +
       '<div class="milestone-photo-upload" id="yr-photo-' + idx + '">' +
-      '<div class="ms-placeholder"><img src="' + assetUrl('icon-camera.jpg') + '" alt=""></div>' +
+      '<div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="30" height="30"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div>' +
       '<img alt="Month ' + (idx+1) + ' photo">' +
-      '<input type="file" accept="image/*" capture="environment">' +
+      '<input type="file" accept="image/*">' +
       '</div>' +
       '<input type="text" id="yr-note-' + idx + '" placeholder="Memory from ' + month + '…" autocomplete="off" style="margin-top:8px;">';
     grid.appendChild(card);
@@ -335,6 +651,82 @@ function buildPhotoYearGrid() {
     }
   });
   bindPhotoUploads();
+}
+
+
+/* ── Extra photo album (unlimited) ── */
+function renderAlbum() {
+  const grid = document.getElementById('albumGrid');
+  if (!grid) return;
+  const list = store.album || [];
+  grid.innerHTML = '';
+  if (!list.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#a9a9b4;' +
+      'font-size:13px;font-weight:600;padding:8px 0 4px;">No extra photos yet — add as many as you like.</div>';
+  }
+  list.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'milestone-card';
+    card.innerHTML =
+      '<div class="milestone-photo-upload has-photo" style="cursor:default;">' +
+        '<img src="' + item.photo + '" alt="">' +
+      '</div>' +
+      '<input type="text" class="album-cap" data-id="' + item.id + '" value="' + escapeHtml(item.caption || '') +
+        '" placeholder="Add a caption…" autocomplete="off" style="margin-top:8px;">' +
+      '<button class="album-del" data-id="' + item.id + '" style="background:none;border:none;color:#c97b8a;' +
+        'font-size:12px;font-weight:700;cursor:pointer;margin-top:8px;padding:0;">Remove</button>';
+    grid.appendChild(card);
+  });
+  grid.querySelectorAll('.album-cap').forEach(inp => {
+    inp.addEventListener('input', () => {
+      const it = (store.album || []).find(a => String(a.id) === inp.dataset.id);
+      if (it) { it.caption = inp.value; saveStore(); }
+    });
+  });
+  grid.querySelectorAll('.album-del').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!confirm('Remove this photo?')) return;
+      store.album = (store.album || []).filter(a => String(a.id) !== btn.dataset.id);
+      saveStore(); renderAlbum(); renderDashboard();
+    });
+  });
+  const count = document.getElementById('albumCount');
+  if (count) count.textContent = list.length ? list.length + (list.length === 1 ? ' photo' : ' photos') : '';
+}
+
+function bindAlbum() {
+  const btn = document.getElementById('albumAddBtn');
+  const input = document.getElementById('albumInput');
+  if (!btn || !input) return;
+  btn.addEventListener('click', () => input.click());
+  input.addEventListener('change', () => {
+    const files = Array.from(input.files || []);
+    if (!files.length) return;
+    if (!store.album) store.album = [];
+    const albumBefore = store.album.slice();
+    let pending = files.length;
+    files.forEach(f => {
+      if (!f.type || f.type.indexOf('image') !== 0) { if (--pending === 0) finish(); return; }
+      resizeImageFile(f, dataUrl => {
+        store.album.push({ id: Date.now() + Math.random(), photo: dataUrl, caption: '' });
+        if (--pending === 0) finish();
+      });
+    });
+    function finish() {
+      const added = store.album.length - albumBefore.length;
+      // Roll the batch back if it couldn't be persisted, so the grid never
+      // shows photos that would vanish on the next reload. saveStore()
+      // already explains the quota failure — don't talk over it.
+      if (saveStore()) {
+        renderAlbum(); renderDashboard();
+        if (added > 0) showToast(added > 1 ? added + ' photos added' : 'Photo added');
+      } else {
+        store.album = albumBefore;
+        renderAlbum(); renderDashboard();
+      }
+    }
+    input.value = '';
+  });
 }
 
 /* ── Memories ── */
@@ -352,19 +744,30 @@ function renderMemories() {
     card.className = 'memory-card';
     card.style.width = '100%';
     card.innerHTML =
-      '<div class="memory-title">' + escapeHtml(mem.title || 'Memory') +
+      '<div class="memory-photo-upload milestone-photo-upload" id="mem-photo-' + mem.id + '">' +
+        '<div class="ms-placeholder">' + '<svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="30" height="30"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg>' + '</div>' +
+        '<img alt="Memory photo">' +
+        '<input type="file" accept="image/*">' +
+      '</div>' +
+      '<div class="memory-title" style="margin-top:12px;">' + escapeHtml(mem.title || 'Memory') +
         (mem.date ? ' · ' + escapeHtml(formatDateDisplay(mem.date)) : '') + '</div>' +
       '<div style="font-size:14px;line-height:1.6;color:#333;white-space:pre-wrap;">' + escapeHtml(mem.text || '') + '</div>' +
       '<button class="memory-delete" data-mem-id="' + mem.id + '" aria-label="Delete memory" ' +
         'style="background:none;border:none;color:#c97b8a;font-size:12px;font-weight:700;cursor:pointer;margin-top:10px;padding:0;">Remove</button>';
     grid.appendChild(card);
   });
+  bindPhotoUploads();
   grid.querySelectorAll('.memory-delete').forEach(btn => {
     btn.addEventListener('click', () => {
       if (!confirm('Remove this memory?')) return;
-      store.memories = store.memories.filter(m => String(m.id) !== btn.dataset.memId);
+      const memId = btn.dataset.memId;
+      store.memories = store.memories.filter(m => String(m.id) !== memId);
+      // The generic uploader persists under the element id — drop it too,
+      // or the image keeps eating quota and shows up in the photo count.
+      if (store.photos) delete store.photos['mem-photo-' + memId];
       saveStore();
       renderMemories();
+      renderDashboard();
     });
   });
 }
@@ -412,13 +815,18 @@ document.addEventListener('DOMContentLoaded', function() {
   bindCoverLock();
   bindGrowthForm();
   buildPhotoYearGrid();
+  renderAlbum();
+  bindAlbum();
   buildGrowthChart();
   bindMemories();
   bindPhotoUploads();
+  syncCoverPhoto();
 
   // Restore last tab
-  if (store.lastTab) showTab(store.lastTab);
-  else showTab('cover');
+  renderDashboard();
+  bindSwipe();
+  initLiquidCanvas();
+  showTab(store.lastTab && document.getElementById('section-' + store.lastTab) ? store.lastTab : 'home', { instant: true });
 
   // Birth fields
   bindFields([

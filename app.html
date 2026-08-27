@@ -24,17 +24,58 @@ body { background: #f5ede6; font-family: 'Nunito', sans-serif; }
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  background: linear-gradient(to right, #c9a87c, #e8d5b7);
-  box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+  /* The paper edge the coil is punched through, not a coloured bar. */
+  background:
+    linear-gradient(to right,
+      rgba(0,0,0,.13) 0%,
+      rgba(255,255,255,.55) 22%,
+      rgba(255,255,255,.30) 62%,
+      rgba(0,0,0,.10) 96%,
+      rgba(0,0,0,.20) 100%);
+  box-shadow: inset -1px 0 2px rgba(0,0,0,.14), 3px 0 12px rgba(0,0,0,.13);
+  overflow: visible;
   pointer-events: none;
 }
+/* Continuous wire coil. Each turn is a slanted wire crossing the punched
+   edge diagonally - the diagonal is what reads as a spiral rather than a
+   row of dots. ::before is the shadow it casts on the paper, ::after the
+   end tucking behind the page. */
 .spiral-ring {
-  width: 20px; height: 20px;
-  border: 3px solid #8B6914;
-  border-radius: 50%;
-  background: #d4a843;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+  position: relative;
+  width: 32px; height: 7px;
+  margin-left: -2px;
   flex-shrink: 0;
+  border-radius: 999px;
+  transform: rotate(34deg);
+  background: linear-gradient(to bottom,
+    #ffffff 0%, #e9ecf1 18%, #b0b6c1 42%,
+    #7b818d 68%, #545a65 88%, #8b919c 100%);
+  box-shadow:
+    0 1px 2px rgba(0,0,0,.42),
+    inset 0 .9px 0 rgba(255,255,255,.95),
+    inset 0 -1.4px 2px rgba(0,0,0,.34);
+}
+/* soft cast shadow on the paper under each turn */
+.spiral-ring::before {
+  content: '';
+  position: absolute;
+  left: 3px; right: -2px; top: 6px; height: 7px;
+  border-radius: 999px;
+  background: rgba(60,45,30,.20);
+  filter: blur(2.5px);
+  z-index: -2;
+}
+/* the wire end curling behind the page edge */
+.spiral-ring::after {
+  content: '';
+  position: absolute;
+  right: -4px; top: 0;
+  width: 9px; height: 7px;
+  border-radius: 999px;
+  background: linear-gradient(to bottom, #c3c9d2 0%, #7d838f 62%, #464b55 100%);
+  transform: rotate(-20deg);
+  box-shadow: inset 0 .8px 0 rgba(255,255,255,.5), 0 1px 1.5px rgba(0,0,0,.28);
+  z-index: -1;
 }
 .journal-page {
   margin-left: 28px;
@@ -54,8 +95,9 @@ body { background: #f5ede6; font-family: 'Nunito', sans-serif; }
 /* Cover page */
 .cover-hero-img {
   width: 100%;
-  max-height: 55vh;
+  max-height: 46vh;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 .cover-content { padding: 20px 16px; text-align: center; width: 100%; }
@@ -71,18 +113,20 @@ body { background: #f5ede6; font-family: 'Nunito', sans-serif; }
 }
 .milestone-illus-img {
   width: 100%;
-  max-height: 200px;
+  height: 150px;
   object-fit: cover;
+  object-position: center 20%;
   display: block;
+  opacity: .95;
 }
 .milestone-illus-bg {
   width: 100%;
-  height: 140px;
+  height: 110px;
   background-size: cover;
   background-position: center;
   border-radius: 12px 12px 0 0;
 }
-.milestone-illus-body { padding: 14px; }
+.milestone-illus-body { padding: 18px 16px 16px; }
 .milestone-illus-title {
   font-family: 'Dancing Script', cursive;
   font-size: 1.5rem;
@@ -120,6 +164,105 @@ img.tab-icon {
   opacity: .85;
 }
 
+
+
+/* ===== SOFT WATERCOLOR PAGE BACKGROUNDS ===== */
+/* Pale kids-theme art, mostly transparent, fixed to each page (does not
+   scroll with the content). Alpha is baked into the PNGs so every colour
+   theme shows through underneath. */
+.page-section {
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: cover;
+}
+#section-home, #section-letters      { background-image: url('assets/wc-stroller-clouds.png'); }
+#section-cover, #section-birth       { background-image: url('assets/wc-moon-clouds.png'); }
+#section-milestones, #section-family { background-image: url('assets/wc-footprints.png'); }
+#section-photos, #section-memories   { background-image: url('assets/wc-balloons-birthday.png'); }
+#section-growth                      { background-image: url('assets/wc-alphabet-blocks.png'); }
+@media print { .page-section { background-image: none !important; } }
+
+/* ===== BENTO DASHBOARD ===== */
+.bento {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  padding: 0 16px 24px; max-width: 640px; margin: 0 auto;
+}
+.tile {
+  background: var(--tcard, rgba(255,255,255,.82));
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--tborder, rgba(94,231,231,.22));
+  border-radius: 22px; padding: 18px 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.05), 0 10px 34px rgba(0,0,0,.04),
+              inset 0 1px 0 rgba(255,255,255,.85);
+  position: relative; overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.tile:active { transform: scale(.98); }
+.tile.wide { grid-column: 1 / -1; }
+.tile-label {
+  font-size: 10px; font-weight: 800; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ta, #1aafaf); margin-bottom: 8px;
+}
+.tile-big {
+  font-size: clamp(26px, 8vw, 38px); font-weight: 900;
+  color: #1a1a2e; line-height: 1.05; letter-spacing: -.02em;
+}
+.tile-sub { font-size: 12.5px; color: #8a8a95; margin-top: 5px; font-weight: 600; }
+.tile-stat { font-size: 30px; font-weight: 900; color: var(--ta, #1aafaf); line-height: 1; }
+.hero-tile {
+  grid-column: 1 / -1; text-align: center; padding: 26px 20px 24px;
+  background: linear-gradient(150deg, var(--tcard, rgba(255,255,255,.9)) 0%, var(--tbg, #e4f8f8) 100%);
+}
+.hero-name {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(34px, 11vw, 52px); color: var(--ta, #1aafaf);
+  line-height: 1.05; text-shadow: 0 2px 14px var(--tglow, rgba(94,231,231,.35));
+}
+.hero-age { font-size: 15px; font-weight: 800; color: #45454f; margin-top: 8px; }
+.hero-dob { font-size: 12px; color: #9a9aa4; margin-top: 3px; font-weight: 600; }
+.tile-photo { padding: 0; min-height: 132px; display: flex; }
+.tile-photo img { width: 100%; height: 100%; min-height: 132px; object-fit: cover; display: block; }
+.tile-photo .empty {
+  width: 100%; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; color: #b9b9c2; font-size: 12px; font-weight: 700; gap: 6px;
+}
+.progress-track {
+  height: 8px; border-radius: 8px; background: rgba(0,0,0,.07);
+  overflow: hidden; margin-top: 10px;
+}
+.progress-fill {
+  height: 100%; border-radius: 8px;
+  background: linear-gradient(90deg, var(--tp, #5ee7e7), var(--ta, #1aafaf));
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+.tile-cta {
+  margin-top: 12px; font-size: 12.5px; font-weight: 800;
+  color: var(--ta, #1aafaf); display: inline-flex; align-items: center; gap: 5px;
+}
+
+/* ===== PAGE FLIP ===== */
+.journal-page { perspective: 1600px; perspective-origin: left center; }
+.page-section.flipping-out {
+  animation: pgOut .34s cubic-bezier(.42,0,.58,1) both;
+  transform-origin: left center; z-index: 40;
+  box-shadow: 12px 0 36px rgba(0,0,0,.18);
+}
+.page-section.flipping-in {
+  animation: pgIn .34s cubic-bezier(.42,0,.58,1) .14s both;
+  transform-origin: left center; z-index: 30;
+}
+@keyframes pgOut {
+  from { transform: rotateY(0deg); opacity: 1; }
+  to   { transform: rotateY(-88deg); opacity: 0; }
+}
+@keyframes pgIn {
+  from { transform: rotateY(70deg); opacity: 0; }
+  to   { transform: rotateY(0deg); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-section.flipping-out, .page-section.flipping-in { animation: none; }
+}
+
 /* Print — flatten fixed sections into one flowing document */
 @media print {
   html, body { overflow: visible !important; height: auto !important; background: #fff !important; }
@@ -127,6 +270,7 @@ img.tab-icon {
   .save-indicator, .toast, #liquid-canvas,
   .settings-btn, #addMemoryBtn, #memoryForm, .memory-delete,
   #coverSaveBtn, #coverEditBtn, #addGrowthBtn,
+  #dashBackupBtn, #albumAddBtn, .album-del,
   .upload-placeholder, .ms-placeholder,
   .photo-upload-area:not(.has-photo), .milestone-photo-upload:not(.has-photo) { display: none !important; }
   .journal-page { margin-left: 0 !important; }
@@ -153,14 +297,32 @@ img.tab-icon {
 
 <!-- Spiral Journal Binding -->
 <div class="journal-binding" aria-hidden="true">
-  <div class="spiral-ring"></div><div class="spiral-ring"></div>
-  <div class="spiral-ring"></div><div class="spiral-ring"></div>
-  <div class="spiral-ring"></div><div class="spiral-ring"></div>
-  <div class="spiral-ring"></div><div class="spiral-ring"></div>
-  <div class="spiral-ring"></div><div class="spiral-ring"></div>
-  <div class="spiral-ring"></div><div class="spiral-ring"></div>
-  <div class="spiral-ring"></div><div class="spiral-ring"></div>
-  <div class="spiral-ring"></div><div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
+  <div class="spiral-ring"></div>
 </div>
 
 <div class="journal-page">
@@ -210,14 +372,29 @@ img.tab-icon {
 </div>
 <!-- DEMO-ONLY-END -->
 
+
+<!-- HOME DASHBOARD -->
+<section class="page-section active" id="section-home">
+  <div class="section-header" style="padding-bottom:12px;">
+    <h1 class="section-title">Your Little One</h1>
+    <p class="section-subtitle" id="homeGreeting">Every first, in one place</p>
+  </div>
+  <div class="bento" id="bentoGrid"></div>
+</section>
+
 <!-- COVER PAGE -->
-<section class="page-section active" id="section-cover">
+<section class="page-section" id="section-cover">
   <div class="cover-page">
-    <img src="assets/cover-hero.jpg" alt="Our Little Miracle cover" class="cover-hero-img">
+    <img src="assets/cover-hero.jpg" alt="Our Little Miracle cover" class="cover-hero-img" id="coverHeroImg">
     <div class="cover-content">
+      <div class="photo-upload-area" id="coverPhotoArea" style="margin-bottom:16px;padding:14px 12px;">
+        <div class="upload-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="30" height="30" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg><div style="margin-top:6px;">Use your own cover photo</div></div>
+        <img alt="Your cover photo">
+        <input type="file" accept="image/*">
+      </div>
       <div class="cover-zone" id="coverZone">
         <div class="cover-edit-zone">
-          <img class="title-accent" src="assets/accent-mobile.jpg" alt="" style="height:72px;"><h2 class="cover-headline">Our Little Miracle</h2>
+          <h2 class="cover-headline">Our Little Miracle</h2>
           <p class="cover-sub">A Journey of Firsts &amp; Precious Milestones</p>
           <p class="cover-sub" style="font-size:0.9rem;opacity:0.7">Enter your baby's name to begin</p>
           <div class="field-card" style="margin-bottom:12px;"><label for="coverName">Baby's Name</label><input type="text" id="coverName" placeholder="e.g. Lily Rose Johnson" autocomplete="off"></div>
@@ -236,9 +413,8 @@ img.tab-icon {
 
 <!-- BIRTH STORY -->
 <section class="page-section" id="section-birth">
-  <img src="assets/illus-welcome.jpg" alt="Welcome to the World illustration" class="section-header-illus">
   <div class="section-header">
-    <img class="title-accent" src="assets/accent-stork.jpg" alt=""><h1 class="section-title">Birth Story</h1>
+    <h1 class="section-title">Birth Story</h1>
     <p class="section-subtitle">Record the details of your baby's arrival</p>
   </div>
   <div class="birth-grid">
@@ -249,103 +425,95 @@ img.tab-icon {
     <div class="field-card"><label for="birthLength">Length</label><input type="text" id="birthLength" placeholder="e.g. 20 inches" autocomplete="off"></div>
     <div class="field-card full-width"><label for="birthHospital">Hospital / Location</label><input type="text" id="birthHospital" placeholder="Where were you born?" autocomplete="off"></div>
     <div class="field-card full-width"><label for="birthStoryText">Birth Story</label><textarea id="birthStoryText" placeholder="Tell the story of this magical day — the moments, the feelings, the joy…" rows="6" autocomplete="off"></textarea></div>
-    <div class="field-card full-width"><label>Birth Photo</label><div class="photo-upload-area" id="birthPhotoArea"><div class="upload-placeholder"><img class="upload-icon-img" src="assets/icon-camera.jpg" alt=""><div>Tap to add a birth photo</div></div><img id="birthPhotoImg" alt="Birth photo"><input type="file" id="birthPhotoInput" accept="image/*" capture="environment"></div></div>
+    <div class="field-card full-width"><label>Birth Photo</label><div class="photo-upload-area" id="birthPhotoArea"><div class="upload-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="34" height="34" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg><div style="margin-top:6px;">Tap to add a birth photo</div></div><img id="birthPhotoImg" alt="Birth photo"><input type="file" id="birthPhotoInput" accept="image/*"></div></div>
   </div>
 </section>
 
 <!-- MILESTONES -->
 <section class="page-section" id="section-milestones">
-  <img src="assets/bg-footprints.jpg" alt="" class="section-header-illus" style="max-height:160px;">
   <div class="section-header">
-    <img class="title-accent" src="assets/accent-smile.jpg" alt=""><h1 class="section-title">Milestones</h1>
+    <h1 class="section-title">Milestones</h1>
     <p class="section-subtitle">Capture every magical first</p>
   </div>
   <div style="padding:0 16px 20px;max-width:640px;margin:0 auto;">
 
     <!-- First Smile -->
     <div class="milestone-illus-card">
-      <img src="assets/illus-first-smile.jpg" alt="First Smile illustration" class="milestone-illus-img">
       <div class="milestone-illus-body">
-        <div class="milestone-illus-title"><img class="ms-accent" src="assets/accent-smile.jpg" alt="">First Smile</div>
+        <div class="milestone-illus-title">First Smile</div>
         <input type="date" id="ms-smile-date" style="margin-bottom:6px;">
         <textarea id="ms-smile-note" placeholder="How it happened…" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
-        <div class="milestone-photo-upload" id="ms-smile-photo"><div class="ms-placeholder"><img src="assets/icon-camera.jpg" alt=""></div><img alt=""><input type="file" accept="image/*"></div>
+        <div class="milestone-photo-upload" id="ms-smile-photo"><div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="34" height="34" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div><img alt=""><input type="file" accept="image/*"></div>
       </div>
     </div>
 
     <!-- First Crawl -->
     <div class="milestone-illus-card">
-      <img src="assets/illus-first-crawl.jpg" alt="First Crawl illustration" class="milestone-illus-img">
       <div class="milestone-illus-body">
-        <div class="milestone-illus-title"><img class="ms-accent" src="assets/accent-crawl.jpg" alt="">First Crawl</div>
+        <div class="milestone-illus-title">First Crawl</div>
         <input type="date" id="ms-roll-date" style="margin-bottom:6px;">
         <textarea id="ms-roll-note" placeholder="Describe the moment…" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
-        <div class="milestone-photo-upload" id="ms-roll-photo"><div class="ms-placeholder"><img src="assets/icon-camera.jpg" alt=""></div><img alt=""><input type="file" accept="image/*"></div>
+        <div class="milestone-photo-upload" id="ms-roll-photo"><div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="34" height="34" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div><img alt=""><input type="file" accept="image/*"></div>
       </div>
     </div>
 
     <!-- First Tooth -->
     <div class="milestone-illus-card">
-      <img src="assets/illus-first-tooth.jpg" alt="First Tooth illustration" class="milestone-illus-img">
       <div class="milestone-illus-body">
-        <div class="milestone-illus-title"><img class="ms-accent" src="assets/accent-tooth-fairy.jpg" alt="">First Tooth</div>
+        <div class="milestone-illus-title">First Tooth</div>
         <input type="date" id="ms-tooth-date" style="margin-bottom:6px;">
         <textarea id="ms-tooth-note" placeholder="Describe the moment…" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
-        <div class="milestone-photo-upload" id="ms-tooth-photo"><div class="ms-placeholder"><img src="assets/icon-camera.jpg" alt=""></div><img alt=""><input type="file" accept="image/*"></div>
+        <div class="milestone-photo-upload" id="ms-tooth-photo"><div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="34" height="34" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div><img alt=""><input type="file" accept="image/*"></div>
       </div>
     </div>
 
     <!-- First Steps -->
     <div class="milestone-illus-card">
-      <img src="assets/illus-first-steps.jpg" alt="First Steps illustration" class="milestone-illus-img">
       <div class="milestone-illus-body">
-        <div class="milestone-illus-title"><img class="ms-accent" src="assets/accent-steps.jpg" alt="">First Steps</div>
+        <div class="milestone-illus-title">First Steps</div>
         <input type="date" id="ms-steps-date" style="margin-bottom:6px;">
         <textarea id="ms-steps-note" placeholder="Where were they going?" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
-        <div class="milestone-photo-upload" id="ms-steps-photo"><div class="ms-placeholder"><img src="assets/icon-camera.jpg" alt=""></div><img alt=""><input type="file" accept="image/*"></div>
+        <div class="milestone-photo-upload" id="ms-steps-photo"><div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="34" height="34" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div><img alt=""><input type="file" accept="image/*"></div>
       </div>
     </div>
 
     <!-- Slept Through Night -->
     <div class="milestone-illus-card">
-      <div class="milestone-illus-bg" style="background-image:url('assets/bg-moon-clouds.jpg');"></div>
       <div class="milestone-illus-body">
-        <div class="milestone-illus-title"><img class="ms-accent" src="assets/accent-sleep.jpg" alt="">Slept Through the Night</div>
+        <div class="milestone-illus-title">Slept Through the Night</div>
         <input type="date" id="ms-sleep-date" style="margin-bottom:6px;">
         <textarea id="ms-sleep-note" placeholder="What a relief!" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
-        <div class="milestone-photo-upload" id="ms-sleep-photo"><div class="ms-placeholder"><img src="assets/icon-camera.jpg" alt=""></div><img alt=""><input type="file" accept="image/*"></div>
+        <div class="milestone-photo-upload" id="ms-sleep-photo"><div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="34" height="34" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div><img alt=""><input type="file" accept="image/*"></div>
       </div>
     </div>
 
     <!-- First Solid Food -->
     <div class="milestone-illus-card">
-      <div class="milestone-illus-bg" style="background-image:url('assets/bg-stroller-clouds.jpg');"></div>
       <div class="milestone-illus-body">
-        <div class="milestone-illus-title"><img class="ms-accent" src="assets/accent-food.jpg" alt="">First Solid Food</div>
+        <div class="milestone-illus-title">First Solid Food</div>
         <input type="date" id="ms-food-date" style="margin-bottom:6px;">
         <textarea id="ms-food-note" placeholder="What did they eat?" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
-        <div class="milestone-photo-upload" id="ms-food-photo"><div class="ms-placeholder"><img src="assets/icon-camera.jpg" alt=""></div><img alt=""><input type="file" accept="image/*"></div>
+        <div class="milestone-photo-upload" id="ms-food-photo"><div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="34" height="34" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div><img alt=""><input type="file" accept="image/*"></div>
       </div>
     </div>
 
     <!-- First Word -->
     <div class="milestone-illus-card">
-      <div class="milestone-illus-bg" style="background-image:url('assets/bg-alphabet-blocks.jpg');"></div>
       <div class="milestone-illus-body">
-        <div class="milestone-illus-title"><img class="ms-accent" src="assets/accent-word.jpg" alt="">First Word</div>
+        <div class="milestone-illus-title">First Word</div>
         <input type="date" id="ms-word-date" style="margin-bottom:6px;">
         <textarea id="ms-word-note" placeholder="What did they say?" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
-        <div class="milestone-photo-upload" id="ms-word-photo"><div class="ms-placeholder"><img src="assets/icon-camera.jpg" alt=""></div><img alt=""><input type="file" accept="image/*"></div>
+        <div class="milestone-photo-upload" id="ms-word-photo"><div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="34" height="34" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div><img alt=""><input type="file" accept="image/*"></div>
       </div>
     </div>
 
     <!-- Favorite Toy -->
     <div class="milestone-illus-card">
       <div class="milestone-illus-body">
-        <div class="milestone-illus-title"><img class="ms-accent" src="assets/accent-toy.jpg" alt="">Favorite Toy</div>
+        <div class="milestone-illus-title">Favorite Toy</div>
         <input type="text" id="ms-toy-name" placeholder="Name of toy" autocomplete="off" style="margin-bottom:6px;">
         <textarea id="ms-toy-note" placeholder="Why do they love it?" rows="2" style="margin-bottom:8px;" autocomplete="off"></textarea>
-        <div class="milestone-photo-upload" id="ms-toy-photo"><div class="ms-placeholder"><img src="assets/icon-camera.jpg" alt=""></div><img alt=""><input type="file" accept="image/*"></div>
+        <div class="milestone-photo-upload" id="ms-toy-photo"><div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="34" height="34" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div><img alt=""><input type="file" accept="image/*"></div>
       </div>
     </div>
 
@@ -354,8 +522,7 @@ img.tab-icon {
 
 <!-- LETTERS -->
 <section class="page-section" id="section-letters">
-  <img src="assets/bg-footprints.jpg" alt="" class="section-header-illus" style="max-height:140px;">
-  <div class="section-header"><img class="title-accent" src="assets/accent-letter.jpg" alt=""><h1 class="section-title">Letters &amp; Notes</h1><p class="section-subtitle">Words from the heart to keep forever</p></div>
+  <div class="section-header"><h1 class="section-title">Letters &amp; Notes</h1><p class="section-subtitle">Words from the heart to keep forever</p></div>
   <div class="memory-card"><div class="memory-title">Letter to Baby</div><textarea id="letterToBaby" placeholder="Dear little one, on the day you were born…" rows="8" autocomplete="off"></textarea></div>
   <div class="memory-card"><div class="memory-title">First Impressions</div><textarea id="firstImpressions" placeholder="The moment I first saw you, I thought…" rows="5" autocomplete="off"></textarea></div>
   <div class="memory-card"><div class="memory-title">Dreams &amp; Wishes</div><textarea id="dreamsWishes" placeholder="All the things I hope for you…" rows="5" autocomplete="off"></textarea></div>
@@ -364,8 +531,7 @@ img.tab-icon {
 
 <!-- GROWTH -->
 <section class="page-section" id="section-growth">
-  <img src="assets/bg-stroller-clouds.jpg" alt="" class="section-header-illus" style="max-height:160px;">
-  <div class="section-header"><img class="title-accent" src="assets/accent-growth.jpg" alt=""><h1 class="section-title">Growth</h1><p class="section-subtitle">Track your baby's amazing growth</p></div>
+  <div class="section-header"><h1 class="section-title">Growth</h1><p class="section-subtitle">Track your baby's amazing growth</p></div>
   <div class="stats-grid">
     <div class="field-card"><label for="currentWeight">Weight</label><input type="text" id="currentWeight" placeholder="e.g. 15 lbs" autocomplete="off"></div>
     <div class="field-card"><label for="currentHeight">Height</label><input type="text" id="currentHeight" placeholder="e.g. 24 in" autocomplete="off"></div>
@@ -378,30 +544,41 @@ img.tab-icon {
 
 <!-- FIRST YEAR PHOTOS -->
 <section class="page-section" id="section-photos">
-  <img src="assets/bg-balloons-birthday.jpg" alt="" class="section-header-illus" style="max-height:160px;">
-  <div class="section-header"><img class="title-accent" src="assets/accent-photos.jpg" alt=""><h1 class="section-title">First Year</h1><p class="section-subtitle">A photo for every month</p></div>
+  <div class="section-header"><h1 class="section-title">First Year</h1><p class="section-subtitle">A photo for every month</p></div>
   <div id="photoYearGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 20px;max-width:640px;margin:0 auto;"></div>
+
+  <div class="section-header" style="padding:8px 20px 12px;">
+    <h1 class="section-title" style="font-size:clamp(19px,4.4vw,24px);">More Photos</h1>
+    <p class="section-subtitle">Add as many as you like <span id="albumCount" style="font-weight:800;color:var(--ta);"></span></p>
+  </div>
+  <div style="padding:0 16px 14px;max-width:640px;margin:0 auto;">
+    <button id="albumAddBtn" class="btn-3d btn-3d-primary btn-full">Add Photos</button>
+    <input type="file" id="albumInput" accept="image/*" multiple style="display:none;">
+  </div>
+  <div id="albumGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 24px;max-width:640px;margin:0 auto;"></div>
 </section>
 
 <!-- FAMILY -->
 <section class="page-section" id="section-family">
-  <img src="assets/bg-footprints.jpg" alt="" class="section-header-illus" style="max-height:140px;">
-  <div class="section-header"><img class="title-accent" src="assets/accent-family.jpg" alt=""><h1 class="section-title">Family Tree</h1><p class="section-subtitle">The people who love you</p></div>
+  <div class="section-header"><h1 class="section-title">Family Tree</h1><p class="section-subtitle">The people who love you</p></div>
   <div class="parents-grid">
-    <div class="field-card"><label>Mother</label><input type="text" id="momName" placeholder="Full name" autocomplete="off"><input type="text" id="momFact" placeholder="Fun fact about Mom" autocomplete="off" style="margin-top:8px;"></div>
-    <div class="field-card"><label>Father</label><input type="text" id="dadName" placeholder="Full name" autocomplete="off"><input type="text" id="dadFact" placeholder="Fun fact about Dad" autocomplete="off" style="margin-top:8px;"></div>
+    <div class="field-card"><label>Mother</label><input type="text" id="momName" placeholder="Full name" autocomplete="off"><input type="text" id="momFact" placeholder="Fun fact about Mom" autocomplete="off" style="margin-top:8px;">
+      <div class="milestone-photo-upload" id="mom-photo" style="margin-top:10px;"><div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="30" height="30" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div><img alt="Photo of Mom"><input type="file" accept="image/*"></div></div>
+    <div class="field-card"><label>Father</label><input type="text" id="dadName" placeholder="Full name" autocomplete="off"><input type="text" id="dadFact" placeholder="Fun fact about Dad" autocomplete="off" style="margin-top:8px;">
+      <div class="milestone-photo-upload" id="dad-photo" style="margin-top:10px;"><div class="ms-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="30" height="30" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></div><img alt="Photo of Dad"><input type="file" accept="image/*"></div></div>
     <div class="field-card"><label>Grandparent 1</label><input type="text" id="gp1Name" placeholder="Full name" autocomplete="off"></div>
     <div class="field-card"><label>Grandparent 2</label><input type="text" id="gp2Name" placeholder="Full name" autocomplete="off"></div>
     <div class="field-card"><label>Grandparent 3</label><input type="text" id="gp3Name" placeholder="Full name" autocomplete="off"></div>
     <div class="field-card"><label>Grandparent 4</label><input type="text" id="gp4Name" placeholder="Full name" autocomplete="off"></div>
   </div>
+  <div class="field-card" style="margin:0 16px 14px;"><label>Family Photo</label>
+    <div class="photo-upload-area" id="familyPhotoArea"><div class="upload-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#c2b09e" stroke-width="1.5" width="30" height="30" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg><div style="margin-top:6px;">Tap to add a family photo</div></div><img alt="Family photo"><input type="file" accept="image/*"></div></div>
   <div class="field-card" style="margin:0 16px 20px;"><label for="siblingsNote">Siblings</label><textarea id="siblingsNote" placeholder="Names and ages of siblings…" rows="3" autocomplete="off"></textarea></div>
 </section>
 
 <!-- MEMORIES -->
 <section class="page-section" id="section-memories">
-  <img src="assets/bg-alphabet-blocks.jpg" alt="" class="section-header-illus" style="max-height:140px;">
-  <div class="section-header"><img class="title-accent" src="assets/accent-memories.jpg" alt=""><h1 class="section-title">Memories</h1><p class="section-subtitle">Moments to treasure forever</p></div>
+  <div class="section-header"><h1 class="section-title">Memories</h1><p class="section-subtitle">Moments to treasure forever</p></div>
   <div id="memoriesGrid" style="padding:0 16px 20px;max-width:640px;margin:0 auto;"></div>
   <div style="padding:0 16px 20px;max-width:640px;margin:0 auto;">
     <button id="addMemoryBtn" class="btn-3d btn-3d-primary btn-full">Add Memory</button>
@@ -416,33 +593,52 @@ img.tab-icon {
 
 <!-- BOTTOM NAV -->
 <nav class="tab-nav" role="navigation" aria-label="Main navigation">
-  <button class="tab-btn active" data-tab="cover" aria-label="Cover">
-    <img src="assets/cover-hero.jpg" alt="" class="tab-icon"><span class="tab-label">Cover</span>
+  <button class="tab-btn active" data-tab="home" aria-label="Home">
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;border-radius:0;"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><span class="tab-label">Home</span>
   </button>
   <button class="tab-btn" data-tab="birth" aria-label="Birth">
-    <img src="assets/illus-welcome.jpg" alt="" class="tab-icon"><span class="tab-label">Birth</span>
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.2 3.4h5.6"/><path d="M10.4 3.4v2.3"/><path d="M13.6 3.4v2.3"/><rect x="7.9" y="5.7" width="8.2" height="14.9" rx="2.8"/><path d="M7.9 10.1h8.2"/></svg><span class="tab-label">Birth</span>
   </button>
   <button class="tab-btn" data-tab="milestones" aria-label="Milestones">
-    <img src="assets/illus-first-smile.jpg" alt="" class="tab-icon"><span class="tab-label">Firsts</span>
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3.6 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg><span class="tab-label">Firsts</span>
   </button>
   <button class="tab-btn" data-tab="letters" aria-label="Letters">
-    <img src="assets/bg-footprints.jpg" alt="" class="tab-icon"><span class="tab-label">Letters</span>
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.8" y="5.2" width="18.4" height="13.6" rx="2.4"/><path d="m3.4 6.6 8.6 6 8.6-6"/></svg><span class="tab-label">Letters</span>
   </button>
   <button class="tab-btn" data-tab="growth" aria-label="Growth">
-    <img src="assets/bg-stroller-clouds.jpg" alt="" class="tab-icon"><span class="tab-label">Growth</span>
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.2V5"/><path d="M4 19.2h15.6"/><path d="m7.4 15.4 3.4-4 3 2.6 4-5.4"/></svg><span class="tab-label">Growth</span>
   </button>
   <button class="tab-btn" data-tab="photos" aria-label="Photos">
-    <img src="assets/bg-balloons-birthday.jpg" alt="" class="tab-icon"><span class="tab-label">Year 1</span>
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.6" width="18" height="14.8" rx="2.4"/><path d="M3 15.2 8 11l4.2 3.6L15.6 12l5.4 4.4"/><circle cx="8.6" cy="9" r="1.3"/></svg><span class="tab-label">Year 1</span>
   </button>
   <button class="tab-btn" data-tab="family" aria-label="Family">
-    <img src="assets/bg-alphabet-blocks.jpg" alt="" class="tab-icon"><span class="tab-label">Family</span>
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.4" cy="8.2" r="2.9"/><circle cx="16.4" cy="9.4" r="2.2"/><path d="M3.2 19.4c0-2.9 2.3-5 5.2-5s5.2 2.1 5.2 5"/><path d="M15 14.6c2.6 0 4.8 1.9 4.8 4.8"/></svg><span class="tab-label">Family</span>
   </button>
   <button class="tab-btn" data-tab="memories" aria-label="Memories">
-    <img src="assets/illus-first-crawl.jpg" alt="" class="tab-icon"><span class="tab-label">Memories</span>
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.4-4.6-7.4-9.5A4.1 4.1 0 0 1 12 8.4a4.1 4.1 0 0 1 7.4 2.3c0 4.9-7.4 9.5-7.4 9.5z"/></svg><span class="tab-label">Memories</span>
   </button>
 </nav>
 
 </div><!-- end journal-page -->
 <script src="app.js"></script>
+<script>
+/* Safety net: app.html is the SOURCE view and needs its sibling files
+   (its stylesheet, script, font and asset folders). If opened alone, say so
+   plainly instead of showing a dead page. The packaged product
+   (OurLittleMiracle.html) inlines everything, so this never fires there. */
+window.addEventListener('load', function () {
+  setTimeout(function () {
+    if (typeof showTab === 'function') return;
+    document.body.innerHTML =
+      '<div style="font-family:-apple-system,Segoe UI,sans-serif;max-width:520px;margin:14vh auto;padding:32px 26px;' +
+      'background:#fff;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.12);text-align:center;color:#1a1a2e;">' +
+      '<div style="font-size:19px;font-weight:800;margin-bottom:10px;">This is not the finished book</div>' +
+      '<div style="font-size:14px;line-height:1.6;color:#555;">You opened <b>app.html</b>, which only works alongside its ' +
+      'other project files.<br><br>Open <b>OurLittleMiracle.html</b> instead — that one is the complete product and works ' +
+      'anywhere on its own.</div></div>';
+    document.body.style.background = '#f5ede6';
+  }, 400);
+});
+</script>
 </body>
 </html>

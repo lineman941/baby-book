@@ -55,7 +55,9 @@ body {
 /* LIQUID CANVAS */
 #liquid-canvas {
   position:fixed;inset:0;width:100%;height:100%;
-  pointer-events:none;z-index:0;opacity:.6;
+  /* Above .page-section (z-index 40) so taps ripple over the page instead of
+     behind it, but under the top bar and tab nav (z-index 300). */
+  pointer-events:none;z-index:60;opacity:.85;
 }
 
 /* TOP BAR */
@@ -342,7 +344,7 @@ textarea { resize:vertical;min-height:90px;line-height:1.6; }
 .photo-upload-area input[type=file] { display:none; }
 .milestone-photo-upload {
   border:2px dashed var(--tborder,rgba(94,231,231,.35));
-  border-radius:14px;aspect-ratio:1;
+  border-radius:14px;height:150px;
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;background:rgba(255,255,255,.5);overflow:hidden;
   transition:border-color .2s,transform .2s;position:relative;
@@ -448,7 +450,7 @@ textarea { resize:vertical;min-height:90px;line-height:1.6; }
   flex:1;display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   gap:3px;height:64px;background:none;border:none;cursor:pointer;
-  padding:0 4px;
+  padding:0 1px;min-width:0;
   -webkit-tap-highlight-color:transparent;
   transition:transform .18s;position:relative;
 }
@@ -458,9 +460,19 @@ textarea { resize:vertical;min-height:90px;line-height:1.6; }
   transition:transform .2s cubic-bezier(.34,1.56,.64,1),filter .2s;
   filter:grayscale(1) opacity(.45);
 }
+svg.tab-icon {
+  width:22px;height:22px;display:block;
+  filter:none;color:#b6b6c0;opacity:.9;
+  transition:transform .2s cubic-bezier(.34,1.56,.64,1),color .2s,opacity .2s;
+}
+.tab-btn.active svg.tab-icon {
+  color:var(--ta,#1aafaf);opacity:1;
+  transform:scale(1.16) translateY(-1px);
+}
 .tab-label {
-  font-size:9px;font-weight:800;text-transform:uppercase;
-  letter-spacing:.06em;color:#bbb;transition:color .2s;
+  font-size:8px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.01em;color:#bbb;transition:color .2s;
+  white-space:nowrap;max-width:100%;
 }
 .tab-btn.active .tab-icon { filter:none;transform:scale(1.22) translateY(-2px); }
 .tab-btn.active .tab-label { color:var(--ta,#1aafaf); }
@@ -512,3 +524,9 @@ textarea { resize:vertical;min-height:90px;line-height:1.6; }
 ::-webkit-scrollbar { width:4px; }
 ::-webkit-scrollbar-track { background:transparent; }
 ::-webkit-scrollbar-thumb { background:var(--tborder,rgba(94,231,231,.3));border-radius:4px; }
+
+/* Small phones (iPhone SE / 360px): keep all 8 tabs on one row */
+@media (max-width:375px) {
+  .tab-label { font-size:7px;letter-spacing:0; }
+  .tab-icon { width:19px;height:19px; }
+}
