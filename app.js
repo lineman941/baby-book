@@ -86,7 +86,10 @@ function showTab(name, opts) {
   const animate = !(opts && opts.instant) && current && current !== target;
 
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  const btn = document.querySelector('.tab-btn[data-tab="' + name + '"]');
+  // The cover has no tab of its own; light up Home so the nav never reads
+  // as inert while the reader is on it.
+  const navName = (name === 'cover') ? 'home' : name;
+  const btn = document.querySelector('.tab-btn[data-tab="' + navName + '"]');
   if (btn) btn.classList.add('active');
 
   if (name === 'home') renderDashboard();
@@ -240,8 +243,12 @@ function unlockCover() {
 function bindCoverLock() {
   const saveBtn = document.getElementById('coverSaveBtn');
   const editBtn = document.getElementById('coverEditBtn');
+  const homeBtn = document.getElementById('coverHomeBtn');
   if (saveBtn) saveBtn.addEventListener('click', lockCover);
   if (editBtn) editBtn.addEventListener('click', unlockCover);
+  // The cover is the one page with no tab of its own, so give it an
+  // explicit way back rather than relying on the nav alone.
+  if (homeBtn) homeBtn.addEventListener('click', () => showTab('home'));
   if (store.coverName) document.getElementById('coverName').value = store.coverName;
   if (store.coverDob) document.getElementById('coverDob').value = store.coverDob;
   if (store.coverLocked) {
