@@ -1,0 +1,64 @@
+SELLING WITHOUT ETSY - PAYHIP (Android)
+========================================
+
+Payhip costs nothing to start, has no listing fee, and does
+not gatekeep new sellers the way Etsy does. You can be
+taking payments today.
+
+
+PART 1 - MAKE THE ACCOUNT
+--------------------------
+1. Chrome -> payhip.com -> Sign Up (free).
+2. Confirm your email.
+3. Skip any "upgrade" offers. The free plan is fine.
+   (Free plan takes 5% per sale. No monthly cost.)
+
+
+PART 2 - CONNECT HOW YOU GET PAID
+----------------------------------
+Settings -> Payment methods.
+Connect PayPal OR Stripe. PayPal is faster if you already
+have one. You cannot get paid until this is done.
+
+
+PART 3 - CREATE THE PRODUCT
+----------------------------
+1. Products -> Add New Product -> DIGITAL PRODUCT
+2. Upload BOTH files from "1 SELL THIS (upload to store)":
+      OurLittleMiracle.html
+      welcome-guide.pdf
+3. Open PAYHIP-listing-text.md (folder "3 WHAT TO PASTE")
+   and copy in:
+      - Product name
+      - Description
+4. Price: 14.97      Compare-at price: 39.97
+5. Cover image: photo-1-MAIN.jpg from "2 LISTING PHOTOS"
+   Add the other 4 photos and listing-video.mp4 too.
+6. Publish.
+
+You now have a link like payhip.com/b/XXXX
+That link IS your store. Send me the link.
+
+
+PART 4 - GETTING BUYERS (this is the real work)
+-----------------------------------------------
+Payhip gives you a link but no shoppers. Etsy would have
+brought some. So traffic has to come from posting:
+
+  - Pinterest: 22 ready-made pins in "4 MARKETING PINS".
+    Pinterest is where baby-book buyers actually search.
+    Post 2-3 a day, link each to your Payhip link.
+  - TikTok: 30 scripts in the marketing kit. Use the
+    listing video as your first post.
+  - Facebook groups for new/expecting moms. Read the
+    rules first - many ban selling outright.
+
+
+ABOUT THE ETSY SUSPENSION
+--------------------------
+Do not open a second Etsy account to get around it. Etsy
+detects that by device and payment details, and it turns a
+temporary suspension into a permanent ban.
+
+Appeal the one you have. Tell me exactly what the email or
+banner said and I will help you write the appeal.
