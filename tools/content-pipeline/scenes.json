@@ -1,0 +1,185 @@
+[
+  {
+    "id": 2,
+    "hook": "POV: you actually kept up with the baby book",
+    "caption": "Because it's on my phone. It saves itself. #babyjournal #babymilestones #newmom #firsttimemom #momtok",
+    "title": "POV: you actually kept up with the baby book",
+    "seed": {
+      "coverName": "Emma Rose",
+      "coverDob": "2026-05-14",
+      "growthEntries": [
+        {
+          "age": "0",
+          "weight": "7.2",
+          "height": "19.5",
+          "headCirc": "13.5",
+          "date": "2026-05-14"
+        },
+        {
+          "age": "3",
+          "weight": "13.0",
+          "height": "23.4",
+          "headCirc": "15.9",
+          "date": "2026-08-14"
+        }
+      ],
+      "ms-smile-date": "2026-06-21",
+      "ms-smile-note": "Right after her morning bottle.",
+      "ms-tooth-date": "2026-08-11",
+      "ms-tooth-note": "Bottom left. Found it while she was giggling.",
+      "coverLocked": true
+    },
+    "steps": [
+      {
+        "action": "showTab",
+        "tab": "cover"
+      },
+      {
+        "action": "wait",
+        "ms": 700
+      },
+      {
+        "action": "showTab",
+        "tab": "milestones"
+      },
+      {
+        "action": "wait",
+        "ms": 1400
+      },
+      {
+        "action": "showTab",
+        "tab": "photos"
+      },
+      {
+        "action": "wait",
+        "ms": 1600
+      },
+      {
+        "action": "showTab",
+        "tab": "home"
+      },
+      {
+        "action": "wait",
+        "ms": 2200
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "hook": "The baby book for moms who lose the baby book",
+    "caption": "It can't get lost under the couch. It's IN your phone. #babyjournal #babybook #newmom #digitaldownload #momtok",
+    "title": "The baby book for moms who lose the baby book",
+    "seed": {
+      "coverName": "Emma Rose",
+      "coverDob": "2026-05-14",
+      "coverLocked": true
+    },
+    "steps": [
+      {
+        "action": "showTab",
+        "tab": "home"
+      },
+      {
+        "action": "wait",
+        "ms": 900
+      },
+      {
+        "action": "showTab",
+        "tab": "cover"
+      },
+      {
+        "action": "wait",
+        "ms": 2600
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "hook": "Watch this chart draw my baby's growth",
+    "caption": "Weirdly satisfying. Weight + height by month. \ud83d\udcc8 #babymilestones #babyjournal #newmom #momtok",
+    "title": "Watch this chart draw my baby's growth",
+    "seed": {
+      "coverName": "Emma Rose",
+      "growthEntries": [
+        {
+          "age": "0",
+          "weight": "7.2",
+          "height": "19.5",
+          "headCirc": "13.5",
+          "date": "2026-05-14"
+        },
+        {
+          "age": "1",
+          "weight": "9.1",
+          "height": "21.0",
+          "headCirc": "14.6",
+          "date": "2026-06-14"
+        },
+        {
+          "age": "2",
+          "weight": "11.4",
+          "height": "22.4",
+          "headCirc": "15.3",
+          "date": "2026-07-14"
+        },
+        {
+          "age": "3",
+          "weight": "13.0",
+          "height": "23.4",
+          "headCirc": "15.9",
+          "date": "2026-08-14"
+        }
+      ],
+      "coverLocked": true
+    },
+    "steps": [
+      {
+        "action": "showTab",
+        "tab": "growth"
+      },
+      {
+        "action": "wait",
+        "ms": 900
+      },
+      {
+        "action": "scrollTo",
+        "selector": "#section-growth",
+        "top": 520
+      },
+      {
+        "action": "wait",
+        "ms": 2600
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "hook": "Writing a letter she'll read at 18",
+    "caption": "Future her is going to sob. In a good way. \ud83d\udc8c #babyjournal #newmom #firsttimemom #momtok",
+    "title": "Writing a letter she'll read at 18",
+    "seed": {
+      "coverName": "Emma Rose",
+      "coverLocked": true
+    },
+    "steps": [
+      {
+        "action": "showTab",
+        "tab": "letters"
+      },
+      {
+        "action": "wait",
+        "ms": 900
+      },
+      {
+        "action": "typeInto",
+        "selector": "#letterToBaby",
+        "text": "My darling girl, I am writing this at 3am while you sleep on my chest...",
+        "charDelay": 45
+      },
+      {
+        "action": "wait",
+        "ms": 1200
+      }
+    ]
+  }
+]
