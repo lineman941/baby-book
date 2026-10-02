@@ -6,6 +6,14 @@ actually possible from where I run. Read the "what this can't do" section
 before trusting it with anything — it's there so you don't find out from a
 suspended account instead of from me.
 
+## MCP server
+
+`mcp-server/` wraps steps 1-4 below as proper MCP tools (`content_list_scenes`,
+`content_generate_clip`, `content_get_queue`, `content_queue_for_approval`,
+`content_mark_posted`, `content_check_environment`) instead of ad-hoc shell
+commands. Same boundary applies: it generates and tracks clips, it never
+posts to TikTok. See `mcp-server/README.md`.
+
 ## What's automated, end to end
 
 1. **`scenes.json`** — a bank of recipes. Each one maps a script from
