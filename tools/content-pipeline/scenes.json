@@ -130,7 +130,8 @@
           "date": "2026-08-14"
         }
       ],
-      "coverLocked": true
+      "coverLocked": true,
+      "coverDob": "2026-05-14"
     },
     "steps": [
       {
