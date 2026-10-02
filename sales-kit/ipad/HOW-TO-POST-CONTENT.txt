@@ -1,0 +1,74 @@
+HOW TO APPROVE AND POST A TIKTOK VIDEO
+=========================================
+
+WHERE: Right here. This same chat with Claude. There is no
+separate app, dashboard, or website for this - it all happens
+in this conversation.
+
+
+STEP 1 - ASK FOR A CLIP
+-------------------------
+Just type one of these:
+
+  "Post the next TikTok clip"
+  "Generate script #5"          (pick any number from
+                                  marketing-kit/tiktok-scripts.md)
+  "What scenes are ready to post?"
+
+Claude builds it (takes under a minute) and SENDS YOU THE ACTUAL
+VIDEO FILE right here in the chat. Not a description of it - the
+real file, so you can watch it before anything goes anywhere.
+
+
+STEP 2 - WATCH IT
+-------------------
+Open the video. If anything looks wrong - a typo, a photo that
+didn't load, the wrong music vibe - just say so. Nothing posts
+until you say it's good. There's no undo on a public TikTok post,
+so this is the moment that matters.
+
+
+STEP 3 - ANSWER THREE QUICK QUESTIONS
+----------------------------------------
+Claude will ask, right in the chat:
+
+  1. Who sees it first?
+     - "Public" (normal, once you trust the clip)
+     - "Only me" (posts privately so you can check it on your
+        own profile before making it public - good for the
+        first few)
+
+  2. Confirm it's labeled as promoting your own product.
+     This isn't optional - TikTok requires it by law for any ad,
+     and it's your own product, so it's always "yes." Claude
+     asks because TikTok's rules say a human has to confirm it,
+     not because there's a real choice here.
+
+  3. Want trending music on it?
+     Usually yes - it helps the video get seen. Claude will show
+     you 3-4 real trending options to pick from, with a link to
+     listen first.
+
+Just answer in plain words - "public, yes, yes" is a complete
+answer.
+
+
+STEP 4 - IT POSTS
+--------------------
+Claude posts it for real, right then, and gives you the link.
+That's the whole process.
+
+
+WANT TO DO MORE THAN ONE?
+----------------------------
+Don't post more than 1 a day - TikTok likes a steady pace, not a
+burst. There are 30 scripts already written in
+marketing-kit/tiktok-scripts.md - that's a month of content ready
+to go, one message at a time.
+
+
+IF YOU SEE A GENERATED CLIP YOU'RE NOT READY TO POST YET
+-------------------------------------------------------------
+Say "hold that one" - Claude keeps it waiting (it's tracked in
+the project so nothing gets lost) and you can come back to it
+whenever.
