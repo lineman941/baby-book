@@ -9,6 +9,16 @@ is driven by a small `config.json`, and the useful values are machine-specific â
 shell path, which directories file operations are allowed to touch, and which commands
 to block all depend on the OS and layout of the actual machine. That's what's tuned here.
 
+## The `ai-tools-setup` skill
+
+`skills/ai-tools-setup/` is a Claude skill that tailors this Desktop Commander setup to
+the **Our Little Miracle** business specifically â€” it scopes file access to the repo and
+the `etsy_api` asset folder, points the toolchain at the Python (Pillow) + Node + Git
+pipeline the build/render scripts actually use, and gives Claude a verify checklist to
+run before a build or sales session. Invoke it when setting up a new machine or checking
+the setup. It ships two ready-made profiles: `skills/ai-tools-setup/config.owner-windows.json`
+(the owner's Windows PC) and the sandbox `config.json` below.
+
 ## What was detected on this machine
 
 | Property        | Value                                             |
