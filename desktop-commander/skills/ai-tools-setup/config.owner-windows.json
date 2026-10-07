@@ -1,0 +1,39 @@
+{
+  "_comment": "Desktop Commander config for Our Little Miracle on the owner's Windows PC. Replace <you> with the Windows username. Scopes file access to the business folders only: the baby-book repo checkout and the etsy_api/marketing asset folder referenced in BUSINESS.md.",
+  "defaultShell": "powershell",
+  "allowedDirectories": [
+    "C:\\Users\\<you>\\baby-book",
+    "C:\\Users\\<you>\\etsy_api"
+  ],
+  "blockedCommands": [
+    "mkfs",
+    "mkfs.ext2",
+    "mkfs.ext3",
+    "mkfs.ext4",
+    "mkfs.xfs",
+    "mkfs.btrfs",
+    "mkfs.vfat",
+    "format",
+    "diskpart",
+    "dd",
+    "fdisk",
+    "parted",
+    "sgdisk",
+    "wipefs",
+    "shred",
+    "cipher",
+    "blkdiscard",
+    "mount",
+    "umount",
+    "shutdown",
+    "reboot",
+    "poweroff",
+    "halt",
+    "init",
+    "userdel",
+    "deluser"
+  ],
+  "fileReadLineLimit": 1000,
+  "fileWriteLineLimit": 200,
+  "telemetryEnabled": false
+}
