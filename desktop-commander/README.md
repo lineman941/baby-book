@@ -1,97 +1,108 @@
-# Desktop Commander — tailored config
+# Desktop Commander — tailored config (Windows)
 
-A [Desktop Commander](https://desktopcommander.app/) configuration customized to
-**this computer**, detected on 2026-07-21.
+A [Desktop Commander](https://desktopcommander.app/) configuration customized for the
+user's **Windows laptop** (an MSI machine).
 
 Desktop Commander is the MCP server behind the `desktop-commander` plugin. It gives
 Claude terminal control and filesystem access on the machine it runs on. Its behavior
 is driven by a small `config.json`, and the useful values are machine-specific — the
-shell path, which directories file operations are allowed to touch, and which commands
-to block all depend on the OS and layout of the actual machine. That's what's tuned here.
+shell, which directories file operations are allowed to touch, and which commands to
+block all depend on the OS and layout of the actual machine. That's what's tuned here.
 
-## What was detected on this machine
+> An earlier revision of this folder was tailored to the Linux cloud sandbox this was
+> generated in (shell `/bin/bash`, `/home/...` paths). This revision targets the user's
+> real computer — a Windows laptop — which is what the customization is actually for.
 
-| Property        | Value                                             |
-| --------------- | ------------------------------------------------- |
-| OS              | Ubuntu 24.04.4 LTS (Linux, x86_64, kernel 6.18.5) |
-| User / home     | `root` → `/root`                                  |
-| Login shell     | `/bin/bash` (only bash/sh/dash present — no zsh)  |
-| Project area    | `/home/user` (e.g. `/home/user/baby-book`)        |
-| Toolchain found | git, python3, node 22, npm, go, rust/cargo, docker, gcc, make, jq, curl |
+## Target machine
+
+| Property   | Value                                                     |
+| ---------- | --------------------------------------------------------- |
+| OS         | Windows (MSI laptop)                                       |
+| Home       | `C:\Users\<you>` (referenced portably as `~`)             |
+| Shell      | Windows PowerShell (`powershell.exe`)                     |
 
 ## The settings, and why each is what it is
 
-| Key                 | Value                          | Reasoning |
-| ------------------- | ------------------------------ | --------- |
-| `defaultShell`      | `/bin/bash`                    | The detected login shell. This box has no zsh, so bash is correct (not the macOS default `/bin/zsh`). |
-| `allowedDirectories`| `/root`, `/home/user`, `/tmp`  | Scopes **file** operations to the real working areas: the home dir, the folder holding projects like `baby-book`, and scratch space. Leaving this `[]` would grant the whole filesystem. Note: this restricts file read/write/edit only — terminal commands are **not** limited by it. |
-| `blockedCommands`   | destructive **executables**    | Denylists disk-wipe / format / mount / power-off executables (`mkfs*`, `dd`, `fdisk`, `parted`, `wipefs`, `shred`, `mount`, `shutdown`, `reboot`, `userdel`, …). See the matching note below. |
-| `fileReadLineLimit` | `1000`                         | Desktop Commander default; fine for reading source files here. |
-| `fileWriteLineLimit`| `200`                          | Raised from the default `50` so routine code edits on this dev box aren't split into many small writes. |
-| `telemetryEnabled`  | `false`                        | Privacy-respecting default for a personal machine. |
+| Key                 | Value              | Reasoning |
+| ------------------- | ------------------ | --------- |
+| `defaultShell`      | `powershell.exe`   | The shell always present on Windows. If you use PowerShell 7, switch to `pwsh.exe`; for the classic prompt, `cmd.exe`. |
+| `allowedDirectories`| `["~"]`            | Desktop Commander expands `~` to your user profile (`C:\Users\<you>`), so **no username is hardcoded** and the file works on any Windows account. This scopes **file** operations to your profile. **Must be non-empty** — an empty list (`[]`) *grants the entire filesystem*. Terminal commands are **not** limited by this — only file read/write/edit. |
+| `blockedCommands`   | `format`, `diskpart`, `bcdedit`, `vssadmin`, `wbadmin`, `fsutil`, `shutdown` | Windows executables that are destructive *and* rarely needed interactively: drive format, partitioning, boot config, shadow-copy/backup deletion, filesystem control, and power-off. See the matching note below. |
+| `fileReadLineLimit` | `1000`             | Desktop Commander default; fine for reading source files. |
+| `fileWriteLineLimit`| `200`              | Raised from the default `50` so routine edits aren't split into many small writes. |
+| `telemetryEnabled`  | `false`            | Privacy-respecting default for a personal machine. |
 
 ### How `blockedCommands` matching works (important)
 
-Desktop Commander does **not** match the full command string. For each command it
-runs `extractBaseCommand` — strips the path and lowercases — and checks that **base
-executable name** against `blockedCommands` by exact match. So a list entry only fires
-if it's a bare executable name:
+Desktop Commander does **not** match the full command string. For each command it runs
+`extractBaseCommand` — strips the path and lowercases — and checks that **base executable
+name** against `blockedCommands` by exact match. So a list entry only fires if it's a bare
+executable name: `format`, `diskpart`, `shutdown` **work**; `format /fs:ntfs C:` still
+matches (it extracts to `format`).
 
-- `dd`, `mkfs`, `shutdown`, `mount`, `userdel` → **work** (base name matches).
-- `rm -rf /`, `chmod -R 777 /`, `systemctl poweroff`, `:(){ :|:& };:` → **do nothing**;
-  they extract to `rm` / `chmod` / `systemctl` / `:`, which aren't listed.
+Two consequences on Windows specifically:
 
-That means blocking is **all-or-nothing per executable** — there's no way to block only a
-dangerous *form* of a command. This blocklist therefore includes only executables that
-are destructive *and* rarely needed in normal work. It deliberately does **not** list
-`rm`, `chmod`, `chown`, `sudo`, or `systemctl`: blocking the bare executable would break
-everyday use, and the argument-scoped forms can't be expressed here. Treat command
-blocking as light defense-in-depth, not a security boundary — it can also be bypassed via
-command substitution or absolute paths ([known](https://github.com/wonderwhy-er/DesktopCommanderMCP/issues/217)
+1. **PowerShell cmdlets can't be blocked.** Destructive PowerShell operations like
+   `Remove-Item -Recurse -Force`, `Format-Volume`, or `Clear-Disk` run *inside*
+   `powershell.exe`, so the base command is `powershell.exe`, not the cmdlet. This list
+   cannot catch them.
+2. **Blocking is all-or-nothing per executable.** There's no way to block only a dangerous
+   *form* of a command, so the list deliberately omits everyday tools (`del`, `rd`,
+   `reg`, `net`, `sc`, `icacls`, `takeown`) that blocking outright would break.
+
+Treat command blocking as light defense-in-depth, **not** a security boundary — it can also
+be bypassed via command substitution or absolute paths
+([known](https://github.com/wonderwhy-er/DesktopCommanderMCP/issues/217)
 [issues](https://github.com/wonderwhy-er/DesktopCommanderMCP/issues/218)). Use the Docker
 install when you need real isolation.
 
 ## Applying it
 
-Desktop Commander reads `~/.claude-server-commander/config.json`
-(`%USERPROFILE%\.claude-server-commander\config.json` on Windows).
+Desktop Commander reads `%USERPROFILE%\.claude-server-commander\config.json` on Windows.
 
-**Option A — script (this machine):**
+**Option A — script (on your Windows laptop):**
 
-```bash
-./apply-config.sh
+```powershell
+.\apply-config.ps1
 ```
 
-It backs up any existing config, then installs `config.json`. Restart Desktop
-Commander / reload the plugin afterward.
+If script execution is blocked, run:
 
-**Option B — through Claude (any machine), one key at a time.**
+```powershell
+powershell -ExecutionPolicy Bypass -File .\apply-config.ps1
+```
+
+It backs up any existing config, then installs `config.json`. Restart Desktop Commander /
+reload the plugin afterward.
+
+**Option B — through Claude, one key at a time.**
 Ask Claude to run these against the Desktop Commander tools:
 
 ```
-set_config_value({ "key": "defaultShell",       "value": "/bin/bash" })
-set_config_value({ "key": "allowedDirectories",  "value": ["/root", "/home/user", "/tmp"] })
+set_config_value({ "key": "defaultShell",       "value": "powershell.exe" })
+set_config_value({ "key": "allowedDirectories",  "value": ["~"] })
 set_config_value({ "key": "fileWriteLineLimit",  "value": 200 })
 set_config_value({ "key": "telemetryEnabled",    "value": false })
 ```
 
 Verify with `get_config({})`.
 
-## Adjusting for a different machine
+## Adjusting
 
-These values match the cloud sandbox this was generated in. On your own laptop/desktop,
-update:
-
-- **macOS** → `defaultShell` `/bin/zsh`, and `allowedDirectories` like
-  `["/Users/<you>", "/tmp"]` (or scope tighter, e.g. `["/Users/<you>/Projects"]`).
-- **Windows** → `defaultShell` `powershell`, and `allowedDirectories` like
-  `["C:\\Users\\<you>", "C:\\Users\\<you>\\Projects"]`.
-- **Tighter scope** → point `allowedDirectories` at a single code folder instead of the
-  whole home directory.
+- **Tighter file scope** → replace `["~"]` with specific folders, e.g.
+  `["~/Documents", "~/Desktop"]` or a single projects folder like `["~/projects"]`.
+  Forward slashes are fine — Desktop Commander normalizes them to Windows separators.
+  (Only a leading `~` or `~/` is expanded; a `~\…` backslash form is **not**, so write
+  `~/Documents`, not `~\Documents`.)
+- **Different shell** → `pwsh.exe` (PowerShell 7) or `cmd.exe`.
+- **macOS / Linux instead** → `defaultShell` `/bin/zsh` (macOS) or `/bin/bash` (Linux),
+  and keep `allowedDirectories` as `["~"]` (it expands to `/Users/<you>` or `/home/<you>`);
+  swap the Windows `blockedCommands` for Unix ones (`mkfs`, `dd`, `fdisk`, `parted`,
+  `wipefs`, `shred`, `mount`, `shutdown`, `reboot`, `userdel`).
 
 ## A note on security
 
-`allowedDirectories` limits **file operations only**, not terminal commands, and
-determined command substitution / symlinks can bypass a denylist. Keep the scope no
-broader than you need. Desktop Commander's own docs recommend the Docker install when
-you want hard isolation.
+`allowedDirectories` limits **file operations only**, not terminal commands, and a
+determined command substitution / symlink can bypass a denylist. Keep the scope no broader
+than you need. Desktop Commander's own docs recommend the Docker install when you want hard
+isolation.
