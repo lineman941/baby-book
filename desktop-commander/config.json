@@ -1,34 +1,16 @@
 {
-  "defaultShell": "/bin/bash",
+  "defaultShell": "powershell.exe",
   "allowedDirectories": [
-    "/root",
-    "/home/user",
-    "/tmp"
+    "~"
   ],
   "blockedCommands": [
-    "mkfs",
-    "mkfs.ext2",
-    "mkfs.ext3",
-    "mkfs.ext4",
-    "mkfs.xfs",
-    "mkfs.btrfs",
-    "mkfs.vfat",
-    "dd",
-    "fdisk",
-    "parted",
-    "sgdisk",
-    "wipefs",
-    "shred",
-    "blkdiscard",
-    "mount",
-    "umount",
-    "shutdown",
-    "reboot",
-    "poweroff",
-    "halt",
-    "init",
-    "userdel",
-    "deluser"
+    "format",
+    "diskpart",
+    "bcdedit",
+    "vssadmin",
+    "wbadmin",
+    "fsutil",
+    "shutdown"
   ],
   "fileReadLineLimit": 1000,
   "fileWriteLineLimit": 200,
